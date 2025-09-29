@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=121 format=3 uid="uid://dl6jsq7htq75q"]
+[gd_resource type="Resource" load_steps=122 format=3 uid="uid://dl6jsq7htq75q"]
 
 [ext_resource type="Material" uid="uid://cwhi82msh22nm" path="res://addons/Ursula/Shaders/IceMat.tres" id="1_28w3s"]
 [ext_resource type="Material" uid="uid://dkyhs6sd6eroy" path="res://addons/Ursula/Shaders/LavaMat.tres" id="2_s2j7q"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://clxifoou28avs" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_detector.tscn" id="4_yghhw"]
 [ext_resource type="PackedScene" uid="uid://duxo3xtm5io1k" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_move.tscn" id="5_f2opi"]
 [ext_resource type="Material" uid="uid://bxar533o5uie6" path="res://addons/Ursula/Shaders/TerrainMaterial3D.tres" id="5_oha17"]
+[ext_resource type="PackedScene" uid="uid://cl67elv5asy2t" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_models.tscn" id="5_vh4lw"]
 [ext_resource type="Material" uid="uid://fu7wl56n0ecn" path="res://addons/Ursula/Shaders/TestMaterial.tres" id="6_8fq4u"]
 [ext_resource type="PackedScene" uid="uid://b2usj12artbdf" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_timer.tscn" id="6_ikhl2"]
 [ext_resource type="Material" uid="uid://dfp20ris1piv8" path="res://addons/Ursula/Shaders/WaterMat.tres" id="7_5ec2a"]
@@ -102,7 +103,7 @@
 [ext_resource type="Texture2D" uid="uid://bt73sje5le1rx" path="res://addons/Ursula/Assets/Models/Props/microscope/microscope_ico.png" id="84_3tawi"]
 [ext_resource type="Texture2D" uid="uid://clxye5oo4haq4" path="res://addons/Ursula/Assets/Models/Props/table_labs/table_labs_ico.png" id="85_65b5u"]
 [ext_resource type="Texture2D" uid="uid://caq2dyy5ebgq8" path="res://addons/Ursula/Assets/Models/Props/vytyazhka/vytyazhka_ico.png" id="86_oeao4"]
-[ext_resource type="Script" path="res://addons/Ursula/Scripts/MapAssets.cs" id="87_w7hn5"]
+[ext_resource type="Script" uid="uid://yy758e1o2p15" path="res://addons/Ursula/Scripts/MapAssets.cs" id="87_w7hn5"]
 [ext_resource type="Texture2D" uid="uid://dsnmo6bs23l3j" path="res://addons/Ursula/Assets/Textures/Terrain/Snow.png" id="88_e64yf"]
 [ext_resource type="Texture2D" uid="uid://chylv5tuim5nj" path="res://addons/Ursula/Assets/Textures/Terrain/Stone.png" id="89_jqkm2"]
 [ext_resource type="Texture2D" uid="uid://dr1fqfn1pelgn" path="res://addons/Ursula/Assets/Textures/Terrain/Grass.png" id="90_eniyf"]
@@ -146,3 +147,4 @@ InteractiveObjectAudioPrefab = ExtResource("2_vjjcw")
 InteractiveObjectMovePrefab = ExtResource("5_f2opi")
 InteractiveObjectTimerPrefab = ExtResource("6_ikhl2")
 InteractiveObjectCounterPrefab = ExtResource("3_oy3hf")
+InteractiveObjectModelsPrefab = ExtResource("5_vh4lw")
