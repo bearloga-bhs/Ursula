@@ -46,6 +46,7 @@ public partial class InteractiveObject : Node
     public HSMModelsModule hswModelsModule;
     public HSMInitializationModule hsmInitializationModule;
     public HSMRandomnessModule hsmRandomnessModule;
+    public HSMInteractiveObjectModule interactiveObjectModule;
 
     HSMLogger _logger;
 
@@ -90,6 +91,7 @@ public partial class InteractiveObject : Node
         hswModelsModule = new HSMModelsModule(hsmLogic, this);
         hsmInitializationModule = new HSMInitializationModule(hsmLogic, this);
         hsmRandomnessModule = new HSMRandomnessModule(hsmLogic, this);
+        interactiveObjectModule = new HSMInteractiveObjectModule(hsmLogic, this);
     }
 
     public void ReloadAlgorithm()
@@ -126,6 +128,7 @@ public partial class InteractiveObject : Node
 
     public void StartAlgorithm()
     {
+        GD.Print("ALGO START");
         if (hsmLogic != null)
         {
             //if (gml.currentState != null)
