@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 using System;
 using Ursula.GameObjects.Model;
 
@@ -67,6 +67,8 @@ namespace VoxLibExample
         public PackedScene InteractiveObjectMovePrefab;
         [Export]
         public PackedScene InteractiveObjectTimerPrefab;
+        [Export]
+        public PackedScene InteractiveObjectTimePrefab;
         [Export]
         public PackedScene InteractiveObjectCounterPrefab;
     }

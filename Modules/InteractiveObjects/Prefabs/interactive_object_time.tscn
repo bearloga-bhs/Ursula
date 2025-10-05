@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcoa64giwiiir"]
+
+[ext_resource type="Script" uid="uid://p0i0w51m5s4j" path="res://addons/Ursula/Modules/InteractiveObjects/InteractiveObjectTime.cs" id="1_snjk4"]
+
+[node name="InteractiveObjectTime" type="Node"]
+script = ExtResource("1_snjk4")

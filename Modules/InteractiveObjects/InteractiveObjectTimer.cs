@@ -1,10 +1,10 @@
-﻿using Godot;
+using Godot;
 using System;
 using Modules.HSM;
 
 public partial class InteractiveObjectTimer : Node
 {
-    public VariableHolder<float> CurrentTimerValue = new(0.0f);
+    public VariableHolder<float> CurrentTimerValue { get; set; } = new(0.0f);
 
     private Timer _timer;
 
