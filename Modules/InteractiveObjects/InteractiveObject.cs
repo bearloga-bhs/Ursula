@@ -17,7 +17,6 @@ public partial class InteractiveObject : Node
     public InteractiveObjectAudio audio;
     public InteractiveObjectMove move;
     public InteractiveObjectTimer timer;
-    public InteractiveObjectTime time;
     public InteractiveObjectCounter counter1;
     public InteractiveObjectCounter counter2;
 
@@ -36,7 +35,6 @@ public partial class InteractiveObject : Node
     public HSMAnimationModule hsmAnimationModule;
     public HSMSoundModule hsmSoundModule;
     public HSMTimerModule hsmTimerModule;
-    public HSMTimeModule hsmTimeModule;
     public HSMCounterOneModule hsmCounterOneModule;
     public HSMCounterTwoModule hsmCounterTwoModule;
     public HSMWorldInteractingModule hsmWorldInteractingModule;
@@ -60,7 +58,6 @@ public partial class InteractiveObject : Node
         audio = LinkComponent<InteractiveObjectAudio>("InteractiveObjectAudio", VoxLib.mapAssets.InteractiveObjectAudioPrefab);
         move = LinkComponent<InteractiveObjectMove>("InteractiveObjectMove", VoxLib.mapAssets.InteractiveObjectMovePrefab);
         timer = LinkComponent<InteractiveObjectTimer>("InteractiveObjectTimer", VoxLib.mapAssets.InteractiveObjectTimerPrefab);
-        time = LinkComponent<InteractiveObjectTime>("InteractiveObjectTime", VoxLib.mapAssets.InteractiveObjectTimePrefab);
         counter1 = LinkComponent<InteractiveObjectCounter>("InteractiveObjectCounter1", VoxLib.mapAssets.InteractiveObjectCounterPrefab);
         counter2 = LinkComponent<InteractiveObjectCounter>("InteractiveObjectCounter2", VoxLib.mapAssets.InteractiveObjectCounterPrefab);
     }
@@ -74,7 +71,6 @@ public partial class InteractiveObject : Node
         hsmAnimationModule = new HSMAnimationModule(hsmLogic, this);
         hsmSoundModule = new HSMSoundModule(hsmLogic, this);
         hsmTimerModule = new HSMTimerModule(hsmLogic, this);
-        hsmTimeModule = new HSMTimeModule(hsmLogic, this);
         hsmCounterOneModule = new HSMCounterOneModule(hsmLogic, this);
         hsmCounterTwoModule = new HSMCounterTwoModule(hsmLogic, this);
         hsmWorldInteractingModule = new HSMWorldInteractingModule(hsmLogic, this);
