@@ -42,7 +42,7 @@ public partial class InteractiveObjectModels : Node, IInjectable
 		var toRemove = newRoot.GetChildren()
 			.Where(n =>
 			{
-				string name = (string)n.Name; // конвертируем StringName → string
+				string name = n.Name;
 				return name != null && (name.StartsWith("InteractiveObject") || name.StartsWith("ItemPropsScript"));
 			})
 			.ToList();
@@ -56,7 +56,7 @@ public partial class InteractiveObjectModels : Node, IInjectable
 		var toMove = oldRoot.GetChildren()
 			.Where(n =>
 			{
-				string name = (string)n.Name;
+				string name = n.Name;
 				return name != null && (name.StartsWith("InteractiveObject") || name.StartsWith("ItemPropsScript"));
 			})
 			.ToList();
