@@ -6,7 +6,7 @@ public partial class CowAnim : BaseAnimation
 
     public override async void PlayUseAnimation()
     {
-        State = state.Use;
+        currentState = State.Use;
         PlayEatingAnimation();
         //PlayHeadSpinAnimation();
     }
