@@ -77,7 +77,8 @@ public partial class InteractiveObject : Node
 
     private async GDTask InitHsm()
     {
-        await ToSignal(GetTree().CreateTimer(0.1), "timeout");
+        //why do we need here timer? In my case it ruins duplicated object to start algorithms
+        //await ToSignal(GetTree().CreateTimer(0.1), "timeout");
 
         hsmDetectorModule = new HSMDetectorModule(hsmLogic, this);
         hsmMovementModule = new HSMMovementModule(hsmLogic, this);
@@ -114,7 +115,7 @@ public partial class InteractiveObject : Node
                 if (File.Exists(ProjectSettings.GlobalizePath(xmlPath)))
                 {
                     hsmLogic = CyberiadaLogic.Load(xmlPath);
-                    _= InitHsm();
+                    _ = InitHsm();
                     _logger = new HSMLogger(this);
                     hsmLogic.SubscribeLogger(_logger);
                 }
