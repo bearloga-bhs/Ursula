@@ -68,6 +68,8 @@ namespace VoxLibExample
         [Export]
         public PackedScene InteractiveObjectTimerPrefab;
         [Export]
+        public PackedScene InteractiveObjectTimePrefab;
+        [Export]
         public PackedScene InteractiveObjectCounterPrefab;
         [Export]
         public PackedScene InteractiveObjectModelsPrefab;
