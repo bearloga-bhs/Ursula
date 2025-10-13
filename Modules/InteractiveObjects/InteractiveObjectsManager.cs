@@ -61,7 +61,9 @@ public partial class InteractiveObjectsManager : Node
 
     private void ForEach(Action<InteractiveObject> action)
     {
-        foreach(InteractiveObject obj in objects)
+        var snapshot = objects.ToArray();
+
+        foreach (InteractiveObject obj in snapshot)
         {
             if (obj != null && IsInstanceValid(obj))
             {
