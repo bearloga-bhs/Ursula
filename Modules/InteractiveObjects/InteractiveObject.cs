@@ -17,8 +17,12 @@ public partial class InteractiveObject : Node
     public InteractiveObjectAudio audio;
     public InteractiveObjectMove move;
     public InteractiveObjectTimer timer;
+    public InteractiveObjectTime time;
     public InteractiveObjectCounter counter1;
     public InteractiveObjectCounter counter2;
+    public InteractiveObjectModels models;
+    public InteractiveObjectInitialization initialization;
+    public InteractiveObjectRandomness random;
 
     [Export]
     public string xmlPath;
@@ -35,9 +39,13 @@ public partial class InteractiveObject : Node
     public HSMAnimationModule hsmAnimationModule;
     public HSMSoundModule hsmSoundModule;
     public HSMTimerModule hsmTimerModule;
+    public HSMTimeModule hsmTimeModule;
     public HSMCounterOneModule hsmCounterOneModule;
     public HSMCounterTwoModule hsmCounterTwoModule;
     public HSMWorldInteractingModule hsmWorldInteractingModule;
+    public HSMModelsModule hswModelsModule;
+    public HSMInitializationModule hsmInitializationModule;
+    public HSMRandomnessModule hsmRandomnessModule;
 
     HSMLogger _logger;
 
@@ -58,8 +66,12 @@ public partial class InteractiveObject : Node
         audio = LinkComponent<InteractiveObjectAudio>("InteractiveObjectAudio", VoxLib.mapAssets.InteractiveObjectAudioPrefab);
         move = LinkComponent<InteractiveObjectMove>("InteractiveObjectMove", VoxLib.mapAssets.InteractiveObjectMovePrefab);
         timer = LinkComponent<InteractiveObjectTimer>("InteractiveObjectTimer", VoxLib.mapAssets.InteractiveObjectTimerPrefab);
+        time = LinkComponent<InteractiveObjectTime>("InteractiveObjectTime", VoxLib.mapAssets.InteractiveObjectTimePrefab);
         counter1 = LinkComponent<InteractiveObjectCounter>("InteractiveObjectCounter1", VoxLib.mapAssets.InteractiveObjectCounterPrefab);
         counter2 = LinkComponent<InteractiveObjectCounter>("InteractiveObjectCounter2", VoxLib.mapAssets.InteractiveObjectCounterPrefab);
+        models = LinkComponent<InteractiveObjectModels>("InteractiveObjectModels", VoxLib.mapAssets.InteractiveObjectModelsPrefab);
+        initialization = LinkComponent<InteractiveObjectInitialization>("InteractiveObjectInitialization", VoxLib.mapAssets.InteractiveObjectInitializationPrefab);
+        random = LinkComponent<InteractiveObjectRandomness>("InteractiveObjectRandomness", VoxLib.mapAssets.InteractiveObjectRandomnessPrefab);
     }
 
     private async GDTask InitHsm()
@@ -71,9 +83,13 @@ public partial class InteractiveObject : Node
         hsmAnimationModule = new HSMAnimationModule(hsmLogic, this);
         hsmSoundModule = new HSMSoundModule(hsmLogic, this);
         hsmTimerModule = new HSMTimerModule(hsmLogic, this);
-        //hsmCounterOneModule = new HSMCounterOneModule(hsmLogic, this);
-        //hsmCounterTwoModule = new HSMCounterTwoModule(hsmLogic, this);
+        hsmTimeModule = new HSMTimeModule(hsmLogic, this);
+        hsmCounterOneModule = new HSMCounterOneModule(hsmLogic, this);
+        hsmCounterTwoModule = new HSMCounterTwoModule(hsmLogic, this);
         hsmWorldInteractingModule = new HSMWorldInteractingModule(hsmLogic, this);
+        hswModelsModule = new HSMModelsModule(hsmLogic, this);
+        hsmInitializationModule = new HSMInitializationModule(hsmLogic, this);
+        hsmRandomnessModule = new HSMRandomnessModule(hsmLogic, this);
     }
 
     public void ReloadAlgorithm()

@@ -605,7 +605,22 @@ public partial class MoveScript : CharacterBody3D
 		Velocity = _targetVelocity;
 	}
 
-	#endregion
+    public void SetPosition(float x, float z)
+    {
+        float y = VoxLib.terrainManager.GetTerrainHeight(x, z);
+        y = MathF.Max(waterLevel, y);
+        GlobalPosition = new Vector3(x, y, z);
+    }
+
+    public void SetRotationLookAt(float x, float z)
+    {
+        Vector3 targetPos = new Vector3(x, GlobalPosition.Y, z);
+        Vector3 dir = GlobalPosition.DirectionTo(targetPos);
+        float targetAngle = Mathf.Atan2(dir.X, dir.Z);
+        Rotation = new Vector3(0, targetAngle, 0);
+    }
+
+    #endregion
 
 	#region Setups
 

@@ -95,6 +95,29 @@ public partial class TerrainManager : TerrainModel, IInjectable
 
         _ProcCreateTerrain(randomHeight);
     }
+
+    public float GetTerrainHeight(float x, float z)
+    {
+        int Xl = Math.Clamp((int)x, 0, VoxLib.mapManager.sizeX);
+        int Xr = Math.Clamp((int)x + 1, 0, VoxLib.mapManager.sizeX);
+        int Zd = Math.Clamp((int)z, 0, VoxLib.mapManager.sizeZ);
+        int Zu = Math.Clamp((int)z + 1, 0, VoxLib.mapManager.sizeZ);
+
+        // Дробная часть числа
+        float x_a = x - (int)x;
+        float z_a = z - (int)z;
+
+        float yld = mapHeight[Xl, Zd] + positionOffset.Y;
+        float ylu = mapHeight[Xl, Zu] + positionOffset.Y;
+        float yrd = mapHeight[Xr, Zd] + positionOffset.Y;
+        float yru = mapHeight[Xr, Zu] + positionOffset.Y;
+
+        // Линейная интерполяция
+        float yu = Mathf.Lerp(ylu, yru, x_a);
+        float yd = Mathf.Lerp(yld, yrd, x_a);
+        float y = Mathf.Lerp(yd, yu, z_a);
+        return y;
+    }
 	
 	public void _ProcCreateTerrain(bool randomHeight)
 	{
