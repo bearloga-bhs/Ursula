@@ -104,6 +104,8 @@ namespace Talent.Logic.HSM
             {
                 case "==":
                     return Math.Abs(leftValue - rightValue) < float.Epsilon;
+                case "=":
+                    return Math.Abs(leftValue - rightValue) < float.Epsilon;
                 case "<":
                     return leftValue < rightValue;
                 case "<=":
