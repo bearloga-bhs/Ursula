@@ -75,5 +75,7 @@ namespace VoxLibExample
         public PackedScene InteractiveObjectModelsPrefab;
         [Export]
         public PackedScene InteractiveObjectInitializationPrefab;
+        [Export]
+        public PackedScene InteractiveObjectRandomnessPrefab;
     }
 }
