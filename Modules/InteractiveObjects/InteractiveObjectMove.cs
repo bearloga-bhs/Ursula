@@ -134,6 +134,7 @@ public partial class InteractiveObjectMove : Node3D
 
     public void CSProcess(double delta)
     {
+        return;
         if (moveScript != null)
         {
             moveDistance.Value = moveScript.GetMoveDistance();

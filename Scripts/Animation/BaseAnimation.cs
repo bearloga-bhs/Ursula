@@ -149,14 +149,13 @@ public partial class BaseAnimation : Node3D
     private void HandleAnimationFinished(StringName finishedAnim)
     {
         if (finishedAnim != _currentAnim) return;
-        // 1.4 ms
         if (_loopCurrent)
         {
-            //animationPlayer.Play(_currentAnim, _currentBlend, 1f, false);
+            animationPlayer.Play(_currentAnim, _currentBlend, 1f, false);
         }
         else if (_queuedNext != default)
         {
-            //Play(_queuedNext, (float)_currentBlend);
+            Play(_queuedNext, (float)_currentBlend);
         }
     }
 
@@ -179,7 +178,7 @@ public partial class BaseAnimation : Node3D
         if (animationPlayer == null) return;
 
         currentState = State.Walk;
-        Play(WalkAnimationName, 1);
+        Play(WalkAnimationName, 0.2f);
     }
 
     public virtual void PlayRunAnimation()
@@ -187,7 +186,7 @@ public partial class BaseAnimation : Node3D
         if (animationPlayer == null) return;
 
         currentState = State.Run;
-        Play(RunAnimationName, 1);
+        Play(RunAnimationName, 0.2f);
     }
 
     public virtual void PlayJumpAnimation()

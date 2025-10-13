@@ -333,6 +333,7 @@ public partial class MoveScript : CharacterBody3D
 
 	public void CSProcess(double delta)
 	{
+		return;
 		base._Process(delta);
 		transformProcessTimer += (float)delta;
 
@@ -636,15 +637,6 @@ public partial class MoveScript : CharacterBody3D
 		{
 			GD.Print("Path is null");
 		}
-	}
-
-
-	bool isCollisionDetected = false;
-	string nameCollisionDetected;
-	private void CollisionDetectedSetup(string nameCollisionDetected)
-	{
-		this.nameCollisionDetected = nameCollisionDetected;
-		isCollisionDetected = true;
 	}
 
 	public async void MoveToRandomSetup()
