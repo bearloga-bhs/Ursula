@@ -41,11 +41,6 @@ public partial class InteractiveObjectAudio : Node3D
         CheckAudioStreamPlayer3D();
     }
 
-    public override void _Process(double delta)
-    {
-
-    }
-
     public void SetAudiosPathes(List<string> audioPathes)
     {
         audios = new Dictionary<string, string>();

@@ -30,10 +30,11 @@ public partial class DayNightCycle : Node
     {
         base._Ready();
         instance = this;
+        CSharpBridgeRegistry.Process += CSProcess;
     }
 
 
-    public override void _Process(double delta)
+    public void CSProcess(double delta)
     {
         _currentTime += (float)delta;
 
@@ -114,5 +115,10 @@ public partial class DayNightCycle : Node
         this.FullDayLength = FullDayLength;
         _currentTime = 0;
         //VoxLib.hud.SaveLengthOfDay(FullDayLength);
+    }
+
+    public override void _ExitTree()
+    {
+        CSharpBridgeRegistry.Process -= CSProcess;
     }
 }

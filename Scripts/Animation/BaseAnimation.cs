@@ -149,14 +149,14 @@ public partial class BaseAnimation : Node3D
     private void HandleAnimationFinished(StringName finishedAnim)
     {
         if (finishedAnim != _currentAnim) return;
-
+        // 1.4 ms
         if (_loopCurrent)
         {
-            animationPlayer.Play(_currentAnim, _currentBlend, 1f, false);
+            //animationPlayer.Play(_currentAnim, _currentBlend, 1f, false);
         }
         else if (_queuedNext != default)
         {
-            Play(_queuedNext, (float)_currentBlend);
+            //Play(_queuedNext, (float)_currentBlend);
         }
     }
 

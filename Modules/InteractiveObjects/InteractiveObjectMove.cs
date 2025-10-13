@@ -9,7 +9,7 @@ public partial class InteractiveObjectMove : Node3D
     private InteractiveObject _interactiveObject;
 
     public VariableHolder<float> moveDistance = new(0.0f);
-    public VariableHolder<float> heightWorld = new(0.0f);
+    public VariableHolderLazy<float> heightWorld;
     public VariableHolder<float> surfaceType = new(0.0f);
     public VariableHolder<float> timesOfDay = new(0.0f);
 
@@ -19,14 +19,19 @@ public partial class InteractiveObjectMove : Node3D
     public Action animationCycleCompleted;
 
     public Vector3 movePosition;
+    private MoveScript moveScriptCache;
 
     public MoveScript moveScript 
     { 
         get
         {
-            var moveScript = GetParent() as MoveScript;
-            if (moveScript != null) moveScript.interactiveObjectMove = this;
-            return moveScript;
+            if (moveScriptCache == null)
+            {
+                var moveScript = GetParent() as MoveScript;
+                if (moveScript != null) moveScript.interactiveObjectMove = this;
+                moveScriptCache = moveScript;
+            }
+            return moveScriptCache;
         } 
     }
 
@@ -39,6 +44,12 @@ public partial class InteractiveObjectMove : Node3D
 
             return _interactiveObject;
         }
+    }
+
+    public override void _Ready()
+    {
+        CSharpBridgeRegistry.Process += CSProcess;
+        heightWorld = new VariableHolderLazy<float>(moveScript.GetHeightWorld);
     }
 
     public object MoveToTarget()
@@ -121,12 +132,11 @@ public partial class InteractiveObjectMove : Node3D
         return null;
     }
 
-    public override void _Process(double delta)
+    public void CSProcess(double delta)
     {
         if (moveScript != null)
         {
             moveDistance.Value = moveScript.GetMoveDistance();
-            heightWorld.Value = moveScript.GetHeightWorld();
             surfaceType.Value = moveScript.GetSurfaceType();
 
             //if (moveScript.GetMoveDistance() > moveDistance.Value) moveScript.onMovingDistanceFinished.Invoke();
@@ -272,5 +282,10 @@ public partial class InteractiveObjectMove : Node3D
     public object StopAnimation()
     {
         return null;
+    }
+
+    public override void _ExitTree()
+    {
+        CSharpBridgeRegistry.Process -= CSProcess;
     }
 }

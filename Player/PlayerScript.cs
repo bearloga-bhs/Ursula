@@ -61,6 +61,8 @@ public partial class PlayerScript : CharacterBody3D, IInjectable
         characterBody3D = this as CharacterBody3D;
 
         instance.Name = "Player";
+
+        CSharpBridgeRegistry.Process += CSProcess;
     }
 
     private bool _isEscapePressed = false;
@@ -140,7 +142,7 @@ public partial class PlayerScript : CharacterBody3D, IInjectable
 
 
 
-    public override void _Process(double delta)
+    public void CSProcess(double delta)
     {
         isNeedUse = false;
 
@@ -265,4 +267,8 @@ public partial class PlayerScript : CharacterBody3D, IInjectable
         MoveAndSlide();
     }
 
+    public override void _ExitTree()
+    {
+        CSharpBridgeRegistry.Process -= CSProcess;
+    }
 }
