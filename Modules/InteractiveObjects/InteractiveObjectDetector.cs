@@ -8,7 +8,7 @@ using System.Security.AccessControl;
 using Talent.Logic.Bus;
 using Modules.HSM;
 
-public partial class InteractiveObjectDetector : Area3D
+public partial class InteractiveObjectDetector : Node3D
 {
     public Node detectedObject; // заданныйОбъект
 
@@ -32,6 +32,11 @@ public partial class InteractiveObjectDetector : Area3D
     public Action onAnyObjectsNotDetected;
 
     public string playerName = "Player";
+
+    public override void _Ready()
+    {
+        CSharpBridgeRegistry.Process += CSProcess;
+    }
 
     public object StartPlayerScan(float radius)
     {
@@ -81,7 +86,7 @@ public partial class InteractiveObjectDetector : Area3D
         return null;
     }
 
-    public override void _Process(double delta)
+    public void CSProcess(double delta)
     {
         if (isScanning)
         {
@@ -142,26 +147,26 @@ public partial class InteractiveObjectDetector : Area3D
         }
     }
 
-    private T FindInRadius<T>(float radius, Func<T, bool> condition) where T : Node
-    {
-        var collisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
-        if (collisionShape.Shape is SphereShape3D sphereShape)
-        {
-            sphereShape.Radius = radius;
-        }
+    //private T FindInRadius<T>(float radius, Func<T, bool> condition) where T : Node
+    //{
+    //    var collisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
+    //    if (collisionShape.Shape is SphereShape3D sphereShape)
+    //    {
+    //        sphereShape.Radius = radius;
+    //    }
 
-        var bodiesInArea = GetOverlappingBodies();
+    //    //var bodiesInArea = GetOverlappingBodies();
 
-        foreach (var body in bodiesInArea)
-        {
-            if (body is T node && condition(node))
-            {
-                return node;
-            }
-        }
+    //    foreach (var body in bodiesInArea)
+    //    {
+    //        if (body is T node && condition(node))
+    //        {
+    //            return node;
+    //        }
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
     private T FindNodeInRadius<T>(float radius, Func<T, bool> condition) where T : Node
     {
@@ -301,5 +306,6 @@ public partial class InteractiveObjectDetector : Area3D
     public override void _ExitTree()
     {
         GameManager.onPlayerInteractionObjectAction -= PlayerInteractionObject;
+        CSharpBridgeRegistry.Process -= CSProcess;
     }
 }

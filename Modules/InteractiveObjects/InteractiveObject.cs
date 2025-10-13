@@ -78,7 +78,7 @@ public partial class InteractiveObject : Node
     {
         await ToSignal(GetTree().CreateTimer(0.1), "timeout");
 
-        hsmDetectorModule = new HSMDetectorModule(hsmLogic, this);
+        //hsmDetectorModule = new HSMDetectorModule(hsmLogic, this);
         hsmMovementModule = new HSMMovementModule(hsmLogic, this);
         hsmAnimationModule = new HSMAnimationModule(hsmLogic, this);
         hsmSoundModule = new HSMSoundModule(hsmLogic, this);

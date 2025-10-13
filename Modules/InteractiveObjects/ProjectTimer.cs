@@ -1,6 +1,7 @@
 ﻿using Godot;
 using System;
 using Modules.HSM;
+using System.Diagnostics;
 
 public partial class ProjectTimer : Node
 {
@@ -42,8 +43,12 @@ public partial class ProjectTimer : Node
 
         if (_accumulatedTime >= 1.0f)
         {
+            Stopwatch stopwath = new Stopwatch();
+            stopwath.Start();
             _accumulatedTime -= 1.0f;
             TickOneSecond?.Invoke();
+            GD.Print(stopwath.Elapsed.TotalMilliseconds);
+            stopwath.Stop();
         }
     }
 }

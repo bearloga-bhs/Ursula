@@ -821,7 +821,7 @@ public partial class MapManager : Node, IInjectable
 		isCreateItem = !isCreateItem;
 	}
 
-    public override void _Process(double delta)
+    public void CSProcess(double delta)
     {
         base._Process(delta);
 

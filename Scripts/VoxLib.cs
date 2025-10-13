@@ -89,8 +89,8 @@ public partial class VoxLib : Node, IInjectable
 
     public void _Log(string message)
     {
-        if (TryGetLogModel(out var logModel))
-            logModel.SetLogMessage(message);
+        //if (TryGetLogModel(out var logModel))
+            //logModel.SetLogMessage(message);
     }
 
     public static void SetVisibleLog(bool value)
