@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://n5amgnjxr8ti" path="res://addons/Ursula/Shaders/TerrainBlend.tres" id="4_nkl5f"]
 [ext_resource type="PackedScene" uid="uid://cbcrx4y7l6hik" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_detector.tscn" id="4_yghhw"]
 [ext_resource type="PackedScene" uid="uid://duxo3xtm5io1k" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_move.tscn" id="5_f2opi"]
+[ext_resource type="PackedScene" uid="uid://cwgvleldrqr2a" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_initialization.tscn" id="5_mq3db"]
 [ext_resource type="Material" uid="uid://bxar533o5uie6" path="res://addons/Ursula/Shaders/TerrainMaterial3D.tres" id="5_oha17"]
 [ext_resource type="PackedScene" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_models.tscn" id="5_vh4lw"]
 [ext_resource type="Material" uid="uid://fu7wl56n0ecn" path="res://addons/Ursula/Shaders/TestMaterial.tres" id="6_8fq4u"]
@@ -150,3 +151,4 @@ InteractiveObjectTimerPrefab = ExtResource("6_ikhl2")
 InteractiveObjectTimePrefab = ExtResource("6_yjl4o")
 InteractiveObjectCounterPrefab = ExtResource("3_oy3hf")
 InteractiveObjectModelsPrefab = ExtResource("5_vh4lw")
+InteractiveObjectInitializationPrefab = ExtResource("5_mq3db")

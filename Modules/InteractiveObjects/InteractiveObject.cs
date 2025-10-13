@@ -21,6 +21,7 @@ public partial class InteractiveObject : Node
     public InteractiveObjectCounter counter1;
     public InteractiveObjectCounter counter2;
     public InteractiveObjectModels models;
+    public InteractiveObjectInitialization initialization;
 
     [Export]
     public string xmlPath;
@@ -42,6 +43,7 @@ public partial class InteractiveObject : Node
     public HSMCounterTwoModule hsmCounterTwoModule;
     public HSMWorldInteractingModule hsmWorldInteractingModule;
     public HSMModelsModule hswModelsModule;
+    public HSMInitializationModule hsmInitializationModule;
 
     HSMLogger _logger;
 
@@ -66,6 +68,7 @@ public partial class InteractiveObject : Node
         counter1 = LinkComponent<InteractiveObjectCounter>("InteractiveObjectCounter1", VoxLib.mapAssets.InteractiveObjectCounterPrefab);
         counter2 = LinkComponent<InteractiveObjectCounter>("InteractiveObjectCounter2", VoxLib.mapAssets.InteractiveObjectCounterPrefab);
         models = LinkComponent<InteractiveObjectModels>("InteractiveObjectModels", VoxLib.mapAssets.InteractiveObjectModelsPrefab);
+        initialization = LinkComponent<InteractiveObjectInitialization>("InteractiveObjectInitialization", VoxLib.mapAssets.InteractiveObjectInitializationPrefab);
     }
 
     private async GDTask InitHsm()
@@ -82,6 +85,7 @@ public partial class InteractiveObject : Node
         hsmCounterTwoModule = new HSMCounterTwoModule(hsmLogic, this);
         hsmWorldInteractingModule = new HSMWorldInteractingModule(hsmLogic, this);
         hswModelsModule = new HSMModelsModule(hsmLogic, this);
+        hsmInitializationModule = new HSMInitializationModule(hsmLogic, this);
     }
 
     public void ReloadAlgorithm()
