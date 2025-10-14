@@ -8,7 +8,7 @@ using System.Security.AccessControl;
 using Talent.Logic.Bus;
 using Modules.HSM;
 
-public partial class InteractiveObjectDetector : Node3D
+public partial class InteractiveObjectDetector : Node
 {
     public Node detectedObject; // заданныйОбъект
 
@@ -32,6 +32,21 @@ public partial class InteractiveObjectDetector : Node3D
     public Action onAnyObjectsNotDetected;
 
     public string playerName = "Player";
+
+    private MoveScript moveScriptCache;
+
+    public MoveScript moveScript
+    {
+        get
+        {
+            if (moveScriptCache == null)
+            {
+                var moveScript = GetParent() as MoveScript;
+                moveScriptCache = moveScript;
+            }
+            return moveScriptCache;
+        }
+    }
 
     public override void _Ready()
     {
@@ -105,18 +120,10 @@ public partial class InteractiveObjectDetector : Node3D
         switch (currentScanType)
         {
             case ScanType.Player:
-                //detectedObject = FindNodeInRadius<Node>(scanRadius, node => node.Name == playerName);
-                //if (detectedObject != null)
-                //{
-                //    //ContextMenu.ShowMessageS($"Модуль сканирования. {onPlayerDetected} Выполнен поиск игрока по радиусу {scanRadius} -> обнаружен игрок {detectedObject.Name}");
-                //    onPlayerDetected.Invoke();
-                //}
-                //else
-                //    onAnyObjectsNotDetected.Invoke();
                 Node3D player = PlayerScript.instance as Node3D;
                 if (player != null && Node.IsInstanceValid(player))
                 {
-                    float distance = GlobalTransform.Origin.DistanceSquaredTo(player.GlobalTransform.Origin);
+                    float distance = moveScript.GlobalPosition.DistanceSquaredTo(player.GlobalTransform.Origin);
                     if (distance < scanRadius * scanRadius)
                     {
                         detectedObject = player;
@@ -147,27 +154,6 @@ public partial class InteractiveObjectDetector : Node3D
         }
     }
 
-    //private T FindInRadius<T>(float radius, Func<T, bool> condition) where T : Node
-    //{
-    //    var collisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
-    //    if (collisionShape.Shape is SphereShape3D sphereShape)
-    //    {
-    //        sphereShape.Radius = radius;
-    //    }
-
-    //    //var bodiesInArea = GetOverlappingBodies();
-
-    //    foreach (var body in bodiesInArea)
-    //    {
-    //        if (body is T node && condition(node))
-    //        {
-    //            return node;
-    //        }
-    //    }
-
-    //    return null;
-    //}
-
     private T FindNodeInRadius<T>(float radius, Func<T, bool> condition) where T : Node
     {
         Node root = GetTree().Root;
@@ -189,7 +175,7 @@ public partial class InteractiveObjectDetector : Node3D
                     {
                         if (node is Node3D targetNode3D)
                         {
-                            float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
+                            float distance = moveScript.GlobalPosition.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
                             if (distance <= radius * radius)
                             {
                                 return targetNode;
@@ -210,7 +196,7 @@ public partial class InteractiveObjectDetector : Node3D
                 {
                     if (node is Node3D targetNode3D)
                     {
-                        float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
+                        float distance = moveScript.GlobalPosition.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
                         if (distance <= radius * radius)
                         {
                             return targetNode;
@@ -230,7 +216,7 @@ public partial class InteractiveObjectDetector : Node3D
                 {
                     if (targetNode is Node3D targetNode3D)
                     {
-                        float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
+                        float distance = moveScript.GlobalPosition.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
                         if (distance <= radius * radius)
                         {
                             return targetNode;
@@ -239,31 +225,6 @@ public partial class InteractiveObjectDetector : Node3D
                 }
             }
         }
-
-        //foreach (Node node in nodes)
-        //{
-        //    if (node is T targetNode && condition(targetNode))
-        //    {
-        //        if (targetNode is InteractiveObjectAudio IOAudio)
-        //        {
-        //            Node3D node3D = targetNode.GetParent() as Node3D;
-        //            if (node3D != null)
-        //            {
-        //                float distance = GlobalTransform.Origin.DistanceSquaredTo(node3D.GlobalTransform.Origin);
-        //                if (distance <= radius * radius) return targetNode;
-        //            }
-        //        }
-        //        else if (targetNode is Node3D targetNode3D)
-        //        {
-        //            float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
-        //            if (distance <= radius * radius)
-        //            {
-        //                return targetNode;
-        //            }
-        //        }
-        //    }
-        //}
-
         return null;
     }
 

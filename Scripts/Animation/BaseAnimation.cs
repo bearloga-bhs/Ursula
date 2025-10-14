@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-public partial class BaseAnimation : Node3D
+public partial class BaseAnimation : Node
 {
     public static string LIBRARY = "Animations";
 
@@ -164,7 +164,7 @@ public partial class BaseAnimation : Node3D
         if (animationPlayer == null) return;
 
         currentState = State.Idle;
-        Play(IdleAnimationName, 1);
+        Play(IdleAnimationName, 0);
     }
 
     public virtual void PlayUseAnimation()
@@ -178,7 +178,7 @@ public partial class BaseAnimation : Node3D
         if (animationPlayer == null) return;
 
         currentState = State.Walk;
-        Play(WalkAnimationName, 0.2f);
+        Play(WalkAnimationName, 0);
     }
 
     public virtual void PlayRunAnimation()
@@ -186,7 +186,7 @@ public partial class BaseAnimation : Node3D
         if (animationPlayer == null) return;
 
         currentState = State.Run;
-        Play(RunAnimationName, 0.2f);
+        Play(RunAnimationName, 0);
     }
 
     public virtual void PlayJumpAnimation()
@@ -194,7 +194,7 @@ public partial class BaseAnimation : Node3D
         if (animationPlayer == null) return;
 
         currentState = State.Jump;
-        PlayOnce(JumpAnimationName, 0.3f, IdleAnimationName);
+        PlayOnce(JumpAnimationName, 0, IdleAnimationName);
     }
 
     public virtual void PlayEatingAnimation()
@@ -202,7 +202,7 @@ public partial class BaseAnimation : Node3D
         if (animationPlayer == null) return;
 
         currentState = State.Eating;
-        PlayOnce(EatingAnimationName, 0.3f, IdleAnimationName);
+        PlayOnce(EatingAnimationName, 0, IdleAnimationName);
     }
 
     public virtual void PlayHeadSpinAnimation()
@@ -213,6 +213,6 @@ public partial class BaseAnimation : Node3D
         if (!animationPlayer.HasAnimation(nameAnim)) nameAnim = LIBRARY + "/" + HeadSpinAnimationName;
 
         currentState = State.HeadSpin;
-        PlayOnce(nameAnim, 0.3f, IdleAnimationName);
+        PlayOnce(nameAnim, 0, IdleAnimationName);
     }
 }

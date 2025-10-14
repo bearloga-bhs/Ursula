@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using Modules.HSM;
 
-public partial class InteractiveObjectMove : Node3D
+public partial class InteractiveObjectMove : Node
 {
     private InteractiveObject _interactiveObject;
 
@@ -95,7 +95,7 @@ public partial class InteractiveObjectMove : Node3D
         }
 
         // Установка позиции с учетом только X и Z координат
-        movePosition = GlobalTransform.Origin + new Vector3(x, 0, z);
+        movePosition = moveScript.GlobalTransform.Origin + new Vector3(x, 0, z);
         return null;
     }
 

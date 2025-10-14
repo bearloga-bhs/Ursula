@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class InteractiveObjectInitialization : Node3D
+public partial class InteractiveObjectInitialization : Node
 {
 	private static Random random;
 

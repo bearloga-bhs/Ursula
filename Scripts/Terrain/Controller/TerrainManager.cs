@@ -107,16 +107,16 @@ public partial class TerrainManager : TerrainModel, IInjectable
         float x_a = x - (int)x;
         float z_a = z - (int)z;
 
-        float yld = mapHeight[Xl, Zd] + positionOffset.Y;
-        float ylu = mapHeight[Xl, Zu] + positionOffset.Y;
-        float yrd = mapHeight[Xr, Zd] + positionOffset.Y;
-        float yru = mapHeight[Xr, Zu] + positionOffset.Y;
+        float yld = mapHeight[Xl, Zd];
+        float ylu = mapHeight[Xl, Zu];
+        float yrd = mapHeight[Xr, Zd];
+        float yru = mapHeight[Xr, Zu];
 
         // Линейная интерполяция
         float yu = Mathf.Lerp(ylu, yru, x_a);
         float yd = Mathf.Lerp(yld, yrd, x_a);
         float y = Mathf.Lerp(yd, yu, z_a);
-        return y;
+        return y + positionOffset.Y;
     }
 	
 	public void _ProcCreateTerrain(bool randomHeight)
