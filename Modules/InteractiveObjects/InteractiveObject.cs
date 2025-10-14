@@ -129,7 +129,6 @@ public partial class InteractiveObject : Node
 
     public void StartAlgorithm()
     {
-        GD.Print("ALGO START");
         if (hsmLogic != null)
         {
             //if (gml.currentState != null)

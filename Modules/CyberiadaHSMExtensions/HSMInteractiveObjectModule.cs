@@ -6,7 +6,7 @@ public class HSMInteractiveObjectModule
 {
     InteractiveObject _object;
 
-    const string ModuleName = "МодульДляРаботыСИнтерактивнымОбъектами"; //Вероятно надо изменить
+    const string ModuleName = "МодульИнтерактивныхОбъектов";
 
     // Command keys
     const string DuplicateObjectCommandKey = $"{ModuleName}.ДублироватьОбъект";
