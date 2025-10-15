@@ -75,11 +75,8 @@ public partial class InteractiveObject : Node
         random = LinkComponent<InteractiveObjectRandomness>("InteractiveObjectRandomness", VoxLib.mapAssets.InteractiveObjectRandomnessPrefab);
     }
 
-    private async GDTask InitHsm()
+    private void InitHsm()
     {
-        //why do we need here timer? In my case it ruins duplicated object to start algorithms
-        //await ToSignal(GetTree().CreateTimer(0.1), "timeout");
-
         hsmDetectorModule = new HSMDetectorModule(hsmLogic, this);
         hsmMovementModule = new HSMMovementModule(hsmLogic, this);
         hsmAnimationModule = new HSMAnimationModule(hsmLogic, this);
@@ -115,7 +112,7 @@ public partial class InteractiveObject : Node
                 if (File.Exists(ProjectSettings.GlobalizePath(xmlPath)))
                 {
                     hsmLogic = CyberiadaLogic.Load(xmlPath);
-                    _ = InitHsm();
+                    InitHsm();
                     _logger = new HSMLogger(this);
                     hsmLogic.SubscribeLogger(_logger);
                 }
