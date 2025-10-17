@@ -93,7 +93,7 @@ public partial class InteractiveObjectsManager : Node
         
         var parent = obj.GetParent();
         Node duplicatedObject = parent.Duplicate();
-        GetTree().CurrentScene.AddChild(duplicatedObject);
+        parent.GetParent().AddChild(duplicatedObject);
         
         var interactiveObject = duplicatedObject.GetChildren().OfType<InteractiveObject>().FirstOrDefault();
         if (interactiveObject != null)
