@@ -12,37 +12,13 @@ using System.Linq;
 public partial class MoveScript : CharacterBody3D
 {
     #region cache
-    private Vector3 localPositionCache;
     private Vector3 globalPositionCache;
     private Vector3 velocityCache;
     private Vector3 rotationCache;
 
-    private bool localPositionCacheUpdated;
     private bool globalPositionCacheUpdated;
     private bool velocityCacheUpdated;
     private bool rotationCacheUpdated;
-
-    public new Vector3 Position
-    {
-        get
-        {
-            if (!localPositionCacheUpdated)
-            {
-                localPositionCache = base.Position;
-                localPositionCacheUpdated = true;
-            }
-            return localPositionCache;
-        }
-        set
-        {
-            if (localPositionCache != value)
-            {
-                localPositionCache = value;
-                base.Position = value;
-                globalPositionCacheUpdated = false;
-            }
-        }
-    }
 
     public new Vector3 GlobalPosition
     {
@@ -57,16 +33,11 @@ public partial class MoveScript : CharacterBody3D
         }
         set
         {
-            if (globalPositionCache != value)
-            {
-                globalPositionCache = value;
-                base.GlobalPosition = value;
-                localPositionCacheUpdated = false;
-            }
+            globalPositionCache = value;
         }
     }
 
-    public Vector3 Velocity
+    public new Vector3 Velocity
     {
         get
         {
@@ -79,7 +50,11 @@ public partial class MoveScript : CharacterBody3D
         }
         set
         {
-            velocityCache = value;
+            if (velocityCache != value)
+            {
+                base.Velocity = value;
+                velocityCache = value;
+            }
         }
     }
 
@@ -94,15 +69,14 @@ public partial class MoveScript : CharacterBody3D
             }
             return rotationCache;
         }
-        set 
+        set
         {
-            if (rotationCache != value)
-            {
-                rotationCache = value;
-                base.Rotation = value;
-            }
+            rotationCache = value;
         }
     }
+
+    private Vector3 oldGlobalPosition = Vector3.Zero;
+    private Vector3 oldRotation = Vector3.Zero;
 
     #endregion
 
@@ -201,7 +175,7 @@ public partial class MoveScript : CharacterBody3D
         collisionShape.Disabled = true;
 
         CSharpBridgeRegistry.Process += CSProcess;
-        CSharpBridgeRegistry.PhysicsProcess += CSPhysicsProcess;        
+        CSharpBridgeRegistry.PhysicsProcess += CSPhysicsProcess;
     }
 
     #endregion
@@ -349,10 +323,10 @@ public partial class MoveScript : CharacterBody3D
     {
         stateMashine = StateMashine.idle;
         PlayIdleAnimation();
-        onMovementFinished?.Invoke();  // ! 5 - 40 ms
+        onMovementFinished?.Invoke();
 
         Vector3 targetPosition = MovementPosition;
-        float distanceToTarget = GlobalTransform.Origin.DistanceTo(targetPosition);
+        float distanceToTarget = GlobalPosition.DistanceTo(targetPosition);
         if (distanceToTarget > _navigationAgent.TargetDesiredDistance * 2)
         {
             onStuckMoving?.Invoke();
@@ -424,7 +398,6 @@ public partial class MoveScript : CharacterBody3D
             // PhysicsLod
 
             inFrustum = Frustum.In(this);
-
             var distance = Frustum.GetDistance(this);
             float targetDistance = inFrustum ? 200 : 50;
 
@@ -437,24 +410,28 @@ public partial class MoveScript : CharacterBody3D
                 SetPhysicsLod1();
             }
         }
+
+        float interpolationFactor = (float)Engine.GetPhysicsInterpolationFraction();
+        base.GlobalPosition = oldGlobalPosition.Lerp(GlobalPosition, interpolationFactor);
+        base.Rotation = oldRotation.Lerp(Rotation, interpolationFactor);
     }
 
     private float navigationProcessTimer = 0f;
+
     public void CSPhysicsProcess(double delta)
     {
-        if (isBlocked) 
+        // Достигнута граница карты
+        if (isBlocked)
             return;
 
-        if (inFrustum)
-        {
-            base._PhysicsProcess(delta);
-        }
-
+        // Обновление NA при следовании за сущностью
         UpdateNavAgentTargetPosition(delta);
 
         Vector3 position = GlobalPosition;
         Vector3 velocity = Velocity;
-        Vector3 rotation = Rotation;
+
+        oldGlobalPosition = position;
+        oldRotation = Rotation;
 
         navigationProcessTimer += (float)delta;
 
@@ -470,19 +447,13 @@ public partial class MoveScript : CharacterBody3D
 
             if (isNavigationFinished)
             {
-                if (stateMashine == StateMashine.moveToRandom)
-                {
-                    MoveToRandomSetup();
-                }
-
-
                 if (stateMashine == StateMashine.moveToTarget || stateMashine == StateMashine.moveFromTarget)
                 {
                     FinishTargetMoveState();
                 }
                 else if (stateMashine == StateMashine.moveToPosition)
                 {
-                    FinishPositionMoveState(); // ! 5 - 40 ms
+                    FinishPositionMoveState();
                 }
                 else
                 {
@@ -492,7 +463,7 @@ public partial class MoveScript : CharacterBody3D
 
             if (stateMashine == StateMashine.idle)
             {
-                return;
+                velocity = Vector3.Zero;
             }
             else if (stateMashine == StateMashine.moveToRandom)
             {
@@ -522,31 +493,28 @@ public partial class MoveScript : CharacterBody3D
             MovingCheck(delta);
         }
 
-        rotation = SetRotation(rotation, velocity, delta);
         velocity = SetVelocity(velocity, delta);
 
-        if (physicsLod == PhysicsLod.Lod0)
-        {
-            Velocity = velocity;
-            Rotation = rotation;
+        //if (physicsLod == PhysicsLod.Lod0)
+        //{
+        Velocity = velocity;
 
-            MoveAndCollide(velocity * (float)delta);
-            velocityCacheUpdated = false;
-            localPositionCacheUpdated = false;
-            globalPositionCacheUpdated = false;
-            rotationCacheUpdated = false;
+        MoveAndSlide();
+        globalPositionCacheUpdated = false;
+        rotationCacheUpdated = false;
 
-            GlobalPosition = CorrectPositionByTerrainHeight(GlobalPosition);
-        }
-        else
-        {
-            position += velocity * (float)delta;
-            position = CorrectPositionByTerrainHeight(position);
+        Rotation = SetRotation(Rotation, velocity, delta);
+        GlobalPosition = CorrectPositionByTerrainHeight(GlobalPosition, 0.5f);
+        //}
+        //else
+        //{
+        //    position += velocity * (float)delta;
+        //    position = CorrectPositionByTerrainHeight(position);
 
-            GlobalPosition = position;
-            Velocity = velocity;
-            Rotation = rotation;
-        }
+        //    GlobalPosition = position;
+        //    Velocity = velocity;
+        //    Rotation = rotation;
+        //}
     }
 
     #endregion
@@ -562,12 +530,12 @@ public partial class MoveScript : CharacterBody3D
     void SetPhysicsLod1()
     {
         physicsLod = PhysicsLod.Lod1;
-        collisionShape.Disabled = true;
+        collisionShape.Disabled = false;
     }
 
     void MovingCheck(double delta)
     {
-        float moveDistDelta = oldPosition.DistanceTo(GlobalTransform.Origin);
+        float moveDistDelta = oldPosition.DistanceTo(GlobalPosition);
 
         if (oldPosition != Vector3.Zero && isMoving)
         {
@@ -575,12 +543,12 @@ public partial class MoveScript : CharacterBody3D
 
             if (moveDistDelta > 0.01f && vel.Length() > 0.01f)
             {
-                moveDistance += oldPosition.DistanceTo(GlobalTransform.Origin);
+                moveDistance += oldPosition.DistanceTo(GlobalPosition);
                 moveDistanceOld = moveDistance;
                 timeStuckMoving = 0;
             }
         }
-        oldPosition = GlobalTransform.Origin;
+        oldPosition = GlobalPosition;
 
         if (onStuckMoving != null && Math.Abs(moveDistanceOld - moveDistance) < 1 && isMoving || (moveDistDelta == 0 && isMoving))
         {
@@ -735,8 +703,8 @@ public partial class MoveScript : CharacterBody3D
     public async void MoveToPositionSetup(Vector3 newPosition)
     {
         ResetCoordinates();
-
-        await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
+        // TODO: requst to change + optimistic movement.
+        //await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
         int X = Math.Clamp((int)newPosition.X, 0, VoxLib.mapManager.sizeX);
         float Y = VoxLib.terrainManager.positionOffset.Y;
@@ -847,7 +815,7 @@ public partial class MoveScript : CharacterBody3D
     {
         //float target_y = GetTerrainHeightByCurrentPos(pos) + upOffset;
         //if (pos.Y < target_y)
-            return new Vector3(pos.X, GetTerrainHeightByCurrentPos(pos) + upOffset, pos.Z);
+        return new Vector3(pos.X, GetTerrainHeightByCurrentPos(pos) + upOffset, pos.Z);
         //return pos;
     }
 

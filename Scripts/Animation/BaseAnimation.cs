@@ -38,6 +38,8 @@ public partial class BaseAnimation : Node
     private bool _loopCurrent = false;
     private StringName _queuedNext = default;
 
+    private Node3D parentNode;
+
     private bool _subscribed = false;
 
     public AnimationPlayer animationPlayer;
@@ -54,6 +56,23 @@ public partial class BaseAnimation : Node
     {
         AnimationSetup();
         AutoplaySetup();
+        parentNode = GetParent<Node3D>();
+        CSharpBridgeRegistry.Process += CSProcess;
+    }
+
+    public void CSProcess(double delta)
+    {
+        if (Frustum.In(parentNode))
+        {
+            if (animationPlayer.CurrentAnimation != "")
+            {
+                animationPlayer?.Play();
+            }
+        }
+        else
+        {
+            animationPlayer?.Pause();
+        }
     }
 
     public virtual void AutoplaySetup()
@@ -98,6 +117,7 @@ public partial class BaseAnimation : Node
         JumpAction -= PlayJumpAnimation;
         EatingAction -= PlayEatingAnimation;
         HeadSpinAction -= PlayHeadSpinAnimation;
+        CSharpBridgeRegistry.Process -= CSProcess;
     }
 
     private void EnsureSubscribed()
@@ -142,7 +162,7 @@ public partial class BaseAnimation : Node
     {
         if (!animationPlayer.HasAnimation(anim)) return;
 
-        animationPlayer.Play(anim, blend, 1f, false);
+        animationPlayer.Play(anim, 0, 1.0f, false);
         _currentAnim = anim;
     }
 
@@ -151,7 +171,7 @@ public partial class BaseAnimation : Node
         if (finishedAnim != _currentAnim) return;
         if (_loopCurrent)
         {
-            animationPlayer.Play(_currentAnim, _currentBlend, 1f, false);
+            animationPlayer.Play(_currentAnim, 0, 1.0f, false);
         }
         else if (_queuedNext != default)
         {

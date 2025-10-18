@@ -6,9 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://cqv2622g5153r" path="res://addons/Ursula/Assets/Models/Animals/Cow/cow_anim.tscn" id="7_lrx7v"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_fq1va"]
-radius = 0.939
+radius = 0.7
 
 [node name="Cow" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_ngxbb")
 
 [node name="InteractiveObject" type="Node" parent="."]
