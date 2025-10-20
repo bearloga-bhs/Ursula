@@ -100,15 +100,7 @@ public partial class InteractiveObjectDetector : Area3D
         switch (currentScanType)
         {
             case ScanType.Player:
-                //detectedObject = FindNodeInRadius<Node>(scanRadius, node => node.Name == playerName);
-                //if (detectedObject != null)
-                //{
-                //    //ContextMenu.ShowMessageS($"Модуль сканирования. {onPlayerDetected} Выполнен поиск игрока по радиусу {scanRadius} -> обнаружен игрок {detectedObject.Name}");
-                //    onPlayerDetected.Invoke();
-                //}
-                //else
-                //    onAnyObjectsNotDetected.Invoke();
-                Node3D player = PlayerScript.instance as Node3D;
+                Node3D player = PlayerScript.instance;
                 if (player != null && Node.IsInstanceValid(player))
                 {
                     float distance = GlobalTransform.Origin.DistanceSquaredTo(player.GlobalTransform.Origin);
@@ -118,57 +110,36 @@ public partial class InteractiveObjectDetector : Area3D
                         onPlayerDetected?.Invoke();
                     }
                     else
+                    {
                         onAnyObjectsNotDetected?.Invoke();
+                    }
                 }
                 break;
             case ScanType.Object:
                 detectedObject = FindNodeInRadius<ItemPropsScript>(scanRadius, ips => ips.GameObjectSampleHash == targetObjectNameHash);
                 if (detectedObject != null && Node.IsInstanceValid(detectedObject))
                 {
-                    //ContextMenu.ShowMessageS($"Модуль сканирования. {onObjectDetected} Выполнен поиск объекта по радиусу {scanRadius} -> обнаружен объект {targetObjectName}");
                     onObjectDetected?.Invoke();
                 }
                 else
+                {
                     onAnyObjectsNotDetected?.Invoke();
+                }
                 break;
             case ScanType.Sound:
                 detectedObject = FindNodeInRadius<InteractiveObjectAudio>(scanRadius, IOAudio => IOAudio.currentAudioKey == targetSoundName && IOAudio.isPlaying)?.GetParent();
                 if (detectedObject != null && Node.IsInstanceValid(detectedObject))
                 {
-                    //ContextMenu.ShowMessageS($"Модуль сканирования. {onSoundDetected} Выполнен поиск звука по радиусу {scanRadius} -> обнаружен звук {targetSoundName}");
                     onSoundDetected?.Invoke();
                 }
                 break;
         }
     }
 
-    private T FindInRadius<T>(float radius, Func<T, bool> condition) where T : Node
-    {
-        var collisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
-        if (collisionShape.Shape is SphereShape3D sphereShape)
-        {
-            sphereShape.Radius = radius;
-        }
-
-        var bodiesInArea = GetOverlappingBodies();
-
-        foreach (var body in bodiesInArea)
-        {
-            if (body is T node && condition(node))
-            {
-                return node;
-            }
-        }
-
-        return null;
-    }
-
     private T FindNodeInRadius<T>(float radius, Func<T, bool> condition) where T : Node
     {
         Node root = GetTree().Root;
-
-        //var nodes = GetAllNodes(root).ToList();
-
+        
         var nodes = GetItemsNodes().ToList();
 
         if (typeof(T) == typeof(InteractiveObjectAudio))
@@ -216,7 +187,7 @@ public partial class InteractiveObjectDetector : Area3D
         }
         else
         {
-            Node player = PlayerScript.instance as Node;
+            Node player = PlayerScript.instance;
             if (player != null) nodes.Add(player);
 
             foreach (Node node in nodes)
@@ -234,54 +205,14 @@ public partial class InteractiveObjectDetector : Area3D
                 }
             }
         }
-
-        //foreach (Node node in nodes)
-        //{
-        //    if (node is T targetNode && condition(targetNode))
-        //    {
-        //        if (targetNode is InteractiveObjectAudio IOAudio)
-        //        {
-        //            Node3D node3D = targetNode.GetParent() as Node3D;
-        //            if (node3D != null)
-        //            {
-        //                float distance = GlobalTransform.Origin.DistanceSquaredTo(node3D.GlobalTransform.Origin);
-        //                if (distance <= radius * radius) return targetNode;
-        //            }
-        //        }
-        //        else if (targetNode is Node3D targetNode3D)
-        //        {
-        //            float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
-        //            if (distance <= radius * radius)
-        //            {
-        //                return targetNode;
-        //            }
-        //        }
-        //    }
-        //}
-
         return null;
-    }
-
-    // Метод для получения всех узлов сцены
-    private IEnumerable<Node> GetAllNodes(Node parent)
-    {
-        foreach (Node child in parent.GetChildren())
-        {
-            yield return child;
-
-            // Рекурсивно проверяем детей
-            foreach (Node grandChild in GetAllNodes(child))
-            {
-                yield return grandChild;
-            }
-        }
     }
 
     private IEnumerable<Node> GetItemsNodes()
     {
         foreach (ItemPropsScript ips in VoxLib.mapManager.gameItems)
         {
-            Node node = (Node)ips; // (Node)ips.GetParent();
+            Node node = (Node)ips; 
             yield return node;
         }
     }
@@ -291,11 +222,12 @@ public partial class InteractiveObjectDetector : Area3D
         detectedObject = FindNodeInRadius<Node>(scanRadius, node => node.Name.ToString().Contains(targetObjectName));
         if (detectedObject != null)
         {
-            //ContextMenu.ShowMessageS($"Модуль сканирования. {onObjectDetected} Выполнен поиск объекта по радиусу {scanRadius} -> обнаружен объект {targetObjectName}");
             onPlayerInteractionObject?.Invoke();
         }
         else
+        {
             onAnyObjectsNotDetected?.Invoke();
+        }
     }
 
     public override void _ExitTree()
