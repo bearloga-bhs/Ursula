@@ -14,8 +14,7 @@ public partial class InteractiveObjectDetector : Area3D
 
     private bool isScanning = false;
 
-    private enum ScanType { Player, Object, Sound }
-    private ScanType currentScanType; 
+    private Action scanAction;
     private string targetObjectName;
     private int targetObjectNameHash;
     private string targetSoundName;
@@ -35,8 +34,8 @@ public partial class InteractiveObjectDetector : Area3D
 
     public object StartPlayerScan(float radius)
     {
-        StartScanning(ScanType.Player, radius);
-
+        StartScanning(radius);
+        scanAction += FindPlayer;
         return null;
     }
 
@@ -44,7 +43,8 @@ public partial class InteractiveObjectDetector : Area3D
     {
         targetObjectName = objectName;
         targetObjectNameHash = objectName.GetHashCode();
-        StartScanning(ScanType.Object, radius);
+        StartScanning(radius);
+        scanAction += FindObject;
 
         return null;
     }
@@ -62,17 +62,17 @@ public partial class InteractiveObjectDetector : Area3D
     public object StartSoundScan(string soundName, float radius)
     {
         targetSoundName = soundName;
-        StartScanning(ScanType.Sound, radius);
+        StartScanning(radius);
+        scanAction += FindSound;
 
         return null;
     }
 
-    private void StartScanning(ScanType scanType, float radius)
+    private void StartScanning(float radius)
     {
         isScanning = true;
-        currentScanType = scanType;
         scanRadius = radius;
-        GD.Print($"Scanning for {scanType} started...");
+        GD.Print($"Scanning started...");
     }
     public object StopScanning()
     {
@@ -97,52 +97,29 @@ public partial class InteractiveObjectDetector : Area3D
 
     private void PerformScan()
     {
-        if (currentScanType == ScanType.Player)
-        {
-            detectedObject = FindPlayer();
-            if (detectedObject != null && Node.IsInstanceValid(detectedObject))
-            {
-                onPlayerDetected?.Invoke();
-            }                    
-            else
-            {
-                onAnyObjectsNotDetected?.Invoke();
-            }
-        }
-        else if (currentScanType == ScanType.Object)
-        {
-            detectedObject = FindObject();
-            if (detectedObject != null && Node.IsInstanceValid(detectedObject))
-            {
-                onObjectDetected?.Invoke();
-            }
-            else
-            {
-                onAnyObjectsNotDetected?.Invoke();
-            }
-        }
-        else if (currentScanType == ScanType.Sound)
-        {
-            detectedObject = FindSound();
-            if (detectedObject != null && Node.IsInstanceValid(detectedObject))
-            {
-                onSoundDetected?.Invoke();
-            }
-        }
+        scanAction();
     }
 
     private IEnumerable<Node> GetItemsNodes()
     {
         foreach (ItemPropsScript ips in VoxLib.mapManager.gameItems)
         {
-            Node node = (Node)ips; 
-            yield return node;
+            yield return ips;
         }
     }
-
-    public void PlayerInteractionObject()
+    
+    private void PlayerInteractionObject()
     {
-        detectedObject = FindPlayerInteractionObject();
+        var nodes = GetItemsNodes().ToList();
+        Node player = PlayerScript.instance;
+        if (player != null) nodes.Add(player);
+        foreach (Node node in nodes)
+        {
+            if (InRadius(node) && node.Name.ToString().Contains(targetObjectName))
+            {
+                detectedObject = node;
+            }
+        }
 
         if (detectedObject != null)
         {
@@ -159,18 +136,25 @@ public partial class InteractiveObjectDetector : Area3D
         GameManager.onPlayerInteractionObjectAction -= PlayerInteractionObject;
     }
 
-    private Node FindPlayer()
+    private void FindPlayer()
     {
         Node3D player = PlayerScript.instance;
         if (player != null && InRadius(player))
         {
-            return player;
+            detectedObject = player;
         }
 
-        return null;
+        if (detectedObject != null && Node.IsInstanceValid(detectedObject))
+        {
+            onPlayerDetected?.Invoke();
+        }                    
+        else
+        {
+            onAnyObjectsNotDetected?.Invoke();
+        }
     }
     
-    private Node FindObject()
+    private void FindObject()
     {
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
@@ -179,44 +163,38 @@ public partial class InteractiveObjectDetector : Area3D
             {
                 if (InRadius(node))
                 {
-                    return node;
+                    detectedObject = node;
                 }
             }
         }
 
-        return null;
+        if (detectedObject != null && Node.IsInstanceValid(detectedObject))
+        {
+            onObjectDetected?.Invoke();
+        }
+        else
+        {
+            onAnyObjectsNotDetected?.Invoke();
+        }
     }
     
-    private Node FindSound()
+    private void FindSound()
     {
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
             if (node is ItemPropsScript item && item.IO.audio.currentAudioKey == targetSoundName && item.IO.audio.isPlaying && InRadius(node))
             {
-                return node;
+                detectedObject = node;
             }
         }
 
-        return null;
+        if (detectedObject != null && Node.IsInstanceValid(detectedObject))
+        {
+            onSoundDetected?.Invoke();
+        }
     }
     
-    private Node FindPlayerInteractionObject()
-    {
-        var nodes = GetItemsNodes().ToList();
-        Node player = PlayerScript.instance;
-        if (player != null) nodes.Add(player);
-        foreach (Node node in nodes)
-        {
-            if (InRadius(node) && node.Name.ToString().Contains(targetObjectName))
-            {
-                return node;
-            }
-        }
-
-        return null;
-    }
-
     private bool InRadius(Node node)
     {
         if (node is Node3D targetNode3D)
