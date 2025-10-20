@@ -162,13 +162,9 @@ public partial class InteractiveObjectDetector : Area3D
     private Node FindPlayer()
     {
         Node3D player = PlayerScript.instance;
-        if (player != null)
+        if (player != null && InRadius(player))
         {
-            float distance = GlobalTransform.Origin.DistanceSquaredTo(player.GlobalTransform.Origin);
-            if (distance < scanRadius * scanRadius)
-            {
-                return player;
-            }
+            return player;
         }
 
         return null;
@@ -184,13 +180,9 @@ public partial class InteractiveObjectDetector : Area3D
             if (item == null) continue;
             if (item is ItemPropsScript targetNode && condition(targetNode))
             {
-                if (node is Node3D targetNode3D)
+                if (InRadius(node))
                 {
-                    float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
-                    if (distance <= scanRadius * scanRadius)
-                    {
-                        return targetNode;
-                    }
+                    return node;
                 }
             }
         }
@@ -209,16 +201,9 @@ public partial class InteractiveObjectDetector : Area3D
             {
                 Node IOaudio = (Node)item.IO.audio;
 
-                if (IOaudio is InteractiveObjectAudio targetNode && condition(targetNode))
+                if (IOaudio is InteractiveObjectAudio targetNode && condition(targetNode) && InRadius(node))
                 {
-                    if (node is Node3D targetNode3D)
-                    {
-                        float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
-                        if (distance <= scanRadius * scanRadius)
-                        {
-                            return targetNode;
-                        }
-                    }
+                    return node;
                 }
             }
         }
@@ -234,19 +219,26 @@ public partial class InteractiveObjectDetector : Area3D
         if (player != null) nodes.Add(player);
         foreach (Node node in nodes)
         {
-            if (node is Node targetNode && condition(targetNode))
+            if (InRadius(node) && condition(node))
             {
-                if (targetNode is Node3D targetNode3D)
-                {
-                    float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalTransform.Origin);
-                    if (distance <= scanRadius * scanRadius)
-                    {
-                        return targetNode;
-                    }
-                }
+                return node;
             }
         }
 
         return null;
+    }
+
+    private bool InRadius(Node node)
+    {
+        if (node is Node3D targetNode3D)
+        {
+            float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalPosition);
+            if (distance <= scanRadius * scanRadius)
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
