@@ -16,7 +16,6 @@ public partial class InteractiveObjectDetector : Area3D
 
     private Action scanAction;
     private string targetObjectName;
-    private int targetObjectNameHash;
     private string targetSoundName;
     private float scanRadius;  
 
@@ -42,7 +41,6 @@ public partial class InteractiveObjectDetector : Area3D
     public object StartObjectScan(string objectName, float radius)
     {
         targetObjectName = objectName;
-        targetObjectNameHash = objectName.GetHashCode();
         StartScanning(radius);
         scanAction += FindObject;
 
@@ -52,7 +50,6 @@ public partial class InteractiveObjectDetector : Area3D
     public object StartPlayerObjectInteractionScan(string objectName, float radius)
     {
         targetObjectName = objectName;
-        targetObjectNameHash = objectName.GetHashCode();
         scanRadius = radius;
         GameManager.onPlayerInteractionObjectAction += PlayerInteractionObject;
 
@@ -74,6 +71,7 @@ public partial class InteractiveObjectDetector : Area3D
         scanRadius = radius;
         GD.Print($"Scanning started...");
     }
+    
     public object StopScanning()
     {
         isScanning = false;
@@ -90,14 +88,9 @@ public partial class InteractiveObjectDetector : Area3D
             if (timeAccumulator >= SCAN_INTERVAL)
             {
                 timeAccumulator = 0f;
-                PerformScan();
+                scanAction();
             }
         }
-    }
-
-    private void PerformScan()
-    {
-        scanAction();
     }
 
     private IEnumerable<Node> GetItemsNodes()
@@ -118,6 +111,7 @@ public partial class InteractiveObjectDetector : Area3D
             if (InRadius(node) && node.Name.ToString().Contains(targetObjectName))
             {
                 detectedObject = node;
+                break;
             }
         }
 
@@ -159,11 +153,12 @@ public partial class InteractiveObjectDetector : Area3D
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
-            if (node is ItemPropsScript item && item.GameObjectSampleHash == targetObjectNameHash)
+            if (node is ItemPropsScript item && item.GameObjectSample == targetObjectName)
             {
                 if (InRadius(node))
                 {
                     detectedObject = node;
+                    break;
                 }
             }
         }
@@ -186,6 +181,7 @@ public partial class InteractiveObjectDetector : Area3D
             if (node is ItemPropsScript item && item.IO.audio.currentAudioKey == targetSoundName && item.IO.audio.isPlaying && InRadius(node))
             {
                 detectedObject = node;
+                break;
             }
         }
 
