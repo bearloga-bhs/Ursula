@@ -172,13 +172,10 @@ public partial class InteractiveObjectDetector : Area3D
     
     private Node FindObject()
     {
-        Func<ItemPropsScript, bool> condition = ips => ips.GameObjectSampleHash == targetObjectNameHash;
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
-            ItemPropsScript item = (ItemPropsScript)node;
-            if (item == null) continue;
-            if (item is ItemPropsScript targetNode && condition(targetNode))
+            if (node is ItemPropsScript item && item.GameObjectSampleHash == targetObjectNameHash)
             {
                 if (InRadius(node))
                 {
@@ -192,19 +189,12 @@ public partial class InteractiveObjectDetector : Area3D
     
     private Node FindSound()
     {
-        Func<InteractiveObjectAudio, bool> condition = IOAudio => IOAudio.currentAudioKey == targetSoundName && IOAudio.isPlaying;
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
-            ItemPropsScript item = (ItemPropsScript)node;
-            if (item != null)
+            if (node is ItemPropsScript item && item.IO.audio.currentAudioKey == targetSoundName && item.IO.audio.isPlaying && InRadius(node))
             {
-                Node IOaudio = (Node)item.IO.audio;
-
-                if (IOaudio is InteractiveObjectAudio targetNode && condition(targetNode) && InRadius(node))
-                {
-                    return node;
-                }
+                return node;
             }
         }
 
@@ -213,13 +203,12 @@ public partial class InteractiveObjectDetector : Area3D
     
     private Node FindPlayerInteractionObject()
     {
-        Func<Node, bool> condition = node => node.Name.ToString().Contains(targetObjectName);
         var nodes = GetItemsNodes().ToList();
         Node player = PlayerScript.instance;
         if (player != null) nodes.Add(player);
         foreach (Node node in nodes)
         {
-            if (InRadius(node) && condition(node))
+            if (InRadius(node) && node.Name.ToString().Contains(targetObjectName))
             {
                 return node;
             }
