@@ -178,6 +178,8 @@ public partial class PlayerScript : CharacterBody3D, IInjectable
                 VoxLib.hud._labelCoordinates.Visible = false;
             }
         }
+
+        GlobalPosition = oldPosition.Lerp(newPosition, (float)Engine.GetPhysicsInterpolationFraction());
     }
 
     private async GDTask SetHudInfo(string info)
@@ -185,6 +187,9 @@ public partial class PlayerScript : CharacterBody3D, IInjectable
         var model = _hudManager != null ? await _hudManager.GetAsync() : null;
         model?.SetInfo(info);
     }
+
+    Vector3 oldPosition;
+    Vector3 newPosition;
 
     float waterLevel = -1;
     VoxDrawTypes TypeSurface = VoxDrawTypes.solid;
@@ -264,7 +269,10 @@ public partial class PlayerScript : CharacterBody3D, IInjectable
         }
 
         Velocity = _targetVelocity;
+        oldPosition = GlobalPosition;
         MoveAndSlide();
+        newPosition = GlobalPosition;
+        GlobalPosition = oldPosition;
     }
 
     public override void _ExitTree()
