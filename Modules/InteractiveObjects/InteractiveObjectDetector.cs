@@ -133,12 +133,12 @@ public partial class InteractiveObjectDetector : Area3D
     private void FindPlayer()
     {
         Node3D player = PlayerScript.instance;
-        if (player != null && InRadius(player))
+        if (player != null && Node.IsInstanceValid(player) && InRadius(player))
         {
             detectedObject = player;
         }
 
-        if (detectedObject != null && Node.IsInstanceValid(detectedObject))
+        if (detectedObject != null)
         {
             onPlayerDetected?.Invoke();
         }                    
