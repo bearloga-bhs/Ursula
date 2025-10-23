@@ -153,13 +153,10 @@ public partial class InteractiveObjectDetector : Area3D
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
-            if (node is ItemPropsScript item && item.GameObjectSample == targetObjectName)
+            if (node is ItemPropsScript item && item.GameObjectSample == targetObjectName && InRadius(node))
             {
-                if (InRadius(node))
-                {
-                    detectedObject = node;
-                    break;
-                }
+                detectedObject = node;
+                break;
             }
         }
 
