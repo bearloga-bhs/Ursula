@@ -29,12 +29,15 @@ public partial class InteractiveObjectDetector : Area3D
 
     public Action onAnyObjectsNotDetected;
 
+    private IDetectorShape detectorShape;
+    
     public string playerName = "Player";
 
     public object StartPlayerScan(float radius)
     {
         StartScanning(radius);
         scanAction += FindPlayer;
+        detectorShape = new SphereDetectorShape(Vector3.Zero, radius, this);
         return null;
     }
 
@@ -43,7 +46,7 @@ public partial class InteractiveObjectDetector : Area3D
         targetObjectName = objectName;
         StartScanning(radius);
         scanAction += FindObject;
-
+        detectorShape = new SphereDetectorShape(Vector3.Zero, radius, this);
         return null;
     }
 
@@ -52,7 +55,7 @@ public partial class InteractiveObjectDetector : Area3D
         targetObjectName = objectName;
         scanRadius = radius;
         GameManager.onPlayerInteractionObjectAction += PlayerInteractionObject;
-
+        detectorShape = new SphereDetectorShape(Vector3.Zero, radius, this);
         return null;
     }   
 
@@ -61,7 +64,7 @@ public partial class InteractiveObjectDetector : Area3D
         targetSoundName = soundName;
         StartScanning(radius);
         scanAction += FindSound;
-
+        detectorShape = new SphereDetectorShape(Vector3.Zero, radius, this);
         return null;
     }
 
@@ -108,7 +111,7 @@ public partial class InteractiveObjectDetector : Area3D
         if (player != null) nodes.Add(player);
         foreach (Node node in nodes)
         {
-            if (InRadius(node) && node.Name.ToString().Contains(targetObjectName))
+            if (node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition) && node.Name.ToString().Contains(targetObjectName))
             {
                 detectedObject = node;
                 break;
@@ -133,7 +136,7 @@ public partial class InteractiveObjectDetector : Area3D
     private void FindPlayer()
     {
         Node3D player = PlayerScript.instance;
-        if (player != null && Node.IsInstanceValid(player) && InRadius(player))
+        if (player != null && Node.IsInstanceValid(player) && detectorShape.IsDetected(player.GlobalPosition))
         {
             detectedObject = player;
         }
@@ -153,7 +156,8 @@ public partial class InteractiveObjectDetector : Area3D
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
-            if (node is ItemPropsScript item && item.GameObjectSample == targetObjectName && InRadius(node))
+            if (node is ItemPropsScript item && item.GameObjectSample == targetObjectName && 
+                node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition))
             {
                 detectedObject = node;
                 break;
@@ -175,7 +179,8 @@ public partial class InteractiveObjectDetector : Area3D
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
-            if (node is ItemPropsScript item && item.IO.audio.currentAudioKey == targetSoundName && item.IO.audio.isPlaying && InRadius(node))
+            if (node is ItemPropsScript item && item.IO.audio.currentAudioKey == targetSoundName && item.IO.audio.isPlaying &&
+                node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition))
             {
                 detectedObject = node;
                 break;
@@ -186,19 +191,5 @@ public partial class InteractiveObjectDetector : Area3D
         {
             onSoundDetected?.Invoke();
         }
-    }
-    
-    private bool InRadius(Node node)
-    {
-        if (node is Node3D targetNode3D)
-        {
-            float distance = GlobalTransform.Origin.DistanceSquaredTo(targetNode3D.GlobalPosition);
-            if (distance <= scanRadius * scanRadius)
-            {
-                return true;
-            }
-        }
-        
-        return false;
     }
 }
