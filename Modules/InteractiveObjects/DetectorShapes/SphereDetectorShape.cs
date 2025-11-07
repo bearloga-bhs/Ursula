@@ -31,7 +31,7 @@ public class SphereDetectorShape : IDetectorShape
         Vector3 offset;
         if (relative)
         {
-            offset = anchor.Transform.Origin;
+            offset = anchor.GlobalPosition;
         }
         else
         {

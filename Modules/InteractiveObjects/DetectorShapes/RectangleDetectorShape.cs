@@ -31,7 +31,7 @@ public class RectangleDetectorShape : IDetectorShape
         Vector3 offset;
         if (relative)
         {
-            offset = anchor.Transform.Origin;
+            offset = anchor.GlobalPosition;
         }
         else
         {

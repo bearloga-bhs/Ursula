@@ -18,6 +18,7 @@ public partial class InteractiveObjectDetector : Area3D
     private string targetObjectName;
     private string targetSoundName;
     private float scanRadius;  
+    private IDetectorShape detectorShape;
 
     private float timeAccumulator = 0f; 
     private const float SCAN_INTERVAL = 0.25f;
@@ -29,8 +30,6 @@ public partial class InteractiveObjectDetector : Area3D
 
     public Action onAnyObjectsNotDetected;
 
-    private IDetectorShape detectorShape;
-    
     public string playerName = "Player";
 
     public object StartPlayerScan(float radius)
