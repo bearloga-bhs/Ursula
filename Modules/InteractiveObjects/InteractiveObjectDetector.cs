@@ -36,7 +36,7 @@ public partial class InteractiveObjectDetector : Area3D
     {
         StartScanning(radius);
         scanAction += FindPlayer;
-        detectorShape = new SphereDetectorShape(Vector3.Zero, radius, this);
+        detectorShape = new SphereDetectorShape(this, radius, Vector3.Zero);
         return null;
     }
 
@@ -45,7 +45,7 @@ public partial class InteractiveObjectDetector : Area3D
         targetObjectName = objectName;
         StartScanning(radius);
         scanAction += FindObject;
-        detectorShape = new SphereDetectorShape(Vector3.Zero, radius, this);
+        detectorShape = new SphereDetectorShape(this, radius, Vector3.Zero);
         return null;
     }
 
@@ -54,7 +54,7 @@ public partial class InteractiveObjectDetector : Area3D
         targetObjectName = objectName;
         scanRadius = radius;
         GameManager.onPlayerInteractionObjectAction += PlayerInteractionObject;
-        detectorShape = new SphereDetectorShape(Vector3.Zero, radius, this);
+        detectorShape = new SphereDetectorShape(this, radius, Vector3.Zero);
         return null;
     }   
 
@@ -63,7 +63,7 @@ public partial class InteractiveObjectDetector : Area3D
         targetSoundName = soundName;
         StartScanning(radius);
         scanAction += FindSound;
-        detectorShape = new SphereDetectorShape(Vector3.Zero, radius, this);
+        detectorShape = new SphereDetectorShape(this, radius, Vector3.Zero);
         return null;
     }
 
