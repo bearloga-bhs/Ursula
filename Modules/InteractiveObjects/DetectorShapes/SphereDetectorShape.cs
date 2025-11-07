@@ -15,9 +15,9 @@ public class SphereDetectorShape : IDetectorShape
 
     public bool IsDetected(Vector3 point)
     {
-        Vector3 offset_after_rotation = anchor.GetTransform() * offset;
+        Vector3 offset_after_rotation = anchor.GlobalTransform * offset;
         
-        float dist2 = point.DistanceSquaredTo(anchor.GlobalPosition + offset_after_rotation);
+        float dist2 = point.DistanceSquaredTo(offset_after_rotation);
         if (dist2 <= radius * radius)
         {
             return true;
