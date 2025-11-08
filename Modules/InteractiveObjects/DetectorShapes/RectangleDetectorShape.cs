@@ -7,18 +7,15 @@ public class RectangleDetectorShape : IDetectorShape
     private Vector3 left_up;
     private Vector3 right_down;
     private Vector3 right_up;
-    private Vector3 offset;
 
     private Node3D anchor;
     
     public RectangleDetectorShape(Node3D relativeTo, float width, float height, Vector3 offset)
     {
-        //TODO add support of offset of rectangle points
-        left_down = new Vector3(-width / 2, 0, -height / 2);
-        left_up = new Vector3(-width / 2, 0, height / 2);
-        right_down = new Vector3(width / 2, 0, -height / 2);
-        right_up = new Vector3(width / 2, 0, height / 2);
-        this.offset = offset;
+        left_down = new Vector3(-width / 2, 0, -height / 2) + offset;
+        left_up = new Vector3(-width / 2, 0, height / 2) + offset;
+        right_down = new Vector3(width / 2, 0, -height / 2) + offset;
+        right_up = new Vector3(width / 2, 0, height / 2) + offset;
         anchor = relativeTo;
     }
 
