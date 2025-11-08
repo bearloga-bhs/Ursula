@@ -21,18 +21,25 @@ public class RectangleDetectorShape : IDetectorShape
 
     public bool IsDetected(Vector3 point)
     {
-        //TODO rotate rectangle here, ignore Pitch rotation
+        //NOTE Pitch rotation is not ignored. If 3D actor is rotated in Pitch axis rectangle will be shrinked
+        //NOTE make detection like box collider? Need to discuss 
+        
         Vector3 point_copy = new Vector3(point.X, 0, point.Z);
+            
+        Vector3 left_down_after_rotation = anchor.GlobalTransform * left_down;
+        Vector3 left_up_after_rotation = anchor.GlobalTransform * left_up;
+        Vector3 right_down_after_rotation = anchor.GlobalTransform * right_down;
+        Vector3 right_up_after_rotation = anchor.GlobalTransform * right_up;
         
-        Vector3 left_side = left_up - left_down;
-        Vector3 up_side = right_up - left_up;
-        Vector3 right_side = right_down - right_up;
-        Vector3 down_side = left_down - right_down;
+        Vector3 left_side = left_up_after_rotation - left_down_after_rotation;
+        Vector3 up_side = right_up_after_rotation - left_up_after_rotation;
+        Vector3 right_side = right_down_after_rotation - right_up_after_rotation;
+        Vector3 down_side = left_down_after_rotation - right_down_after_rotation;
         
-        Vector3 point_left = left_down - point_copy;
-        Vector3 point_up = left_up - point_copy;
-        Vector3 point_right = right_up - point_copy;
-        Vector3 point_down = right_down - point_copy;
+        Vector3 point_left = left_down_after_rotation - point_copy;
+        Vector3 point_up = left_up_after_rotation - point_copy;
+        Vector3 point_right = right_up_after_rotation - point_copy;
+        Vector3 point_down = right_down_after_rotation - point_copy;
 
         float cross_left = point_left.Cross(left_side).Y;
         float cross_up = point_up.Cross(up_side).Y;
