@@ -105,6 +105,8 @@ public partial class InteractiveObjectDetector : Area3D
     
     private void PlayerInteractionObject()
     {
+        detectedObject = null;
+        
         var nodes = GetItemsNodes().ToList();
         Node player = PlayerScript.instance;
         if (player != null) nodes.Add(player);
@@ -134,6 +136,8 @@ public partial class InteractiveObjectDetector : Area3D
 
     private void FindPlayer()
     {
+        detectedObject = null;
+        
         Node3D player = PlayerScript.instance;
         if (player != null && Node.IsInstanceValid(player) && detectorShape.IsDetected(player.GlobalPosition))
         {
@@ -152,6 +156,8 @@ public partial class InteractiveObjectDetector : Area3D
     
     private void FindObject()
     {
+        detectedObject = null;
+        
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
@@ -175,6 +181,8 @@ public partial class InteractiveObjectDetector : Area3D
     
     private void FindSound()
     {
+        detectedObject = null;
+        
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {

@@ -1,0 +1,591 @@
+{
+  "savingDirectory": "bearloga/saves",
+  "iconsDirectory": "bearloga/icon",
+  "modules": [
+    {
+      "name": "МодульОбнаружения",
+      "icon": "Scan.png",
+      "actions": [
+        {
+          "name": "ПоискИгрокаВРадиусе",
+          "icon": "FindAllyByDistance.png",
+          "parameters": [
+            {
+              "parameter": "радиусОбнаружения",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ПоискОбъектаВРадиусеПоИмени",
+          "icon": "findObjectByName.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеОбъекта",
+              "parameterType": "string"
+            },
+            {
+              "parameter": "радиусОбнаружения",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ВзаимодействиеИгрокаСОбъектом",
+          "icon": "findObjectByName.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеОбъекта",
+              "parameterType": "string"
+            },
+            {
+              "parameter": "радиусОбнаружения",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ОбнаружениеВоспроизведенияЗвука",
+          "icon": "findObjectBySound.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеЗвука",
+              "parameterType": "string"
+            },
+            {
+              "parameter": "радиусОбнаружения",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ОстановкаПоиска",
+          "icon": "Stop.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "ИгрокОбнаружен",
+          "icon": "playerDetected.png"
+        },
+        {
+          "name": "ОбъектОбнаружен",
+          "icon": "objectDetected.png"
+        },
+        {
+          "name": "ВзаимодействиеИгрока",
+          "icon": "playerInteraction.png"
+        },
+        {
+          "name": "ВзаимодействиеИгрокаСОбъектом",
+          "icon": "playerObjectInteraction.png"
+        },
+        {
+          "name": "ОбъектовНеОбнаружено",
+          "icon": "objectDetected.png"
+        },
+        {
+          "name": "ЗвукОбнаружен",
+          "icon": "objectDetected.png"
+        }
+      ]
+    },
+    {
+      "name": "МодульОбнаружения2",
+      "icon": "Scan.png",
+      "actions": [
+        {
+          "name": "ПоискИгрокаВРадиусе",
+          "icon": "FindAllyByDistance.png",
+          "parameters": [
+            {
+              "parameter": "радиусОбнаружения",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ПоискОбъектаВРадиусеПоИмени",
+          "icon": "findObjectByName.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеОбъекта",
+              "parameterType": "string"
+            },
+            {
+              "parameter": "радиусОбнаружения",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ВзаимодействиеИгрокаСОбъектом",
+          "icon": "findObjectByName.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеОбъекта",
+              "parameterType": "string"
+            },
+            {
+              "parameter": "радиусОбнаружения",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ОбнаружениеВоспроизведенияЗвука",
+          "icon": "findObjectBySound.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеЗвука",
+              "parameterType": "string"
+            },
+            {
+              "parameter": "радиусОбнаружения",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ОстановкаПоиска",
+          "icon": "Stop.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "ИгрокОбнаружен",
+          "icon": "playerDetected.png"
+        },
+        {
+          "name": "ОбъектОбнаружен",
+          "icon": "objectDetected.png"
+        },
+        {
+          "name": "ВзаимодействиеИгрока",
+          "icon": "playerInteraction.png"
+        },
+        {
+          "name": "ВзаимодействиеИгрокаСОбъектом",
+          "icon": "playerObjectInteraction.png"
+        },
+        {
+          "name": "ОбъектовНеОбнаружено",
+          "icon": "objectDetected.png"
+        },
+        {
+          "name": "ЗвукОбнаружен",
+          "icon": "objectDetected.png"
+        }
+      ]
+    },
+    {
+      "name": "МодульДвижения",
+      "icon": "MoveModule.png",
+      "actions": [
+        {
+          "name": "ДвигатьсяКОбъекту",
+          "icon": "GoToTarget.png"
+        },
+        {
+          "name": "ДвигатьсяОтОбъекта",
+          "icon": "GoAwayFromTarget.png"
+        },
+        {
+          "name": "ДвигатьсяПоКоординатам",
+          "icon": "MoveToCoord.png"
+        },
+        {
+          "name": "ЗадатьКоординаты",
+          "icon": "setCoords.png",
+          "parameters": [
+            {
+              "parameter": "x",
+              "parameterType": "float"
+            },
+            {
+              "parameter": "y",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ЗадатьКоординатуВверх",
+          "icon": "SetCoordUp.png",
+          "parameters": [
+            {
+              "parameter": "N",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ЗадатьКоординатуВниз",
+          "icon": "SetCoordDown.png",
+          "parameters": [
+            {
+              "parameter": "N",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ЗадатьКоординатуВправо",
+          "icon": "SetCoordRight.png",
+          "parameters": [
+            {
+              "parameter": "N",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ЗадатьКоординатуВлево",
+          "icon": "SetCoordLeft.png",
+          "parameters": [
+            {
+              "parameter": "N",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ЗадатьСлучайныеКоординаты",
+          "icon": "setCoords.png",
+          "parameters": [
+            {
+              "parameter": "radius",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "СбросКоординат",
+          "icon": "ResetCoords.png"
+        },
+        {
+          "name": "ЗадатьИмяОбъекта",
+          "icon": "findObjectByName.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеОбъекта",
+              "parameterType": "string"
+            }
+          ]
+        },
+        {
+          "name": "ЗадатьПройденноеРасстояние",
+          "icon": "setCoords.png",
+          "parameters": [
+            {
+              "parameter": "distance",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "Стоп",
+          "icon": "Stop.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "ПеремещениеВыполнено",
+          "icon": "Completed.png"
+        },
+        {
+          "name": "ЗастреваниеПриДвижении",
+          "icon": "CollisionWithObstacle.png"
+        },
+        {
+          "name": "СтолкновениеСПрепятствием",
+          "icon": "Stop.png"
+        },
+        {
+          "name": "ПройденноеРасстояние",
+          "icon": "Completed.png"
+        }
+      ],
+      "variables": [
+        {
+          "name": "ПройденноеРасстояние",
+          "icon": "distanceTraveled.png"
+        }
+      ]
+    },
+    {
+      "name": "МодульАнимаций",
+      "icon": "playerInteraction.png",
+      "actions": [
+        {
+          "name": "ВоспроизвестиАнимацию",
+          "icon": "playSound.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеАнимации",
+              "parameterType": "string"
+            },
+            {
+              "parameter": "количествоПовторений",
+              "parameterType": "int"
+            }
+          ]
+        },
+        {
+          "name": "ВоспроизвестиСлучайнуюАнимацию",
+          "icon": "playRandomSound.png",
+          "parameters": [
+            {
+              "parameter": "количествоПовторений",
+              "parameterType": "int"
+            }
+          ]
+        },
+        {
+          "name": "ОстановитьАнимацию",
+          "icon": "Stop.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "АнимацияЗавершилась",
+          "icon": "Completed.png"
+        },
+        {
+          "name": "ЦиклАнимацийЗавершился",
+          "icon": "CollisionWithObstacle.png"
+        }
+      ],
+      "variables": [
+
+      ]
+    },
+    {
+      "name": "ВоспроизведениеЗвука",
+      "icon": "sound.png",
+      "actions": [
+        {
+          "name": "УстановитьРадиусСлышимости",
+          "icon": "setSoundRadius.png",
+          "parameters": [
+            {
+              "parameter": "радиус",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ВоспроизвестиЗвук",
+          "icon": "playSound.png",
+          "parameters": [
+            {
+              "parameter": "наименованиеЗвука",
+              "parameterType": "string"
+            },
+            {
+              "parameter": "циклический",
+              "parameterType": "bool"
+            }
+          ]
+        },
+        {
+          "name": "ВоспроизвестиСлучайныйЗвук",
+          "icon": "playRandomSound.png",
+          "parameters": [
+            {
+              "parameter": "циклический",
+              "parameterType": "bool"
+            }
+          ]
+        },
+        {
+          "name": "Стоп",
+          "icon": "Stop.png"
+        },
+        {
+          "name": "Пауза",
+          "icon": "pauseSound.png"
+        }
+      ]
+    },
+    {
+      "name": "ВзаимодействиеСМиром",
+      "icon": "world.png",
+      "events": [
+        {
+          "name": "СменаТипаПоверхности",
+          "icon": "surfaceTypeChange.png"
+        }
+      ],
+      "variables": [
+        {
+          "name": "ВремяСуток",
+          "icon": "timeOfDay.png"
+        },
+        {
+          "name": "ТипПоверхности",
+          "icon": "surfaceType.png"
+        },
+        {
+          "name": "ВысотаНадПоверхностью",
+          "icon": "heightAboveSurface.png"
+        }
+      ]
+    },
+    {
+      "name": "Таймер",
+      "icon": "Timer.png",
+      "actions": [
+        {
+          "name": "ТаймерЗапуск",
+          "icon": "TimerStart.png",
+          "parameters": [
+            {
+              "parameter": "T",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ТаймерЗапускДиапазон",
+          "icon": "TimerStart.png",
+          "parameters": [
+            {
+              "parameter": "T0",
+              "parameterType": "float"
+            },
+            {
+              "parameter": "T1",
+              "parameterType": "float"
+            }
+          ]
+        },
+        {
+          "name": "ТаймерСтоп",
+          "icon": "Stop.png"
+        },
+        {
+          "name": "ТаймерСброс",
+          "icon": "TimerReset.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "ТаймерВыполнен",
+          "icon": "Completed.png"
+        },
+        {
+          "name": "Тик",
+          "icon": "Tick.png"
+        },
+        {
+          "name": "Тик1Секунда",
+          "icon": "Tick1Second.png"
+        }
+      ],
+      "variables": [
+        {
+          "name": "ТекущееЗначениеТаймера",
+          "icon": "TimerCurrentValue.png"
+        }
+      ]
+    },
+    {
+      "name": "Счётчик1",
+      "icon": "1Счётчик.png",
+      "actions": [
+        {
+          "name": "ПрибавитьЗначение",
+          "icon": "СчетчикПрибавить.png",
+          "parameters": [
+            {
+              "parameter": "T",
+              "parameterType": "int"
+            }
+          ]
+        },
+        {
+          "name": "ОтнятьЗначение",
+          "icon": "СчетчикОтнять.png",
+          "parameters": [
+            {
+              "parameter": "T",
+              "parameterType": "int"
+            }
+          ]
+        },
+        {
+          "name": "ОбнулитьЗначение",
+          "icon": "СчетчикСброс.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "ЗначениеИзменилось",
+          "icon": "Completed.png"
+        }
+      ],
+      "variables": [
+        {
+          "name": "ТекущееЗначение",
+          "icon": "Текущее значение счетчика.png"
+        }
+      ]
+    },
+    {
+      "name": "Счётчик2",
+      "icon": "2Счётчик.png",
+      "actions": [
+        {
+          "name": "ПрибавитьЗначение",
+          "icon": "СчетчикПрибавить.png",
+          "parameters": [
+            {
+              "parameter": "T",
+              "parameterType": "int"
+            }
+          ]
+        },
+        {
+          "name": "ОтнятьЗначение",
+          "icon": "СчетчикОтнять.png",
+          "parameters": [
+            {
+              "parameter": "T",
+              "parameterType": "int"
+            }
+          ]
+        },
+        {
+          "name": "ОбнулитьЗначение",
+          "icon": "СчетчикСброс.png"
+        }
+      ],
+      "events": [
+        {
+          "name": "ЗначениеИзменилось",
+          "icon": "Completed.png"
+        }
+      ],
+      "variables": [
+        {
+          "name": "ТекущееЗначение",
+          "icon": "Текущее значение счетчика.png"
+        }
+      ]
+    },
+    {
+      "name": "МодульИнтерактивныхОбъектов",
+      "icon": "world.png",
+      "actions": [
+        {
+          "name": "ДублироватьОбъект",
+          "icon": "surfaceType.png"
+        },
+        {
+          "name": "УдалитьОбъект",
+          "icon": "Stop.png"
+        }
+      ]
+    }
+  ]
+}
