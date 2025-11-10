@@ -14,6 +14,7 @@ public partial class InteractiveObject : Node
     public string selectedObjectName;
 
     public InteractiveObjectDetector detector;
+    public InteractiveObjectDetector detector2;
     public InteractiveObjectAudio audio;
     public InteractiveObjectMove move;
     public InteractiveObjectTimer timer;
@@ -35,6 +36,7 @@ public partial class InteractiveObject : Node
     public CyberiadaLogic hsmLogic;
 
     public HSMDetectorModule hsmDetectorModule;
+    public HSMDetectorTwoModule hsmDetectorTwoModule;
     public HSMMovementModule hsmMovementModule;
     public HSMAnimationModule hsmAnimationModule;
     public HSMSoundModule hsmSoundModule;
@@ -64,6 +66,7 @@ public partial class InteractiveObject : Node
     private void InitInstances()
     {
         detector = LinkComponent<InteractiveObjectDetector>("InteractiveObjectDetector", VoxLib.mapAssets.InteractiveObjectDetectorPrefab);
+        detector2 = LinkComponent<InteractiveObjectDetector>("InteractiveObjectDetector2", VoxLib.mapAssets.InteractiveObjectDetectorPrefab);
         audio = LinkComponent<InteractiveObjectAudio>("InteractiveObjectAudio", VoxLib.mapAssets.InteractiveObjectAudioPrefab);
         move = LinkComponent<InteractiveObjectMove>("InteractiveObjectMove", VoxLib.mapAssets.InteractiveObjectMovePrefab);
         timer = LinkComponent<InteractiveObjectTimer>("InteractiveObjectTimer", VoxLib.mapAssets.InteractiveObjectTimerPrefab);
@@ -77,7 +80,8 @@ public partial class InteractiveObject : Node
 
     private void InitHsm()
     {
-        hsmDetectorModule = new HSMDetectorModule(hsmLogic, this);
+        hsmDetectorModule = new HSMDetectorModule(hsmLogic, this);        
+        hsmDetectorTwoModule = new HSMDetectorTwoModule(hsmLogic, this);
         hsmMovementModule = new HSMMovementModule(hsmLogic, this);
         hsmAnimationModule = new HSMAnimationModule(hsmLogic, this);
         hsmSoundModule = new HSMSoundModule(hsmLogic, this);
