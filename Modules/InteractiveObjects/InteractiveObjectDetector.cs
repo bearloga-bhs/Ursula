@@ -10,6 +10,8 @@ using Modules.HSM;
 
 public partial class InteractiveObjectDetector : Area3D
 {
+    public VariableHolder<float> SoundDetectionValue = new(0);
+
     public Node detectedObject; // заданныйОбъект
 
     private bool isScanning = false;
@@ -25,6 +27,7 @@ public partial class InteractiveObjectDetector : Area3D
 
     public Action onObjectDetected;
     public Action onPlayerDetected;
+    public Action onSoundDetection;
     public Action onSoundDetected;
     public Action onPlayerInteractionObject;
 
@@ -194,9 +197,17 @@ public partial class InteractiveObjectDetector : Area3D
             }
         }
 
-        if (detectedObject != null && Node.IsInstanceValid(detectedObject))
+        if(detectedObject != null && Node.IsInstanceValid(detectedObject))
         {
+            SoundDetectionValue.Value = 1f;
             onSoundDetected?.Invoke();
+
         }
+        else
+        {
+            SoundDetectionValue.Value = 0f;
+        }
+
+        onSoundDetection?.Invoke();
     }
 }

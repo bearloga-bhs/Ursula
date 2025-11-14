@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 // МодульОбнаружения
@@ -10,7 +10,10 @@ public class HSMDetectorTwoModule
 
     const string ObjectDetectedModuleKey = $"{ModuleName}.ОбъектОбнаружен";
     const string PlayerDetectedModuleKey = $"{ModuleName}.ИгрокОбнаружен";
+
     const string SoundDetectedModuleKey = $"{ModuleName}.ЗвукОбнаружен";
+    const string SoundDetectionModuleKey = $"{ModuleName}.ОбнаружениеЗвука";
+
     const string TargetLostModuleKey = $"{ModuleName}.ЦельПотеряна";
     const string ThisInteractionModuleKey = $"{ModuleName}.ВзаимодействиеИгрока";
     const string PlayerInteractionObjectModuleKey = $"{ModuleName}.ВзаимодействиеИгрокаСОбъектом";
@@ -22,6 +25,8 @@ public class HSMDetectorTwoModule
     const string StopScanningCommandKey = $"{ModuleName}.ОстановкаПоиска";
     const string PlayerObjectInteractionScanCommandKey = $"{ModuleName}.ВзаимодействиеИгрокаСОбъектом";
 
+    const string SoundDetectionVariableKey = $"{ModuleName}.ЗначениеОбнаруженияЗвука";
+
     public HSMDetectorTwoModule(CyberiadaLogic logic, InteractiveObject interactiveObject)
     {
         _object = interactiveObject;
@@ -30,6 +35,7 @@ public class HSMDetectorTwoModule
         _object.detector2.onObjectDetected += () => logic.localBus.InvokeEvent(ObjectDetectedModuleKey);
         _object.detector2.onPlayerDetected += () => logic.localBus.InvokeEvent(PlayerDetectedModuleKey);
         _object.detector2.onSoundDetected += () => logic.localBus.InvokeEvent(SoundDetectedModuleKey);
+        _object.detector2.onSoundDetection += () => logic.localBus.InvokeEvent(SoundDetectionModuleKey);
 
         if (_object.move.moveScript != null)
             _object.move.moveScript.onTargetLost += () => logic.localBus.InvokeEvent(TargetLostModuleKey);
@@ -46,6 +52,9 @@ public class HSMDetectorTwoModule
         logic.localBus.AddCommandListener(SoundScanCommandKey, StartSoundScan);
         logic.localBus.AddCommandListener(StopScanningCommandKey, StopScanning);
         logic.localBus.AddCommandListener(PlayerObjectInteractionScanCommandKey, StartPlayerObjectInteractionScan);
+
+        // Variables
+        logic.localBus.AddVariableGetter(SoundDetectionVariableKey, () => _object.detector.SoundDetectionValue);
     }
 
     bool StartPlayerScan(List<Tuple<string, string>> values)
