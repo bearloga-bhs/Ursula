@@ -18,6 +18,8 @@ using Ursula.Settings.Model;
 using Ursula.Log.Model;
 using Ursula.EmbeddedGames.Manager;
 using Ursula.EmbeddedGames.Model;
+using ursula.addons.Ursula.Scripts.GameObjects.Controller;
+using ursula.addons.Ursula.Scripts.GameObjects.View;
 
 
 namespace Ursula.Core.Initialization
@@ -105,7 +107,10 @@ namespace Ursula.Core.Initialization
 
             InstallSingleton<ControlEmbeddedGamesProjectViewModel>(services);
             InstallSingleton<ControlEmbeddedGamesProjectManager>(services);
-            
+
+            InstallSingleton<SimulationGeneratorView>(services);
+            InstallSingleton<SimulationGeneratorController>(services);
+
         }
 
         private void InstallSingleton<T>(ServiceCollection services) where T : class 

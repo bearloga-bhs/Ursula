@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://dgc042g3ej4rj"]
+[gd_scene load_steps=82 format=3 uid="uid://dgc042g3ej4rj"]
 
 [ext_resource type="PackedScene" uid="uid://dn1jem1nnefln" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/project_timer.tscn" id="1_wxxnd"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/Core/Initialization/UrsulaEntryPoint.cs" id="1_xjqfu"]
@@ -71,6 +71,7 @@
 [ext_resource type="StyleBox" uid="uid://c06y7nq7pqiyd" path="res://addons/Ursula/Assets/Themes/ButtonStandart.tres" id="51_ffq47"]
 [ext_resource type="StyleBox" uid="uid://bwkxycn6p1ew0" path="res://addons/Ursula/Assets/Themes/Panel.tres" id="51_qas0a"]
 [ext_resource type="Texture2D" uid="uid://mn7avqdknfbk" path="res://addons/Ursula/Assets/Themes/File.png" id="56_qj0h5"]
+[ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/Controller/SimulationGeneratorController.cs" id="72_8jok7"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_elju3"]
 line_spacing = -3.0
@@ -119,6 +120,11 @@ script = ExtResource("1_xjqfu")
 [node name="ProjectTimer" parent="." instance=ExtResource("1_wxxnd")]
 
 [node name="ModelLoader" parent="." instance=ExtResource("2_ayndh")]
+
+[node name="Simulation" type="Node" parent="."]
+
+[node name="SimulationGeneratorController" type="Node3D" parent="Simulation"]
+script = ExtResource("72_8jok7")
 
 [node name="Controls" type="Control" parent="." node_paths=PackedStringArray("_labelFile", "_cross", "_labelCoordinates", "CheckButtonAlgoritm", "ButtonOpenGameProjectView")]
 layout_mode = 1
@@ -2068,6 +2074,7 @@ text = "Количество сущностей"
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_styles/normal = ExtResource("46_h4d78")
+text = "10"
 placeholder_text = "Введите целое число"
 
 [node name="LabelPercent" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
@@ -2078,6 +2085,7 @@ text = "Изначальное количество больных"
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_styles/normal = ExtResource("46_h4d78")
+text = "50"
 placeholder_text = "Введите процент"
 
 [node name="LabelCoefficient" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
@@ -2088,10 +2096,10 @@ text = "Коэффициент заражения"
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_styles/normal = ExtResource("46_h4d78")
+text = "0,5"
 placeholder_text = "Введите значение от 0 до 1"
 
 [node name="LabelRadius" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
-visible = false
 layout_mode = 2
 text = "Расстояние заражения"
 
@@ -2099,6 +2107,7 @@ text = "Расстояние заражения"
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_styles/normal = ExtResource("46_h4d78")
+text = "10"
 placeholder_text = "Введите целое число"
 
 [node name="LabelProtectionCount" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
@@ -2109,6 +2118,7 @@ text = "Количество пилюлей"
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_styles/normal = ExtResource("46_h4d78")
+text = "10"
 placeholder_text = "Введите целое число"
 
 [node name="ButtonGenerate" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
