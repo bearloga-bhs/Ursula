@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://dgc042g3ej4rj"]
+[gd_scene load_steps=81 format=3 uid="uid://dgc042g3ej4rj"]
 
 [ext_resource type="PackedScene" uid="uid://dn1jem1nnefln" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/project_timer.tscn" id="1_wxxnd"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/Core/Initialization/UrsulaEntryPoint.cs" id="1_xjqfu"]
@@ -54,6 +54,7 @@
 [ext_resource type="Texture2D" uid="uid://bqggx5f00mjv7" path="res://addons/Ursula/Assets/Themes/Close.png" id="38_0acjv"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/Settings/View/ControlSettingsView.cs" id="38_0w2xm"]
 [ext_resource type="Texture2D" uid="uid://cceh2ccis1t63" path="res://addons/Ursula/Assets/Themes/ArrowLeft.png" id="38_544k6"]
+[ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/View/SimulationGeneratorView.cs" id="38_wuvcs"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/Controller/GameObjectCollectionController.cs" id="42_rqra7"]
 [ext_resource type="StyleBox" uid="uid://ccj7ltfpijtug" path="res://addons/Ursula/Assets/Themes/ButtonStartup.tres" id="43_0nvn3"]
 [ext_resource type="Theme" uid="uid://dyddtywft2yrs" path="res://addons/Ursula/Assets/Themes/Controls.tres" id="43_cp4ec"]
@@ -1915,6 +1916,236 @@ tab_count = 2
 tab_0/title = "Все объекты"
 tab_1/title = "Деревья"
 
+[node name="ButtonSimulation" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer" node_paths=PackedStringArray("PanelMenu", "arrow1", "arrow2")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+focus_mode = 1
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = ExtResource("51_ffq47")
+theme_override_styles/hover_pressed = ExtResource("51_ffq47")
+theme_override_styles/pressed = ExtResource("51_ffq47")
+theme_override_styles/normal = ExtResource("51_qas0a")
+text = "Генерация симуляции"
+script = ExtResource("6_1h5ru")
+PanelMenu = NodePath("PanelSimulationGenerator")
+arrow1 = NodePath("Arrow1")
+arrow2 = NodePath("Arrow2")
+
+[node name="Icon" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -8.0
+offset_right = 18.0
+offset_bottom = 7.0
+grow_vertical = 2
+texture = ExtResource("16_couy0")
+expand_mode = 1
+flip_h = true
+
+[node name="Arrow1" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -4.0
+offset_right = -8.0
+offset_bottom = 6.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("10_ymu3k")
+expand_mode = 1
+
+[node name="Arrow2" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -4.0
+offset_right = -8.0
+offset_bottom = 6.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("11_0tbdj")
+expand_mode = 1
+
+[node name="PanelSimulationGenerator" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "LabelRadius", "TextEditRadius", "LabelProtectionCount", "TextEditProtectionCount", "ButtonGenerate", "view1", "view2")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -310.0
+offset_top = 42.0
+offset_right = -206.0
+offset_bottom = 569.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("51_qas0a")
+script = ExtResource("38_wuvcs")
+LabelEntitiesCount = NodePath("VBoxContainer/LabelEntitiesCount")
+TextEditEntitiesCount = NodePath("VBoxContainer/TextlEditEntitiesCount")
+LabelPetcent = NodePath("VBoxContainer/LabelPercent")
+TextEditPercent = NodePath("VBoxContainer/TextEditPercent")
+LabelCoefficient = NodePath("VBoxContainer/LabelCoefficient")
+TextEditCoefficient = NodePath("VBoxContainer/TextEditCoefficient")
+LabelRadius = NodePath("VBoxContainer/LabelRadius")
+TextEditRadius = NodePath("VBoxContainer/TextEditRadius")
+LabelProtectionCount = NodePath("VBoxContainer/LabelProtectionCount")
+TextEditProtectionCount = NodePath("VBoxContainer/TextEditProtectionCount")
+ButtonGenerate = NodePath("VBoxContainer/ButtonGenerate")
+view1 = NodePath("VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab1")
+view2 = NodePath("VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab2")
+
+[node name="Label7" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator"]
+visible = false
+layout_mode = 1
+offset_right = 268.0
+offset_bottom = 23.0
+text = "Выбор объекта"
+
+[node name="IdItemOption" type="OptionButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator"]
+visible = false
+layout_mode = 1
+offset_top = 27.0
+offset_right = 265.0
+offset_bottom = 58.0
+focus_mode = 1
+alignment = 2
+autowrap_mode = 3
+clip_text = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/ScrollContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_direction = 2
+layout_mode = 2
+columns = 7
+
+[node name="GameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/ScrollContainer/GridContainer" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+script = ExtResource("38_wuvcs")
+
+[node name="TabBarGameObjectGroup" type="TabBar" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator"]
+visible = false
+layout_mode = 0
+offset_right = 1146.0
+offset_bottom = 40.0
+theme = ExtResource("43_cp4ec")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/tab_selected = ExtResource("18_c37xe")
+current_tab = 0
+tab_count = 1
+tab_0/title = "Все объекты"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator"]
+layout_mode = 0
+offset_right = 287.0
+offset_bottom = 457.0
+
+[node name="LabelEntitiesCount" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+layout_mode = 2
+text = "Количество сущностей"
+
+[node name="TextlEditEntitiesCount" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("46_h4d78")
+placeholder_text = "Введите целое число"
+
+[node name="LabelPercent" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+layout_mode = 2
+text = "Изначальное количество больных"
+
+[node name="TextEditPercent" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("46_h4d78")
+placeholder_text = "Введите процент"
+
+[node name="LabelCoefficient" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+layout_mode = 2
+text = "Коэффициент заражения"
+
+[node name="TextEditCoefficient" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("46_h4d78")
+placeholder_text = "Введите значение от 0 до 1"
+
+[node name="LabelRadius" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Расстояние заражения"
+
+[node name="TextEditRadius" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("46_h4d78")
+placeholder_text = "Введите целое число"
+
+[node name="LabelProtectionCount" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+layout_mode = 2
+text = "Количество пилюлей"
+
+[node name="TextEditProtectionCount" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("46_h4d78")
+placeholder_text = "Введите целое число"
+
+[node name="ButtonGenerate" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+custom_minimum_size = Vector2(115, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = ExtResource("18_c37xe")
+text = "Сгенерировать"
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer/ButtonGenerate"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.07996
+offset_top = -9.0
+offset_right = 21.08
+offset_bottom = 10.0
+grow_vertical = 2
+texture = ExtResource("19_c8ee4")
+expand_mode = 1
+
+[node name="GridContainer" type="GridContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_direction = 2
+layout_mode = 2
+columns = 7
+
+[node name="GameObjectAssetInfoViewPrefab1" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer/GridContainer" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
+[node name="GameObjectAssetInfoViewPrefab2" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer/GridContainer" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu"]
 layout_mode = 1
 anchors_preset = 6
@@ -3324,6 +3555,8 @@ clip_text = true
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonEnvironment/PanelTab/HBoxContainer/ButtonPlants" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonEnvironment/PanelTab" method="OpenPanel" binds= [2]]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonObject" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonObject" method="OnClick"]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonObject/PanelGameObjectLibraryView/IdItemOption" to="MapManagers/MapManager" method="SetUsedStandartItemBuild"]
+[connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" method="OnClick"]
+[connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/IdItemOption" to="MapManagers/MapManager" method="SetUsedStandartItemBuild"]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer2/ButtonOpenControlProject" to="Controls" method="OnOpenControlProject"]
 [connection signal="toggled" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer2/CheckButton" to="Controls" method="OnAlgoritmStartStopChange"]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer2/ButtonReload" to="MapManagers/MapManager" method="OnReloadMap"]
