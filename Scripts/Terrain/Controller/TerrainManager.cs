@@ -1,4 +1,5 @@
-﻿using Fractural.Tasks;
+﻿using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
+using Fractural.Tasks;
 using Godot;
 using System;
 using System.Diagnostics;
@@ -138,7 +139,7 @@ public partial class TerrainManager : TerrainModel, IInjectable
 				Generate(startPoint, x, z);				
 			}
 		}
-	}
+    }
 
     public event Action TerrainNavMeshBaked;
     public event Action TerrainNavMeshBakeStated;
@@ -516,6 +517,8 @@ public partial class TerrainManager : TerrainModel, IInjectable
         BakeNavMesh();
 
         GenerateEdgesMap();
+
+        NavGraphManager.Instance.Generate(256, vertices[vertices.Length / 2].Y + positionOffset.Y);
     }
 
     private void CreateNewMaterialTerrain()

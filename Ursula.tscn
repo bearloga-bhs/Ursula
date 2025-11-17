@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://dgc042g3ej4rj"]
+[gd_scene load_steps=81 format=3 uid="uid://dgc042g3ej4rj"]
 
 [ext_resource type="PackedScene" uid="uid://dn1jem1nnefln" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/project_timer.tscn" id="1_wxxnd"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/Core/Initialization/UrsulaEntryPoint.cs" id="1_xjqfu"]
@@ -70,6 +70,7 @@
 [ext_resource type="StyleBox" uid="uid://c06y7nq7pqiyd" path="res://addons/Ursula/Assets/Themes/ButtonStandart.tres" id="51_ffq47"]
 [ext_resource type="StyleBox" uid="uid://bwkxycn6p1ew0" path="res://addons/Ursula/Assets/Themes/Panel.tres" id="51_qas0a"]
 [ext_resource type="Texture2D" uid="uid://mn7avqdknfbk" path="res://addons/Ursula/Assets/Themes/File.png" id="56_qj0h5"]
+[ext_resource type="Script" path="res://addons/Ursula/Scripts/NavigationGraph/Controller/NavGraphManager.cs" id="59_622bu"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_elju3"]
 line_spacing = -3.0
@@ -3113,6 +3114,9 @@ script = ExtResource("23_56bgx")
 
 [node name="TerrainManager" type="Node3D" parent="."]
 script = ExtResource("25_jfqi2")
+
+[node name="NavGraphManager" type="Node3D" parent="."]
+script = ExtResource("59_622bu")
 
 [node name="WaterManager" type="Node3D" parent="."]
 script = ExtResource("47_25wwj")
