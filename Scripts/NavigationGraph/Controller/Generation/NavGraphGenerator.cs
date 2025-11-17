@@ -28,14 +28,15 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
                 throw new ArgumentOutOfRangeException(nameof(connectionProbability));
 
             NavGraph navGraph = CreateBaseForm(range, height, dx, dy, connectionProbability);
-            navGraph = EraseIlands(navGraph);
+            navGraph = EraseIslands(navGraph);
             navGraph = Subdivide(navGraph);
             navGraph = ApplyDirections(navGraph, (dx + dx) / 16);
 
             return navGraph;
         }
 
-        private static NavGraph EraseIlands(NavGraph navGraph)
+        // Removes all connected subgraphs except one that contains maximum amount of vertices
+        private static NavGraph EraseIslands(NavGraph navGraph)
         {
             List<NavGraph> connectedSubgraphs = new List<NavGraph>();
             foreach (NavGraphVertex vertex in navGraph.vertices)
