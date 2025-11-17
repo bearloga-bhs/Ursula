@@ -98,6 +98,7 @@ public partial class InteractiveObjectsManager : Node
         var interactiveObject = duplicatedObject.GetChildren().OfType<InteractiveObject>().FirstOrDefault();
         if (interactiveObject != null)
         {
+            interactiveObject.ReloadAlgorithm();
             interactiveObject.StartAlgorithm();
         }
         

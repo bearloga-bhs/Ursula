@@ -150,6 +150,7 @@ public partial class InteractiveObject : Node
         }
 
         detector?.StopScanning();
+        detector2?.StopScanning();
         audio?.Stop();
         move?.StopMoving();
         timer?.StopTimer();
@@ -163,6 +164,11 @@ public partial class InteractiveObject : Node
         return detector.detectedObject as Node3D;
     }
 
+    public Node3D GetCurrentTargetObject2()
+    {
+        return detector2.detectedObject as Node3D;
+    }
+    
     public void Interaction() //Метод запуска взаимодействия с текущим объектом
     {
         onThisInteraction?.Invoke();

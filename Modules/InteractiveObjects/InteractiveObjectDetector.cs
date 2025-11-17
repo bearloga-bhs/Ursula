@@ -2,11 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Security.AccessControl;
-
-using Talent.Logic.Bus;
-using Modules.HSM;
 
 public partial class InteractiveObjectDetector : Area3D
 {
@@ -105,7 +100,7 @@ public partial class InteractiveObjectDetector : Area3D
     
     private void PlayerInteractionObject()
     {
-        detectedObject = null;
+        Node currentDetectedObject = null;
         
         var nodes = GetItemsNodes().ToList();
         Node player = PlayerScript.instance;
@@ -114,12 +109,12 @@ public partial class InteractiveObjectDetector : Area3D
         {
             if (node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition) && node.Name.ToString().Contains(targetObjectName))
             {
-                detectedObject = node;
+                currentDetectedObject = node;
                 break;
             }
         }
 
-        if (detectedObject != null)
+        if (currentDetectedObject != null)
         {
             onPlayerInteractionObject?.Invoke();
         }
@@ -127,6 +122,8 @@ public partial class InteractiveObjectDetector : Area3D
         {
             onAnyObjectsNotDetected?.Invoke();
         }
+
+        detectedObject = currentDetectedObject;
     }
 
     public override void _ExitTree()
@@ -136,12 +133,14 @@ public partial class InteractiveObjectDetector : Area3D
 
     private void FindPlayer()
     {
-        detectedObject = null;
-        
         Node3D player = PlayerScript.instance;
         if (player != null && Node.IsInstanceValid(player) && detectorShape.IsDetected(player.GlobalPosition))
         {
             detectedObject = player;
+        }
+        else
+        {
+            detectedObject = null;
         }
 
         if (detectedObject != null)
@@ -156,7 +155,7 @@ public partial class InteractiveObjectDetector : Area3D
     
     private void FindObject()
     {
-        detectedObject = null;
+        Node currentDetectedObject = null;
         
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
@@ -164,12 +163,12 @@ public partial class InteractiveObjectDetector : Area3D
             if (node is ItemPropsScript item && item.GameObjectSample == targetObjectName && 
                 node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition))
             {
-                detectedObject = node;
+                currentDetectedObject = node;
                 break;
             }
         }
 
-        if (detectedObject != null && Node.IsInstanceValid(detectedObject))
+        if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
             onObjectDetected?.Invoke();
         }
@@ -177,11 +176,13 @@ public partial class InteractiveObjectDetector : Area3D
         {
             onAnyObjectsNotDetected?.Invoke();
         }
+        
+        detectedObject = currentDetectedObject;
     }
     
     private void FindSound()
     {
-        detectedObject = null;
+        Node currentDetectedObject = null;
         
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
@@ -189,14 +190,16 @@ public partial class InteractiveObjectDetector : Area3D
             if (node is ItemPropsScript item && item.IO.audio.currentAudioKey == targetSoundName && item.IO.audio.isPlaying &&
                 node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition))
             {
-                detectedObject = node;
+                currentDetectedObject = node;
                 break;
             }
         }
 
-        if (detectedObject != null && Node.IsInstanceValid(detectedObject))
+        if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
             onSoundDetected?.Invoke();
         }
+
+        detectedObject = currentDetectedObject;
     }
 }

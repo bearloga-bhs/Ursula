@@ -20,6 +20,8 @@ public class HSMMovementModule
     //const string MoveRandomCommandKey = $"{ModuleName}.�����������������";
     const string MoveToTargetCommandKey = $"{ModuleName}.ДвигатьсяКОбъекту";
     const string MoveFromTargetCommandKey = $"{ModuleName}.ДвигатьсяОтОбъекта";
+    const string MoveToTarget2CommandKey = $"{ModuleName}.ДвигатьсяКОбъекту2";
+    const string MoveFromTarget2CommandKey = $"{ModuleName}.ДвигатьсяОтОбъекта2";
     const string MoveToPositionCommandKey = $"{ModuleName}.ДвигатьсяПоКоординатам";
     const string SetPositionCommandKey = $"{ModuleName}.ЗадатьКоординаты";
     const string SetPositionUpCommandKey = $"{ModuleName}.ЗадатьКоординатуВверх";
@@ -56,6 +58,8 @@ public class HSMMovementModule
         //logic.localBus.AddCommandListener(MoveRandomCommandKey, MoveToRandom);
         logic.localBus.AddCommandListener(MoveToTargetCommandKey, MoveToTarget);
         logic.localBus.AddCommandListener(MoveFromTargetCommandKey, MoveFromTarget);
+        logic.localBus.AddCommandListener(MoveToTarget2CommandKey, MoveToTarget2);
+        logic.localBus.AddCommandListener(MoveFromTarget2CommandKey, MoveFromTarget2);
         logic.localBus.AddCommandListener(MoveToPositionCommandKey, MoveToPosition);
         logic.localBus.AddCommandListener(SetPositionCommandKey, SetPosition);
         logic.localBus.AddCommandListener(SetPositionUpCommandKey, SetPositionUp);
@@ -94,6 +98,20 @@ public class HSMMovementModule
         return true;
     }
 
+    bool MoveToTarget2(List<Tuple<string, string>> value)
+    {
+        _object.move.MoveToTarget2();
+
+        return true;
+    }
+
+    bool MoveFromTarget2(List<Tuple<string, string>> value)
+    {
+        _object.move.MoveFromTarget2();
+
+        return true;
+    }
+    
     bool MoveToPosition(List<Tuple<string, string>> value)
     {
         //Profiler.EndSample("MoveToPosition");

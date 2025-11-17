@@ -57,6 +57,22 @@ public partial class InteractiveObjectMove : Node3D
         return null;
     }
 
+    public object MoveToTarget2()
+    {
+        var movementTarget = interactiveObject.GetCurrentTargetObject2();
+        moveScript?.MoveToTargetSetup(movementTarget);
+
+        return null;
+    }
+
+    public object MoveFromTarget2()
+    {
+        var movementTarget = interactiveObject.GetCurrentTargetObject2();
+        moveScript?.MoveFromTargetSetup(movementTarget);
+
+        return null;
+    }
+    
     public object MoveToRandom()
     {
         moveScript?.MoveToRandomSetup();
