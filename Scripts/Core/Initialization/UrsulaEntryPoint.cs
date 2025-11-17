@@ -18,6 +18,7 @@ using Ursula.Settings.Model;
 using Ursula.Log.Model;
 using Ursula.EmbeddedGames.Manager;
 using Ursula.EmbeddedGames.Model;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
 
 
 namespace Ursula.Core.Initialization
