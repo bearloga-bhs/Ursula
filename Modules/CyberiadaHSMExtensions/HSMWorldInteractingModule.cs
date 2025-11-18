@@ -12,6 +12,7 @@ public class HSMWorldInteractingModule
 
     // Variable keys
     const string DayTimeVariableKey = $"{ModuleName}.ВремяСуток";
+    const string IsDayVariableKey = $"{ModuleName}.ФлагДня";
     const string SurfaceTypeVariableKey = $"{ModuleName}.ТипПоверхности";
     const string HeightAboveSurfaceVariableKey = $"{ModuleName}.ВысотаНадПоверхностью";
 
@@ -29,6 +30,7 @@ public class HSMWorldInteractingModule
 
         // Variables
         logic.localBus.AddVariableGetter(DayTimeVariableKey, () => _object.move.timesOfDay.Value);
+        logic.localBus.AddVariableGetter(IsDayVariableKey, () => _object.move.isDay.Value);
         logic.localBus.AddVariableGetter(SurfaceTypeVariableKey, () => _object.move.surfaceType.Value);
         logic.localBus.AddVariableGetter(HeightAboveSurfaceVariableKey, () => _object.move.heightWorld.Value);
     }
