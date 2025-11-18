@@ -108,8 +108,8 @@ public partial class MoveScript : CharacterBody3D
 
         // These values need to be adjusted for the actor's speed
         // and the navigation layout.
-        _navigationAgent.PathDesiredDistance = 1.5f;
-        _navigationAgent.TargetDesiredDistance = 0.5f;
+        _navigationAgent.PathDesiredDistance = 3.0f;
+        _navigationAgent.TargetDesiredDistance = 3.0f;
 
         // Make sure to not await during _Ready.
         //Callable.From(MoveToRandomSetup).CallDeferred();
@@ -173,8 +173,8 @@ public partial class MoveScript : CharacterBody3D
         if (MovementTarget == null || !IsInstanceValid(MovementTarget))
         {
             stateMashine = StateMashine.idle;
-            PlayIdleAnimation();
-            onTargetLost.Invoke();
+            PlayIdleAnimation(); 
+            //onTargetLost.Invoke();
             return;
         }
 
@@ -198,9 +198,9 @@ public partial class MoveScript : CharacterBody3D
         }
         else
         {
-            //GD.Print("Moved to point");
-            onMovementFinished.Invoke();
-            //stateMashine = StateMashine.idle;
+            GD.Print("Moved to point");
+            onMovementFinished?.Invoke();
+            stateMashine = StateMashine.idle;
             _targetVelocity = Vector3.Zero;
             oldPathPosition = Vector3.Zero;
         }
@@ -391,7 +391,7 @@ public partial class MoveScript : CharacterBody3D
             UpdateSurfaceType();
 
             var isNavigationFinished = _navigationAgent.IsNavigationFinished();
-
+            
             if (isNavigationFinished)
             {
                 if (stateMashine == StateMashine.moveToRandom)

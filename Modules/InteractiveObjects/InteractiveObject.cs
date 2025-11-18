@@ -18,6 +18,7 @@ public partial class InteractiveObject : Node
     public InteractiveObjectAudio audio;
     public InteractiveObjectMove move;
     public InteractiveObjectTimer timer;
+    public InteractiveObjectTimer timer2;
     public InteractiveObjectTime time;
     public InteractiveObjectCounter counter1;
     public InteractiveObjectCounter counter2;
@@ -41,6 +42,7 @@ public partial class InteractiveObject : Node
     public HSMAnimationModule hsmAnimationModule;
     public HSMSoundModule hsmSoundModule;
     public HSMTimerModule hsmTimerModule;
+    public HSMTimerTwoModule hsmTimerTwoModule;
     public HSMTimeModule hsmTimeModule;
     public HSMCounterOneModule hsmCounterOneModule;
     public HSMCounterTwoModule hsmCounterTwoModule;
@@ -70,6 +72,7 @@ public partial class InteractiveObject : Node
         audio = LinkComponent<InteractiveObjectAudio>("InteractiveObjectAudio", VoxLib.mapAssets.InteractiveObjectAudioPrefab);
         move = LinkComponent<InteractiveObjectMove>("InteractiveObjectMove", VoxLib.mapAssets.InteractiveObjectMovePrefab);
         timer = LinkComponent<InteractiveObjectTimer>("InteractiveObjectTimer", VoxLib.mapAssets.InteractiveObjectTimerPrefab);
+        timer2 = LinkComponent<InteractiveObjectTimer>("InteractiveObjectTimer2", VoxLib.mapAssets.InteractiveObjectTimerPrefab);
         time = LinkComponent<InteractiveObjectTime>("InteractiveObjectTime", VoxLib.mapAssets.InteractiveObjectTimePrefab);
         counter1 = LinkComponent<InteractiveObjectCounter>("InteractiveObjectCounter1", VoxLib.mapAssets.InteractiveObjectCounterPrefab);
         counter2 = LinkComponent<InteractiveObjectCounter>("InteractiveObjectCounter2", VoxLib.mapAssets.InteractiveObjectCounterPrefab);
@@ -78,14 +81,17 @@ public partial class InteractiveObject : Node
         random = LinkComponent<InteractiveObjectRandomness>("InteractiveObjectRandomness", VoxLib.mapAssets.InteractiveObjectRandomnessPrefab);
     }
 
-    private void InitHsm()
+    private async GDTask InitHsm()
     {
+        await ToSignal(GetTree().CreateTimer(0.1), "timeout");
+        
         hsmDetectorModule = new HSMDetectorModule(hsmLogic, this);        
         hsmDetectorTwoModule = new HSMDetectorTwoModule(hsmLogic, this);
         hsmMovementModule = new HSMMovementModule(hsmLogic, this);
         hsmAnimationModule = new HSMAnimationModule(hsmLogic, this);
         hsmSoundModule = new HSMSoundModule(hsmLogic, this);
         hsmTimerModule = new HSMTimerModule(hsmLogic, this);
+        hsmTimerTwoModule = new HSMTimerTwoModule(hsmLogic, this);
         hsmTimeModule = new HSMTimeModule(hsmLogic, this);
         hsmCounterOneModule = new HSMCounterOneModule(hsmLogic, this);
         hsmCounterTwoModule = new HSMCounterTwoModule(hsmLogic, this);
@@ -116,7 +122,7 @@ public partial class InteractiveObject : Node
                 if (File.Exists(ProjectSettings.GlobalizePath(xmlPath)))
                 {
                     hsmLogic = CyberiadaLogic.Load(xmlPath);
-                    InitHsm();
+                    _ = InitHsm();
                     _logger = new HSMLogger(this);
                     hsmLogic.SubscribeLogger(_logger);
                 }
@@ -161,12 +167,12 @@ public partial class InteractiveObject : Node
 
     public Node3D GetCurrentTargetObject()
     {
-        return detector.detectedObject as Node3D;
+        return detector.previousDetectedObject as Node3D;
     }
 
     public Node3D GetCurrentTargetObject2()
     {
-        return detector2.detectedObject as Node3D;
+        return detector2.previousDetectedObject as Node3D;
     }
     
     public void Interaction() //Метод запуска взаимодействия с текущим объектом

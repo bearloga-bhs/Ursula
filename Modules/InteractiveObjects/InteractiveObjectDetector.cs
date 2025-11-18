@@ -6,7 +6,8 @@ using System.Linq;
 public partial class InteractiveObjectDetector : Area3D
 {
     public Node detectedObject; // заданныйОбъект
-
+    public Node previousDetectedObject;
+    
     private bool isScanning = false;
 
     private Action scanAction;
@@ -117,6 +118,7 @@ public partial class InteractiveObjectDetector : Area3D
         if (currentDetectedObject != null)
         {
             onPlayerInteractionObject?.Invoke();
+            previousDetectedObject = currentDetectedObject;
         }
         else
         {
@@ -136,6 +138,7 @@ public partial class InteractiveObjectDetector : Area3D
         Node3D player = PlayerScript.instance;
         if (player != null && Node.IsInstanceValid(player) && detectorShape.IsDetected(player.GlobalPosition))
         {
+            previousDetectedObject = player;
             detectedObject = player;
         }
         else
@@ -170,6 +173,7 @@ public partial class InteractiveObjectDetector : Area3D
 
         if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
+            previousDetectedObject = currentDetectedObject;
             onObjectDetected?.Invoke();
         }
         else
@@ -197,6 +201,7 @@ public partial class InteractiveObjectDetector : Area3D
 
         if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
+            previousDetectedObject = currentDetectedObject;
             onSoundDetected?.Invoke();
         }
 
