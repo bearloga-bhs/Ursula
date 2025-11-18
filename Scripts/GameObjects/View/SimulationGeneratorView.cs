@@ -34,16 +34,6 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         private TextEdit TextEditCoefficient;
 
         [Export]
-        private Label LabelRadius;
-        [Export]
-        private TextEdit TextEditRadius;
-
-        [Export]
-        private Label LabelProtectionCount;
-        [Export]
-        private TextEdit TextEditProtectionCount;
-
-        [Export]
         private Button ButtonGenerate;
 
         [Export]
@@ -123,10 +113,8 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             int entitiesCount = Convert.ToInt32(TextEditEntitiesCount.Text);
             float percent = Convert.ToSingle(TextEditPercent.Text);
             float coefficient = Convert.ToSingle(TextEditCoefficient.Text);
-            float radius = Convert.ToSingle(TextEditRadius.Text);
-            int protectionCount = Convert.ToInt32(TextEditProtectionCount.Text);
-            GD.Print($"Generate Simulation with params: entitiesCount={entitiesCount}, percent={percent}, coefficient={coefficient}, radius={radius}, protectionCount={protectionCount}");
-            _simulationGeneratorController.GenerateSimulationItems(view1.GameObjectAssetInfo, view2.GameObjectAssetInfo, entitiesCount, percent, coefficient, radius, protectionCount);
+            GD.Print($"Generate Simulation with params: entitiesCount={entitiesCount}, percent={percent}, coefficient={coefficient}");
+            _simulationGeneratorController.GenerateSimulationItems(view1.GameObjectAssetInfo, view2.GameObjectAssetInfo, entitiesCount, percent, coefficient);
         }
 
         private void OnView1ClickEvent(GameObjectAssetInfo assetInfo)

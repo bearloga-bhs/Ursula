@@ -34,6 +34,9 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
         private TerrainManager _terrainManager;
         private WaterModel _waterModel;
 
+
+        public float Coefficient { get; private set; }
+
         void IInjectable.OnDependenciesInjected()
         {
         }
@@ -56,6 +59,8 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
             _terrainModel = terrainModel;
             _terrainManager = terrainManager;
             _waterModel = waterModel;
+
+            Coefficient = 0f;
         }
 
         private async GDTask SubscribeEvent()
@@ -72,7 +77,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
             base.Dispose(disposing);
         }
 
-        public async void GenerateSimulationItems(GameObjectAssetInfo asset1, GameObjectAssetInfo asset2, int entitiesCount, float percent, float coefficient, float radius, int protectionCount)
+        public async void GenerateSimulationItems(GameObjectAssetInfo asset1, GameObjectAssetInfo asset2, int entitiesCount, float percent, float coefficient)
         {
             if (_gameObjectCreateItemsModel == null
                 || _gameObjectCollectionModel == null
@@ -86,6 +91,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
 
             entitiesCount = Mathf.Max(0, entitiesCount);
             percent = Mathf.Clamp(percent, 0f, 100f);
+            Coefficient = coefficient;
 
             int firstAssetCount = Mathf.RoundToInt(entitiesCount * (percent * 0.01f));
             firstAssetCount = Mathf.Clamp(firstAssetCount, 0, entitiesCount);

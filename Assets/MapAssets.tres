@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=125 format=3 uid="uid://dl6jsq7htq75q"]
+[gd_resource type="Resource" load_steps=126 format=3 uid="uid://dl6jsq7htq75q"]
 
 [ext_resource type="Material" uid="uid://cwhi82msh22nm" path="res://addons/Ursula/Shaders/IceMat.tres" id="1_28w3s"]
 [ext_resource type="Material" uid="uid://dkyhs6sd6eroy" path="res://addons/Ursula/Shaders/LavaMat.tres" id="2_s2j7q"]
@@ -7,13 +7,14 @@
 [ext_resource type="PackedScene" uid="uid://c1huqsvq5ebhh" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_counter.tscn" id="3_oy3hf"]
 [ext_resource type="Material" uid="uid://blb8huupptm0h" path="res://addons/Ursula/Shaders/LavaMatPlane.tres" id="3_wymj1"]
 [ext_resource type="Material" uid="uid://n5amgnjxr8ti" path="res://addons/Ursula/Shaders/TerrainBlend.tres" id="4_nkl5f"]
-[ext_resource type="PackedScene" uid="uid://cbcrx4y7l6hik" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_detector.tscn" id="4_yghhw"]
+[ext_resource type="PackedScene" uid="uid://clxifoou28avs" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_detector.tscn" id="4_yghhw"]
 [ext_resource type="PackedScene" uid="uid://duxo3xtm5io1k" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_move.tscn" id="5_f2opi"]
-[ext_resource type="PackedScene" uid="uid://cwgvleldrqr2a" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_initialization.tscn" id="5_mq3db"]
+[ext_resource type="PackedScene" uid="uid://cj77bvbsc8xxr" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_epidemic.tscn" id="5_hi3yn"]
+[ext_resource type="PackedScene" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_initialization.tscn" id="5_mq3db"]
 [ext_resource type="Material" uid="uid://bxar533o5uie6" path="res://addons/Ursula/Shaders/TerrainMaterial3D.tres" id="5_oha17"]
 [ext_resource type="PackedScene" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_models.tscn" id="5_vh4lw"]
 [ext_resource type="Material" uid="uid://fu7wl56n0ecn" path="res://addons/Ursula/Shaders/TestMaterial.tres" id="6_8fq4u"]
-[ext_resource type="PackedScene" uid="uid://dxk048njxb3fw" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_randomness.tscn" id="6_8hpl3"]
+[ext_resource type="PackedScene" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_randomness.tscn" id="6_8hpl3"]
 [ext_resource type="PackedScene" uid="uid://b2usj12artbdf" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_timer.tscn" id="6_ikhl2"]
 [ext_resource type="PackedScene" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/interactive_object_time.tscn" id="6_yjl4o"]
 [ext_resource type="Material" uid="uid://dfp20ris1piv8" path="res://addons/Ursula/Shaders/WaterMat.tres" id="7_5ec2a"]
@@ -154,3 +155,4 @@ InteractiveObjectCounterPrefab = ExtResource("3_oy3hf")
 InteractiveObjectModelsPrefab = ExtResource("5_vh4lw")
 InteractiveObjectInitializationPrefab = ExtResource("5_mq3db")
 InteractiveObjectRandomnessPrefab = ExtResource("6_8hpl3")
+InteractiveObjectEpidemicPrefab = ExtResource("5_hi3yn")

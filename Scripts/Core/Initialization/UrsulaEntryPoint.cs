@@ -20,6 +20,7 @@ using Ursula.EmbeddedGames.Manager;
 using Ursula.EmbeddedGames.Model;
 using ursula.addons.Ursula.Scripts.GameObjects.Controller;
 using ursula.addons.Ursula.Scripts.GameObjects.View;
+using ursula.addons.Ursula.Modules.CyberiadaHSMExtensions;
 
 
 namespace Ursula.Core.Initialization
@@ -111,6 +112,7 @@ namespace Ursula.Core.Initialization
             InstallSingleton<SimulationGeneratorView>(services);
             InstallSingleton<SimulationGeneratorController>(services);
 
+            InstallSingleton<HSMEpidemicModule>(services);
         }
 
         private void InstallSingleton<T>(ServiceCollection services) where T : class 

@@ -1984,7 +1984,7 @@ grow_vertical = 2
 texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
-[node name="PanelSimulationGenerator" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "LabelRadius", "TextEditRadius", "LabelProtectionCount", "TextEditProtectionCount", "ButtonGenerate", "view1", "view2")]
+[node name="PanelSimulationGenerator" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "ButtonGenerate", "view1", "view2")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2003,10 +2003,6 @@ LabelPetcent = NodePath("VBoxContainer/LabelPercent")
 TextEditPercent = NodePath("VBoxContainer/TextEditPercent")
 LabelCoefficient = NodePath("VBoxContainer/LabelCoefficient")
 TextEditCoefficient = NodePath("VBoxContainer/TextEditCoefficient")
-LabelRadius = NodePath("VBoxContainer/LabelRadius")
-TextEditRadius = NodePath("VBoxContainer/TextEditRadius")
-LabelProtectionCount = NodePath("VBoxContainer/LabelProtectionCount")
-TextEditProtectionCount = NodePath("VBoxContainer/TextEditProtectionCount")
 ButtonGenerate = NodePath("VBoxContainer/ButtonGenerate")
 view1 = NodePath("VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab1")
 view2 = NodePath("VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab2")
@@ -2098,28 +2094,6 @@ layout_mode = 2
 theme_override_styles/normal = ExtResource("46_h4d78")
 text = "0,5"
 placeholder_text = "Введите значение от 0 до 1"
-
-[node name="LabelRadius" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
-layout_mode = 2
-text = "Расстояние заражения"
-
-[node name="TextEditRadius" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme_override_styles/normal = ExtResource("46_h4d78")
-text = "10"
-placeholder_text = "Введите целое число"
-
-[node name="LabelProtectionCount" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
-layout_mode = 2
-text = "Количество пилюлей"
-
-[node name="TextEditProtectionCount" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme_override_styles/normal = ExtResource("46_h4d78")
-text = "10"
-placeholder_text = "Введите целое число"
 
 [node name="ButtonGenerate" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelSimulationGenerator/VBoxContainer"]
 custom_minimum_size = Vector2(115, 0)
