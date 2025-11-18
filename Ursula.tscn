@@ -3055,7 +3055,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="AlgControl" parent="." instance=ExtResource("18_uus1o")]
-visible = false
 offset_left = 275.0
 offset_top = 44.0
 offset_right = 543.0
@@ -3070,11 +3069,9 @@ anchor_bottom = 0.0
 grow_vertical = 1
 
 [node name="VideoPlayer" parent="." instance=ExtResource("22_6diaf")]
-visible = false
 layout_mode = 1
 
 [node name="Loading" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

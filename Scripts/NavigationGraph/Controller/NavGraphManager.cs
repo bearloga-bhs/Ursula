@@ -17,6 +17,15 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             Instance = this;
         }
 
+        public override void _Process(double delta)
+        {
+            base._Process(delta);
+            if (visualization != null)
+            {
+                visualization.Update(Time.GetTicksMsec() / 1000f);
+            }
+        }
+
         public void Generate(float range, float height)
         {
             navGraph = NavGraphGenerator.Generate(range, height, 10, 10, 0.6f);

@@ -12,7 +12,6 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
     {
         public static MeshInstance3D InstantiateMeshInstance3D(NavGraphEdge edge, Node parent, Color color = default)
         {
-            RandomNumberGenerator rng = new RandomNumberGenerator();
             MeshInstance3D meshInstance = new MeshInstance3D();
             ImmediateMesh mesh = new ImmediateMesh();
             OrmMaterial3D material = new OrmMaterial3D();
@@ -20,13 +19,27 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
             meshInstance.Mesh = mesh;
             meshInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
 
-            mesh.SurfaceBegin(Mesh.PrimitiveType.Lines, material);
-            mesh.SurfaceAddVertex(edge.v1.position + new Vector3(0, rng.Randf(), 0));
-            mesh.SurfaceAddVertex(edge.v2.position + new Vector3(0, rng.Randf(), 0));
-            mesh.SurfaceEnd();
-
             Vector3 direction = edge.v2.position - edge.v1.position;
             direction = direction.Normalized();
+            Vector3 right = Vector3.Up.Cross(direction);
+
+            float arrowOffset = 1f;
+            Vector3 p1 = edge.v1.position;
+            Vector3 p2 = edge.v2.position;
+            Vector3 arrowBase = p2 - direction * arrowOffset;
+            Vector3 arrowRight = arrowBase + right * arrowOffset / 2;
+            Vector3 arrowLeft = arrowBase - right * arrowOffset / 2;
+
+            mesh.SurfaceBegin(Mesh.PrimitiveType.Lines, material);
+            mesh.SurfaceAddVertex(p1);
+            mesh.SurfaceAddVertex(p2);
+            mesh.SurfaceAddVertex(p2);
+            mesh.SurfaceAddVertex(arrowRight);
+            mesh.SurfaceAddVertex(p2);
+            mesh.SurfaceAddVertex(arrowLeft);
+            mesh.SurfaceEnd();
+
+            
             direction = (direction + Vector3.One) / 2;
             if (color == default)
                 color = new Color(direction.X, direction.Y, direction.Z, 1);
@@ -35,7 +48,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
             material.AlbedoColor = color;
 
             parent.AddChild(meshInstance);
-            meshInstance.GlobalPosition = Vector3.Zero;
+            meshInstance.GlobalPosition = new Vector3(0, 0.00001f, 0);
 
             return meshInstance;
         }

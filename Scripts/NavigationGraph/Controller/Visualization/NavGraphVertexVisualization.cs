@@ -8,7 +8,6 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
     {
         public static MeshInstance3D InstantiateMeshInstance3D(NavGraphVertex vertex, Node parent, float radius = 0.5f, Color color = default)
         {
-            RandomNumberGenerator rng = new RandomNumberGenerator();
             MeshInstance3D meshInstance = new MeshInstance3D();
             SphereMesh mesh = new SphereMesh();
             OrmMaterial3D material = new OrmMaterial3D();
@@ -21,13 +20,13 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
             mesh.Material = material;
 
             if (color == default)
-                color = new Color(0, 1, 0, 1); // Green
+                color = new Color(0, 0.5f, 0, 1); // Dark green
 
             material.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
             material.AlbedoColor = color;
 
             parent.AddChild(meshInstance);
-            meshInstance.GlobalPosition = vertex.position + new Vector3(0, rng.Randf(), 0);
+            meshInstance.GlobalPosition = vertex.position;
 
             return meshInstance;
         }
