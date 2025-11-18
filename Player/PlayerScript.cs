@@ -146,7 +146,7 @@ public partial class PlayerScript : CharacterBody3D, IInjectable
 
         float RayLength = isVivibleInfo ? 1000f : 3f;
 
-        //if (isVivibleInfo)
+        if (isVivibleInfo)
         {
             if (Raycaster.HitFromCenterOfScreen(_camera, out Node collider, out Vector3 pos, false, RayLength))
             {
