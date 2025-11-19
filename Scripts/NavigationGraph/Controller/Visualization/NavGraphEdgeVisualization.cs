@@ -10,7 +10,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
 {
     public static class NavGraphEdgeVisualization
     {
-        public static MeshInstance3D InstantiateMeshInstance3D(NavGraphEdge edge, Node parent, Color color = default)
+        public static MeshInstance3D InstantiateMeshInstance3D(NavGraphEdge edge, Node parent, float heightOffset, Color color = default)
         {
             MeshInstance3D meshInstance = new MeshInstance3D();
             ImmediateMesh mesh = new ImmediateMesh();
@@ -48,7 +48,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
             material.AlbedoColor = color;
 
             parent.AddChild(meshInstance);
-            meshInstance.GlobalPosition = new Vector3(0, 0.00001f, 0);
+            meshInstance.GlobalPosition = Vector3.Up * heightOffset;
 
             return meshInstance;
         }

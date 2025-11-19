@@ -11,7 +11,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Model
         public NavGraphVertex v1;
         public NavGraphVertex v2;
 
-        public NavGraphEdge(NavGraphVertex v1, NavGraphVertex v2)
+        public NavGraphEdge(NavGraphVertex v1, NavGraphVertex v2, bool temp = false)
         {
             if (v1 is null)
                 throw new ArgumentNullException(nameof(v1));
@@ -22,8 +22,11 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Model
             this.v1 = v1;
             this.v2 = v2;
 
-            v1.edges.Add(this);
-            v2.edges.Add(this);
+            if (!temp)
+            {
+                v1.edges.Add(this);
+                v2.edges.Add(this);
+            }
         }
     }
 }

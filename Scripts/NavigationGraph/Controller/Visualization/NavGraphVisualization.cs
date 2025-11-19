@@ -9,17 +9,17 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
         private Dictionary<NavGraphVertex, MeshInstance3D> points = new Dictionary<NavGraphVertex, MeshInstance3D>();
         private List<MeshInstance3D> lines = new List<MeshInstance3D>();
 
-        public void Draw(NavGraph graph, Node parent)
+        public void Draw(NavGraph graph, Node parent, float heightOffset)
         {
             foreach (NavGraphVertex vertex in graph.vertices)
             {
-                MeshInstance3D meshInstance = NavGraphVertexVisualization.InstantiateMeshInstance3D(vertex, parent);
+                MeshInstance3D meshInstance = NavGraphVertexVisualization.InstantiateMeshInstance3D(vertex, parent, heightOffset);
                 points[vertex] = (meshInstance);
             }
 
             foreach (NavGraphEdge edge in graph.edges)
             {
-                MeshInstance3D meshInstance = NavGraphEdgeVisualization.InstantiateMeshInstance3D(edge, parent);
+                MeshInstance3D meshInstance = NavGraphEdgeVisualization.InstantiateMeshInstance3D(edge, parent, heightOffset);
                 lines.Add(meshInstance);
             }
         }

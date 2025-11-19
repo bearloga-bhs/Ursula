@@ -6,7 +6,8 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
 {
     public static class NavGraphVertexVisualization
     {
-        public static MeshInstance3D InstantiateMeshInstance3D(NavGraphVertex vertex, Node parent, float radius = 0.5f, Color color = default)
+        public static MeshInstance3D InstantiateMeshInstance3D(NavGraphVertex vertex, Node parent, float heightOffset,
+            float radius = 0.5f, Color color = default)
         {
             MeshInstance3D meshInstance = new MeshInstance3D();
             SphereMesh mesh = new SphereMesh();
@@ -26,7 +27,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
             material.AlbedoColor = color;
 
             parent.AddChild(meshInstance);
-            meshInstance.GlobalPosition = vertex.position;
+            meshInstance.GlobalPosition = vertex.position + Vector3.Up * heightOffset;
 
             return meshInstance;
         }

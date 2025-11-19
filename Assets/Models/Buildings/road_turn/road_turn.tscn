@@ -5,12 +5,11 @@
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/ItemPropsScript.cs" id="3_v6bx1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_oacc8"]
-size = Vector3(12, 1, 12)
 
 [node name="RoadTurn" type="Node3D"]
 
 [node name="Cube010" type="MeshInstance3D" parent="."]
-transform = Transform3D(300, 0, 0, 0, -1.31134e-05, 5, 0, -300, -2.18557e-07, -0.13, 0, -0.4)
+transform = Transform3D(25, 0, 0, 0, -1.09278e-06, 0.417, 0, -25, -1.82276e-08, -0.01, 0, -0.034)
 mesh = ExtResource("1_5ndn4")
 
 [node name="InteractiveObject" type="Node" parent="."]

@@ -5,7 +5,6 @@
 [ext_resource type="Script" path="res://addons/Ursula/Modules/InteractiveObjects/InteractiveObject.cs" id="3_ma0dq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ffy11"]
-size = Vector3(12, 1, 6)
 
 [node name="RoadStraight" type="Node3D"]
 
@@ -22,5 +21,9 @@ shape = SubResource("BoxShape3D_ffy11")
 script = ExtResource("2_6a1xj")
 
 [node name="Cube001" type="MeshInstance3D" parent="."]
-transform = Transform3D(300, 0, 0, 0, -1.31134e-05, 5, 0, -300, -2.18557e-07, 0, 0, 0)
+transform = Transform3D(25, 0, 0, 0, -1.09278e-06, 0.417, 0, -25, -1.82276e-08, 0, 0, 0.25)
+mesh = ExtResource("3_b4lg4")
+
+[node name="Cube002" type="MeshInstance3D" parent="."]
+transform = Transform3D(25, 0, 0, 0, -1.09278e-06, 0.417, 0, -25, -1.82276e-08, 0, 0, -0.25)
 mesh = ExtResource("3_b4lg4")

@@ -30,8 +30,19 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
 
             NavGraph navGraph = CreateBaseForm(range, height, dx, dy, connectionProbability);
             navGraph = EraseIslands(navGraph);
+            return navGraph;
+        }
+
+        public static NavGraph PostProcess(NavGraph navGraph, float directionsOffset)
+        {
+            if (navGraph == null)
+                throw new ArgumentNullException(nameof(navGraph));
+
+            if (float.IsNaN(directionsOffset) || float.IsInfinity(directionsOffset))
+                throw new ArgumentOutOfRangeException(nameof(directionsOffset));
+
             navGraph = Subdivide(navGraph);
-            navGraph = ApplyDirections(navGraph, (dx + dx) / 16);
+            navGraph = ApplyDirections(navGraph, directionsOffset);
             CreateShedules(navGraph);
 
             return navGraph;
@@ -81,8 +92,8 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
         // Depth search that returns connected subgraph that contains startVertex
         private static NavGraph GetConnectedSubgraph(NavGraphVertex startVertex)
         {
-            List<NavGraphEdge> edges = new List<NavGraphEdge>();
-            List<NavGraphVertex> vertices = new List<NavGraphVertex>();
+            HashSet<NavGraphEdge> edges = new HashSet<NavGraphEdge>();
+            HashSet<NavGraphVertex> vertices = new HashSet<NavGraphVertex>();
             Queue<NavGraphVertex> vertexQueue = new Queue<NavGraphVertex>();
             vertexQueue.Enqueue(startVertex);
 
@@ -111,7 +122,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
                 }
             }
 
-            return new NavGraph(edges, vertices);
+            return new NavGraph(edges.ToList(), vertices.ToList());
         }
 
         // Makes directed graph.
@@ -215,7 +226,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
             }
             else
             {
-                return new NavGraphEdge(leftToRightEdge.v2, leftToRightEdge.v1);
+                return new NavGraphEdge(leftToRightEdge.v2, leftToRightEdge.v1, temp: true);
             }
         }
 
@@ -231,45 +242,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
             NavGraphVertex right = new NavGraphVertex(vertex.position + rightDirection * offset);
             NavGraphVertex left = new NavGraphVertex(vertex.position + leftDirection * offset);
 
-            return new NavGraphEdge(left, right);
-        }
-
-        // Determine left and right vertices for the vertex
-        private static NavGraphEdge GetLeftToRightEdge(NavGraphEdge edge, NavGraphVertex vertex, 
-            Dictionary<NavGraphVertex, NavGraphEdge> vertexMap, float offset)
-        {
-            Vector3 direction = edge.v2.position - edge.v1.position;
-            direction = direction.Normalized();
-
-            Vector3 rightDirection = Vector3.Up.Cross(direction);
-            Vector3 leftDirection = -rightDirection;
-
-            NavGraphVertex right;
-            NavGraphVertex left;
-            if (!vertexMap.ContainsKey(vertex))
-            {
-                // Create new vertices if map record is empty
-                right = new NavGraphVertex(vertex.position + rightDirection * offset);
-                left = new NavGraphVertex(vertex.position + leftDirection * offset);
-            }
-            else
-            {
-                // Determine left and right vertices if map record is not empty
-                if (IsLeft(edge.v1.position, edge.v2.position, vertexMap[vertex].v1.position))
-                {
-                    left = vertexMap[vertex].v1;
-                    right = vertexMap[vertex].v2;
-                }
-                else
-                {
-                    left = vertexMap[vertex].v2;
-                    right = vertexMap[vertex].v1;
-                }
-            }
-
-            NavGraphEdge resultEdge = new NavGraphEdge(left, right);
-            vertexMap[vertex] = resultEdge;
-            return resultEdge;
+            return new NavGraphEdge(left, right, temp: true);
         }
 
         private static bool IsLeft(Vector3 edgeV1, Vector3 edgeV2, Vector3 p)

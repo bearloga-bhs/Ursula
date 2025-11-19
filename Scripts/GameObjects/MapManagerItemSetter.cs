@@ -89,7 +89,7 @@ namespace Ursula.MapManagers.Setters
 
             int id = _x + _y * 256 + _z * 256 * 256;
 
-            rotationNode = VoxLib.mapManager.tempRotation;
+            //rotationNode = VoxLib.mapManager.tempRotation;
 
             Node item = CreateGameItem(asset, rotationNode, scaleNode, _x, positionNode.Y, _z, 0, id, false);
             Node3D node3D = item as Node3D;
@@ -204,12 +204,18 @@ namespace Ursula.MapManagers.Setters
         {
             return rotation switch
             {
-                (byte)GameItemRotation.forward => LookRotation(Vector3.Forward),
-                (byte)GameItemRotation.backward => LookRotation(-Vector3.Forward),
-                (byte)GameItemRotation.right => LookRotation(Vector3.Right),
-                (byte)GameItemRotation.left => LookRotation(-Vector3.Right),
-                (byte)GameItemRotation.up => LookRotation(Vector3.Up),
-                (byte)GameItemRotation.down => LookRotation(-Vector3.Up),
+                (byte)GameItemRotation.forward => 
+                LookRotation(Vector3.Forward),
+                (byte)GameItemRotation.backward => 
+                LookRotation(-Vector3.Forward),
+                (byte)GameItemRotation.right => 
+                LookRotation(Vector3.Right),
+                (byte)GameItemRotation.left => 
+                LookRotation(-Vector3.Right),
+                (byte)GameItemRotation.up => 
+                LookRotation(Vector3.Up),
+                (byte)GameItemRotation.down => 
+                LookRotation(-Vector3.Up),
                 _ => Quaternion.Identity,
             };
         }
