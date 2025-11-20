@@ -19,7 +19,7 @@ public class RectangleDetectorShape : IDetectorShape
         anchor = relativeTo;
     }
 
-    public bool IsDetected(Vector3 point)
+    public bool IsDetected(Vector3 point, out float distance)
     {
         //NOTE Pitch rotation is not ignored. If 3D actor is rotated in Pitch axis rectangle will be shrinked
         //NOTE make detection like box collider? Need to discuss 
@@ -48,9 +48,11 @@ public class RectangleDetectorShape : IDetectorShape
 
         if (cross_left < 0 || cross_up < 0 || cross_right < 0 || cross_down < 0)
         {
+            distance = -1.0f;
             return false;
         }
-        
+
+        distance = 1.0f;
         return true;
     }
 }

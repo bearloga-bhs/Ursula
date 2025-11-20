@@ -13,16 +13,18 @@ public class SphereDetectorShape : IDetectorShape
         this.center = center;
     }
 
-    public bool IsDetected(Vector3 point)
+    public bool IsDetected(Vector3 point, out float distance)
     {
         Vector3 center_after_rotation = anchor.GlobalTransform * center;
         
         float dist2 = point.DistanceSquaredTo(center_after_rotation);
         if (dist2 <= radius * radius)
         {
+            distance = dist2;
             return true;
         }
-        
+
+        distance = -1.0f;
         return false;
     }
 }

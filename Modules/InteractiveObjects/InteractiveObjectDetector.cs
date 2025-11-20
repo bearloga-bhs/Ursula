@@ -108,7 +108,8 @@ public partial class InteractiveObjectDetector : Area3D
         if (player != null) nodes.Add(player);
         foreach (Node node in nodes)
         {
-            if (node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition) && node.Name.ToString().Contains(targetObjectName))
+            float distance;
+            if (node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition, out distance) && node.Name.ToString().Contains(targetObjectName))
             {
                 currentDetectedObject = node;
                 break;
@@ -135,8 +136,10 @@ public partial class InteractiveObjectDetector : Area3D
 
     private void FindPlayer()
     {
+        float distance;
+        
         Node3D player = PlayerScript.instance;
-        if (player != null && Node.IsInstanceValid(player) && detectorShape.IsDetected(player.GlobalPosition))
+        if (player != null && Node.IsInstanceValid(player) && detectorShape.IsDetected(player.GlobalPosition, out distance))
         {
             previousDetectedObject = player;
             detectedObject = player;
@@ -159,15 +162,21 @@ public partial class InteractiveObjectDetector : Area3D
     private void FindObject()
     {
         Node currentDetectedObject = null;
+        float min_distance = float.MaxValue;
         
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
+            float distance;
+            
             if (node is ItemPropsScript item && item.GameObjectSample == targetObjectName && 
-                node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition))
+                node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition, out distance))
             {
-                currentDetectedObject = node;
-                break;
+                if (min_distance > distance)
+                { 
+                    currentDetectedObject = node;
+                    min_distance = distance;
+                }
             }
         }
 
@@ -187,15 +196,22 @@ public partial class InteractiveObjectDetector : Area3D
     private void FindSound()
     {
         Node currentDetectedObject = null;
+
+        float min_distance = float.MaxValue;
         
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
+            float distance;
+            
             if (node is ItemPropsScript item && item.IO.audio.currentAudioKey == targetSoundName && item.IO.audio.isPlaying &&
-                node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition))
+                node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition, out distance))
             {
-                currentDetectedObject = node;
-                break;
+                if (min_distance > distance)
+                { 
+                    currentDetectedObject = node;
+                    min_distance = distance;
+                }
             }
         }
 
