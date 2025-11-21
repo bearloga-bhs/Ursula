@@ -34,7 +34,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
             return navGraph;
         }
 
-        public static NavGraph PostProcess(NavGraph navGraph, float directionsOffset)
+        public static NavGraph PostProcess(NavGraph navGraph, float subdivisionOffset, float directionsOffset)
         {
             if (navGraph == null)
                 throw new ArgumentNullException(nameof(navGraph));
@@ -42,7 +42,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
             if (float.IsNaN(directionsOffset) || float.IsInfinity(directionsOffset))
                 throw new ArgumentOutOfRangeException(nameof(directionsOffset));
 
-            navGraph = NavGraphSubdivisionStage.Subdivide(navGraph);
+            navGraph = NavGraphSubdivisionStage.Subdivide(navGraph, subdivisionOffset);
             navGraph = NavGraphDirectedStage.ApplyDirections(navGraph, directionsOffset);
             NavGraphSheduleStage.CreateShedules(navGraph);
 

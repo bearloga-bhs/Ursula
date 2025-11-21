@@ -7,16 +7,16 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation.S
 {
     public static class NavGraphSubdivisionStage
     {
-        // Creates points at 0.25 and 0.75 of every edge
+        // Creates points at t and 1 - t of every edge
         // Connects edges similar to the original graph
-        public static NavGraph Subdivide(NavGraph navGraph)
+        public static NavGraph Subdivide(NavGraph navGraph, float t)
         {
             List<NavGraphVertex> vertices = new List<NavGraphVertex>();
             List<NavGraphEdge> edges = new List<NavGraphEdge>();
             // maps old vertices to new ones
             Dictionary<NavGraphVertex, List<NavGraphVertex>> vertexMap = new Dictionary<NavGraphVertex, List<NavGraphVertex>>();
 
-            ShortenEdges(navGraph, vertices, edges, vertexMap);
+            ShortenEdges(navGraph, vertices, edges, vertexMap, t);
             FillGaps(navGraph, vertices, edges, vertexMap);
 
             return new NavGraph(edges, vertices);
@@ -26,7 +26,8 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation.S
             NavGraph navGraph,
             List<NavGraphVertex> vertices,
             List<NavGraphEdge> edges,
-            Dictionary<NavGraphVertex, List<NavGraphVertex>> vertexMap)
+            Dictionary<NavGraphVertex, List<NavGraphVertex>> vertexMap,
+            float t)
         {
             // Create new vertices and fill the vertexMap
             foreach (NavGraphEdge edge in navGraph.edges)
@@ -35,8 +36,8 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation.S
                 Vector3 direction = edge.v2.position - edge.v1.position;
 
                 // Create new vertices
-                NavGraphVertex v1 = new NavGraphVertex(source + 0.25f * direction);
-                NavGraphVertex v2 = new NavGraphVertex(source + 0.75f * direction);
+                NavGraphVertex v1 = new NavGraphVertex(source + t * direction);
+                NavGraphVertex v2 = new NavGraphVertex(source + (1 - t) * direction);
                 // Create new edge in place of the old one but twice as short
                 NavGraphEdge newEdge = new NavGraphEdge(v1, v2);
                 vertices.Add(v1);

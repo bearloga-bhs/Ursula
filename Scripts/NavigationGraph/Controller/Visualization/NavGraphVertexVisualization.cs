@@ -7,7 +7,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
     public static class NavGraphVertexVisualization
     {
         public static MeshInstance3D InstantiateMeshInstance3D(NavGraphVertex vertex, Node parent, float heightOffset,
-            float radius = 0.5f, Color color = default)
+            float radius = 0.2f, Color color = default)
         {
             MeshInstance3D meshInstance = new MeshInstance3D();
             SphereMesh mesh = new SphereMesh();

@@ -91,7 +91,7 @@ namespace Ursula.MapManagers.Setters
 
             //rotationNode = VoxLib.mapManager.tempRotation;
 
-            Node item = CreateGameItem(asset, rotationNode, scaleNode, _x, positionNode.Y, _z, 0, id, false);
+            Node item = CreateGameItem(asset, rotationNode, scaleNode, positionNode.X, positionNode.Y, positionNode.Z, 0, id, false);
             Node3D node3D = item as Node3D;
             //if (_mapManager.itemsGO == null) _mapManager.itemsGO = new Node3D();
             //_mapManager.itemsGO.AddChild(node3D);
@@ -136,7 +136,7 @@ namespace Ursula.MapManagers.Setters
             int _y = Mathf.RoundToInt(y);
             int _z = Mathf.RoundToInt(z);
 
-            Vector3 newPos = new Vector3(_x, y, _z);
+            Vector3 newPos = new Vector3(x, y, z);
             if (isSnapGrid) newPos = new Vector3(_x, _y, _z);
             Quaternion rot = GetRotation(rotation);
 

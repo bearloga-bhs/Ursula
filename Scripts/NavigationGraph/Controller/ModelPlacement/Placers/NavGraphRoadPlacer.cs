@@ -20,10 +20,9 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             this.gameObjectCreateItemsModel = gameObjectCreateItemsModel;
         }
 
-        #region API
         public void PlaceRoadStraightOrTurn(GameObjectAssetInfo roadStraight, GameObjectAssetInfo roadTurn, NavGraphVertex vertex, float scale, float heightOffset)
         {
-            if (IsRoadStraight(vertex))
+            if (NavGraphPlacerUtils.IsRoadStraight(vertex))
                 PlaceRoadStraight(roadStraight, vertex, scale, heightOffset);
             else
                 PlaceRoadTurn(roadTurn, vertex, scale, heightOffset);
@@ -48,8 +47,8 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             gameObjectCollectionModel.SetGameObjectAssetSelected(roadTurn);
 
             Vector3 pos = vertex.position + Vector3.Up * heightOffset;
-            NavGraphEdge edge1 = OrientFromVertex(vertex.edges[0], vertex);
-            NavGraphEdge edge2 = OrientFromVertex(vertex.edges[1], vertex);
+            NavGraphEdge edge1 = NavGraphPlacerUtils.OrientFromVertex(vertex.edges[0], vertex);
+            NavGraphEdge edge2 = NavGraphPlacerUtils.OrientFromVertex(vertex.edges[1], vertex);
 
             Vector3 dir1 = edge1.v2.position - edge1.v1.position;
             Vector3 dir2 = edge2.v2.position - edge2.v1.position;
@@ -61,7 +60,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             else
                 mainDir = dir2;
 
-            gameObjectCreateItemsModel.SetGameObjectCreateItem(pos, scale, EncodeDirection(mainDir));
+            gameObjectCreateItemsModel.SetGameObjectCreateItem(pos, scale, NavGraphPlacerUtils.EncodeDirection(mainDir));
         }
 
         public void PlaceRoadT(GameObjectAssetInfo roadT, NavGraphVertex vertex, float scale, float heightOffset)
@@ -69,9 +68,9 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             gameObjectCollectionModel.SetGameObjectAssetSelected(roadT);
 
             Vector3 pos = vertex.position + Vector3.Up * heightOffset;
-            NavGraphEdge edge1 = OrientFromVertex(vertex.edges[0], vertex);
-            NavGraphEdge edge2 = OrientFromVertex(vertex.edges[1], vertex);
-            NavGraphEdge edge3 = OrientFromVertex(vertex.edges[2], vertex);
+            NavGraphEdge edge1 = NavGraphPlacerUtils.OrientFromVertex(vertex.edges[0], vertex);
+            NavGraphEdge edge2 = NavGraphPlacerUtils.OrientFromVertex(vertex.edges[1], vertex);
+            NavGraphEdge edge3 = NavGraphPlacerUtils.OrientFromVertex(vertex.edges[2], vertex);
             Vector3 dir1 = edge1.v2.position - edge1.v1.position;
             Vector3 dir2 = edge2.v2.position - edge2.v1.position;
             Vector3 dir3 = edge3.v2.position - edge3.v1.position;
@@ -84,7 +83,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             else
                 mainDir = dir1;
 
-            gameObjectCreateItemsModel.SetGameObjectCreateItem(pos, scale, EncodeDirection(mainDir));
+            gameObjectCreateItemsModel.SetGameObjectCreateItem(pos, scale, NavGraphPlacerUtils.EncodeDirection(mainDir));
         }
 
         public void PlaceRoadCross(GameObjectAssetInfo roadCross, NavGraphVertex vertex, float scale, float heightOffset)
@@ -93,52 +92,5 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             Vector3 pos = vertex.position + Vector3.Up * heightOffset;
             gameObjectCreateItemsModel.SetGameObjectCreateItem(pos, scale, 0);
         }
-        #endregion
-
-        #region utils
-        private bool IsRoadStraight(NavGraphVertex vertex)
-        {
-            if (vertex.edges.Count != 2)
-            {
-                throw new ArgumentException($"Vertex should be connected to 2 edges");
-            }
-
-            NavGraphEdge e1 = vertex.edges[0];
-            NavGraphEdge e2 = vertex.edges[1];
-
-            Vector3 dir1 = (e1.v2.position - e1.v1.position).Normalized();
-            Vector3 dir2 = (e2.v2.position - e2.v1.position).Normalized();
-
-            float value = Mathf.Abs(dir1.Dot(dir2));
-            if (value > 0.5f)
-                return true;
-            return false;
-        }
-
-        private NavGraphEdge OrientFromVertex(NavGraphEdge edge, NavGraphVertex vertex)
-        {
-            if (edge.v1 == vertex)
-                return edge;
-            else
-                return new NavGraphEdge(edge.v2, edge.v1, temp: true);
-        }
-
-        private byte EncodeDirection(Vector3 direction)
-        {
-            if (direction == Vector3.Zero)
-                throw new ArgumentException(nameof(direction));
-
-            if (direction.Dot(Vector3.Forward) >= 0.5f)
-                return (byte)GameItemRotation.forward;
-            if (direction.Dot(Vector3.Right) >= 0.5f)
-                return (byte)GameItemRotation.right;
-            if (direction.Dot(Vector3.Back) >= 0.5f)
-                return (byte)GameItemRotation.backward;
-            if (direction.Dot(Vector3.Left) >= 0.5f)
-                return (byte)GameItemRotation.left;
-
-            throw new Exception($"Couldn't encode model direction from vector {direction}");
-        }
-        #endregion
     }
 }

@@ -37,12 +37,19 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             float dy = 10;
             float connectionProbability = 0.6f;
             float directionsOffset = (dx + dy) / 16;
+            float subdivisionOffset = 0.3f;
             float modelHegihtOffset = 1f;
+            Vector3 offset = new Vector3(subdivisionOffset * dx - directionsOffset, modelHegihtOffset, 0);
 
+            // Create undirected ghraph
             navGraph = NavGraphGenerator.Generate(range, height, dx, dy, connectionProbability);
+            // Place road models
             _ = NavGraphModelPlacer.Instance.GenerateRoads(navGraph, dx, modelHegihtOffset);
-            navGraph = NavGraphGenerator.PostProcess(navGraph, directionsOffset);
-            
+            // Create directed graph and assign shedules
+            navGraph = NavGraphGenerator.PostProcess(navGraph, subdivisionOffset, directionsOffset);
+            // Place traffic lights models
+            _ = NavGraphModelPlacer.Instance.GenerateTrafficLights(navGraph, dx / 8, offset);
+
             visualization = new NavGraphVisualization();
             visualization.Draw(navGraph, this, modelHegihtOffset);
             
