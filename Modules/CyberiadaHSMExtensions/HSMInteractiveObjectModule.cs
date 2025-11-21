@@ -10,15 +10,19 @@ public class HSMInteractiveObjectModule
 
     // Command keys
     const string DuplicateObjectCommandKey = $"{ModuleName}.ДублироватьОбъект";
-    const string RemoveObjectCommandKey = $"{ModuleName}.УдалитьОбъект";
-
+    const string RemoveCurrentObjectCommandKey = $"{ModuleName}.УдалитьЭтотОбъект";
+    const string RemoveFoundedObjectCommandKey = $"{ModuleName}.УдалитьНайденныйОбъект";
+    const string RemoveFoundedObject2CommandKey = $"{ModuleName}.УдалитьНайденныйОбъект2";
+    
     public HSMInteractiveObjectModule(CyberiadaLogic logic, InteractiveObject interactiveObject)
     {
         _object = interactiveObject;
 
         // Commands
         logic.localBus.AddCommandListener(DuplicateObjectCommandKey, DuplicateObject);
-        logic.localBus.AddCommandListener(RemoveObjectCommandKey, RemoveObject);
+        logic.localBus.AddCommandListener(RemoveCurrentObjectCommandKey, RemoveCurrentObject);
+        logic.localBus.AddCommandListener(RemoveFoundedObjectCommandKey, RemoveFoundedObject);
+        logic.localBus.AddCommandListener(RemoveFoundedObject2CommandKey, RemoveFounded2Object);
     }
 
 
@@ -28,9 +32,43 @@ public class HSMInteractiveObjectModule
         return true;
     }
 
-    bool RemoveObject(List<Tuple<string, string>> value)
+    bool RemoveCurrentObject(List<Tuple<string, string>> value)
     {
         InteractiveObjectsManager.Instance.RemoveObject(_object);
         return true;
+    }
+    
+    bool RemoveFoundedObject(List<Tuple<string, string>> value)
+    {
+        var target = _object.GetCurrentTargetObject();
+        if (target != null)
+        {
+            var interactiveObject = GetChildByType<InteractiveObject>(target.GetParent());
+            InteractiveObjectsManager.Instance.RemoveObject(interactiveObject);
+        }
+        return true;
+    }
+    
+    bool RemoveFounded2Object(List<Tuple<string, string>> value)
+    {
+        var target = _object.GetCurrentTargetObject2();
+        if (target != null)
+        {
+            var interactiveObject = GetChildByType<InteractiveObject>(target.GetParent());
+            InteractiveObjectsManager.Instance.RemoveObject(interactiveObject);
+        }
+        return true;
+    }
+    
+    private T GetChildByType<T>(Node parent) where T : Node
+    {
+        foreach (Node child in parent.GetChildren())
+        {
+            if (child is T typedChild)
+            {
+                return typedChild;
+            }
+        }
+        return null;
     }
 }
