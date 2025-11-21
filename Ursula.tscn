@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://dgc042g3ej4rj"]
+[gd_scene load_steps=84 format=3 uid="uid://dgc042g3ej4rj"]
 
 [ext_resource type="PackedScene" uid="uid://dn1jem1nnefln" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/project_timer.tscn" id="1_wxxnd"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/Core/Initialization/UrsulaEntryPoint.cs" id="1_xjqfu"]
@@ -55,6 +55,8 @@
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/Settings/View/ControlSettingsView.cs" id="38_0w2xm"]
 [ext_resource type="Texture2D" uid="uid://cceh2ccis1t63" path="res://addons/Ursula/Assets/Themes/ArrowLeft.png" id="38_544k6"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/View/SimulationGeneratorView.cs" id="38_wuvcs"]
+[ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/View/EcosystemGeneratorView.cs" id="40_m5gvt"]
+[ext_resource type="PackedScene" uid="uid://dndold6tr7uhn" path="res://addons/Ursula/Prefabs/GameObjects/EcosystemGameObjectAssetInfoViewPrefab.tscn" id="41_yjobr"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/Controller/GameObjectCollectionController.cs" id="42_rqra7"]
 [ext_resource type="StyleBox" uid="uid://ccj7ltfpijtug" path="res://addons/Ursula/Assets/Themes/ButtonStartup.tres" id="43_0nvn3"]
 [ext_resource type="Theme" uid="uid://dyddtywft2yrs" path="res://addons/Ursula/Assets/Themes/Controls.tres" id="43_cp4ec"]
@@ -1984,6 +1986,7 @@ texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
 [node name="PanelTab" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" node_paths=PackedStringArray("panels")]
+layout_mode = 0
 offset_top = 40.0
 offset_right = 410.0
 offset_bottom = 99.0
@@ -2062,153 +2065,6 @@ grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
-
-[node name="PanelSimulationGenerator" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "ButtonGenerate", "view1", "view2")]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -321.0
-offset_top = -7.0
-offset_right = -217.0
-offset_bottom = 520.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = ExtResource("51_qas0a")
-script = ExtResource("38_wuvcs")
-LabelEntitiesCount = NodePath("VBoxContainer/LabelEntitiesCount")
-TextEditEntitiesCount = NodePath("VBoxContainer/TextlEditEntitiesCount")
-LabelPetcent = NodePath("VBoxContainer/LabelPercent")
-TextEditPercent = NodePath("VBoxContainer/TextEditPercent")
-LabelCoefficient = NodePath("VBoxContainer/LabelCoefficient")
-TextEditCoefficient = NodePath("VBoxContainer/TextEditCoefficient")
-ButtonGenerate = NodePath("VBoxContainer/ButtonGenerate")
-view1 = NodePath("VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab1")
-view2 = NodePath("VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab2")
-
-[node name="Label7" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator"]
-visible = false
-layout_mode = 1
-offset_right = 268.0
-offset_bottom = 23.0
-text = "Выбор объекта"
-
-[node name="IdItemOption" type="OptionButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator"]
-visible = false
-layout_mode = 1
-offset_top = 27.0
-offset_right = 265.0
-offset_bottom = 58.0
-focus_mode = 1
-alignment = 2
-autowrap_mode = 3
-clip_text = true
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 40.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="GridContainer" type="GridContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/ScrollContainer"]
-custom_minimum_size = Vector2(120, 120)
-layout_direction = 2
-layout_mode = 2
-columns = 7
-
-[node name="GameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/ScrollContainer/GridContainer" instance=ExtResource("16_1eb3b")]
-layout_mode = 2
-script = ExtResource("38_wuvcs")
-
-[node name="TabBarGameObjectGroup" type="TabBar" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator"]
-visible = false
-layout_mode = 0
-offset_right = 1146.0
-offset_bottom = 40.0
-theme = ExtResource("43_cp4ec")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/tab_selected = ExtResource("18_c37xe")
-current_tab = 0
-tab_count = 1
-tab_0/title = "Все объекты"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator"]
-layout_mode = 0
-offset_right = 287.0
-offset_bottom = 457.0
-
-[node name="LabelEntitiesCount" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer"]
-layout_mode = 2
-text = "Количество сущностей"
-
-[node name="TextlEditEntitiesCount" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme_override_styles/normal = ExtResource("46_h4d78")
-text = "10"
-placeholder_text = "Введите целое число"
-
-[node name="LabelPercent" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer"]
-layout_mode = 2
-text = "Изначальное количество больных"
-
-[node name="TextEditPercent" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme_override_styles/normal = ExtResource("46_h4d78")
-text = "50"
-placeholder_text = "Введите процент"
-
-[node name="LabelCoefficient" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer"]
-layout_mode = 2
-text = "Коэффициент заражения"
-
-[node name="TextEditCoefficient" type="TextEdit" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme_override_styles/normal = ExtResource("46_h4d78")
-text = "0,5"
-placeholder_text = "Введите значение от 0 до 1"
-
-[node name="ButtonGenerate" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer"]
-custom_minimum_size = Vector2(115, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-focus_mode = 1
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = ExtResource("18_c37xe")
-text = "Сгенерировать"
-icon_alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer/ButtonGenerate"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 3.07996
-offset_top = -9.0
-offset_right = 21.08
-offset_bottom = 10.0
-grow_vertical = 2
-texture = ExtResource("19_c8ee4")
-expand_mode = 1
-
-[node name="GridContainer" type="GridContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer"]
-custom_minimum_size = Vector2(120, 120)
-layout_direction = 2
-layout_mode = 2
-columns = 7
-
-[node name="GameObjectAssetInfoViewPrefab1" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer/GridContainer" instance=ExtResource("16_1eb3b")]
-layout_mode = 2
-
-[node name="GameObjectAssetInfoViewPrefab2" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/VBoxContainer/GridContainer" instance=ExtResource("16_1eb3b")]
-layout_mode = 2
 
 [node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "ButtonGenerate", "view1", "view2")]
 layout_mode = 0
@@ -2365,7 +2221,7 @@ visible = false
 layout_mode = 0
 offset_left = -115.0
 offset_top = 50.0
-offset_right = 216.0
+offset_right = 295.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("34_bxh7g")
@@ -2540,7 +2396,7 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_qiu05")
 text = "Экосистема"
 script = ExtResource("6_1h5ru")
-PanelMenu = NodePath("PanelConstructorFloraMenuView")
+PanelMenu = NodePath("PanelEcosystem")
 
 [node name="Icon" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem"]
 visible = false
@@ -2590,32 +2446,17 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelConstructorFloraMenuView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" node_paths=PackedStringArray("ButtonPlants", "ButtonTrees", "ButtonGrass", "TabBarTrees", "LabelTreeDensity", "PanelTreeDensity", "GridContainerTrees", "TabBarGrass", "LabelGrassDensity", "PanelGrassDensity", "GridContainerGrass", "HSliderTreesDensity", "HSliderGrassDensity", "ButtonGenerateFlora")]
-visible = false
+[node name="PanelEcosystem" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" node_paths=PackedStringArray("prefabs")]
 layout_mode = 0
-offset_left = -219.0
+offset_left = -298.0
 offset_top = 50.0
 offset_right = 112.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
-script = ExtResource("35_10kx4")
-ButtonPlants = NodePath("..")
-ButtonTrees = NodePath("ScrollContainer/VBoxContainer/HBoxContainer/ButtonTrees")
-ButtonGrass = NodePath("ScrollContainer/VBoxContainer/HBoxContainer/ButtonGrass")
-TabBarTrees = NodePath("ScrollContainer/VBoxContainer/TabBarTrees")
-LabelTreeDensity = NodePath("ScrollContainer/VBoxContainer/LabelTreeDensity")
-PanelTreeDensity = NodePath("ScrollContainer/VBoxContainer/PanelTreeDensity")
-GridContainerTrees = NodePath("ScrollContainer/VBoxContainer/GridContainerTrees")
-TabBarGrass = NodePath("ScrollContainer/VBoxContainer/TabBarGrass")
-LabelGrassDensity = NodePath("ScrollContainer/VBoxContainer/LabelGrassDensity")
-PanelGrassDensity = NodePath("ScrollContainer/VBoxContainer/PanelGrassDensity")
-GridContainerGrass = NodePath("ScrollContainer/VBoxContainer/GridContainerGrass")
-GameObjectAssetInfoPrefab = ExtResource("36_pl0m0")
-HSliderTreesDensity = NodePath("ScrollContainer/VBoxContainer/PanelTreeDensity/HSliderTreeDensity")
-HSliderGrassDensity = NodePath("ScrollContainer/VBoxContainer/PanelGrassDensity/HSliderGrassDensity")
-ButtonGenerateFlora = NodePath("ButtonCreateLandscape")
+script = ExtResource("40_m5gvt")
+prefabs = [NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab2"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab3"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab4")]
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2627,193 +2468,67 @@ offset_bottom = -67.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="TransportFlowAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/ScrollContainer/VBoxContainer" instance=ExtResource("41_yjobr")]
 layout_mode = 2
 
-[node name="ButtonTrees" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="TransportFlowAssetInfoViewPrefab2" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/ScrollContainer/VBoxContainer" instance=ExtResource("41_yjobr")]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/pressed = ExtResource("18_c37xe")
-theme_override_styles/normal = ExtResource("51_ffq47")
-toggle_mode = true
-button_pressed = true
-button_group = SubResource("ButtonGroup_uj8t1")
-text = "Деревья"
 
-[node name="ButtonGrass" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="TransportFlowAssetInfoViewPrefab3" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/ScrollContainer/VBoxContainer" instance=ExtResource("41_yjobr")]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/pressed = ExtResource("18_c37xe")
-theme_override_styles/normal = ExtResource("51_ffq47")
-toggle_mode = true
-button_group = SubResource("ButtonGroup_uj8t1")
-text = "Трава"
 
-[node name="LabelTreeDensity" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
+[node name="TransportFlowAssetInfoViewPrefab4" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/ScrollContainer/VBoxContainer" instance=ExtResource("41_yjobr")]
 layout_mode = 2
-text = "Плотность деревьев"
 
-[node name="PanelTreeDensity" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme_override_styles/panel = ExtResource("46_h4d78")
-
-[node name="HSliderTreeDensity" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer/PanelTreeDensity" node_paths=PackedStringArray("_hSlider")]
-custom_minimum_size = Vector2(100, 30)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem"]
+layout_mode = 0
 offset_left = 3.0
-offset_top = -1.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_icons/grabber = ExtResource("22_m1i1r")
-theme_override_icons/grabber_highlight = ExtResource("22_m1i1r")
-theme_override_styles/slider = ExtResource("23_8khbg")
-theme_override_styles/grabber_area = ExtResource("24_ux6rg")
-theme_override_styles/grabber_area_highlight = ExtResource("24_ux6rg")
-value = 50.0
-script = ExtResource("25_l6pvw")
-_hSlider = NodePath(".")
+offset_top = 428.0
+offset_right = 584.0
+offset_bottom = 507.0
 
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer/PanelTreeDensity/HSliderTreeDensity"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -34.5
-offset_top = -12.0
-offset_right = -5.5
-offset_bottom = 13.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "50"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="TabBarTrees" type="TabBar" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("43_cp4ec")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/tab_selected = ExtResource("18_c37xe")
-current_tab = 0
-tab_count = 3
-tab_0/title = "Базовые"
-tab_1/title = "Загруженные"
-tab_2/title = "Смешанные"
-
-[node name="GridContainerTrees" type="GridContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
-layout_direction = 2
-layout_mode = 2
-size_flags_vertical = 3
-columns = 4
-
-[node name="GameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer/GridContainerTrees" instance=ExtResource("16_1eb3b")]
-layout_mode = 2
-
-[node name="LabelGrassDensity" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Плотность травы"
-
-[node name="PanelGrassDensity" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme_override_styles/panel = ExtResource("46_h4d78")
-
-[node name="HSliderGrassDensity" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer/PanelGrassDensity" node_paths=PackedStringArray("_hSlider")]
-custom_minimum_size = Vector2(100, 30)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = -1.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_icons/grabber = ExtResource("22_m1i1r")
-theme_override_icons/grabber_highlight = ExtResource("22_m1i1r")
-theme_override_styles/slider = ExtResource("23_8khbg")
-theme_override_styles/grabber_area = ExtResource("24_ux6rg")
-theme_override_styles/grabber_area_highlight = ExtResource("24_ux6rg")
-value = 50.0
-script = ExtResource("25_l6pvw")
-_hSlider = NodePath(".")
-
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer/PanelGrassDensity/HSliderGrassDensity"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -34.5
-offset_top = -12.0
-offset_right = -5.5
-offset_bottom = 13.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "50"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="TabBarGrass" type="TabBar" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("43_cp4ec")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/tab_selected = ExtResource("18_c37xe")
-current_tab = 0
-tab_count = 3
-tab_0/title = "Базовые"
-tab_1/title = "Загруженные"
-tab_2/title = "Смешанные"
-
-[node name="GridContainerGrass" type="GridContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
-layout_direction = 2
-layout_mode = 2
-size_flags_vertical = 3
-columns = 4
-
-[node name="GameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ScrollContainer/VBoxContainer/GridContainerGrass" instance=ExtResource("16_1eb3b")]
-layout_mode = 2
-
-[node name="ButtonCreateLandscape" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView"]
+[node name="ButtonGenerate" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -153.5
-offset_top = -62.0
-offset_right = 153.5
-offset_bottom = -12.0
-grow_horizontal = 2
-grow_vertical = 0
+layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 18
 theme_override_styles/hover = ExtResource("18_c37xe")
 theme_override_styles/pressed = ExtResource("18_c37xe")
 theme_override_styles/normal = ExtResource("18_c37xe")
-text = "Генерировать флору"
+text = "Сгенерировать"
 icon_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelConstructorFloraMenuView/ButtonCreateLandscape"]
+[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer/ButtonGenerate"]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.07996
+offset_top = -9.0
+offset_right = 21.08
+offset_bottom = 10.0
+grow_vertical = 2
+texture = ExtResource("19_c8ee4")
+expand_mode = 1
+
+[node name="ButtonClear" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = ExtResource("18_c37xe")
+theme_override_styles/pressed = ExtResource("18_c37xe")
+theme_override_styles/normal = ExtResource("18_c37xe")
+text = "Очистить карту"
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer/ButtonClear"]
 visible = false
 layout_mode = 1
 anchors_preset = 4
@@ -3309,6 +3024,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gln1k")
 
 [node name="ControlLog" type="Control" parent="Controls" node_paths=PackedStringArray("LogControl", "fileDialog", "filterText", "optionFilterButton", "FilterMenuButton", "PauseButton", "VBoxContainerLogItemViews")]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -4238,7 +3954,6 @@ clip_text = true
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonObject/PanelGameObjectLibraryView/IdItemOption" to="MapManagers/MapManager" method="SetUsedStandartItemBuild"]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" method="OnClick"]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab" method="OpenPanel" binds= [0]]
-[connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelSimulationGenerator/IdItemOption" to="MapManagers/MapManager" method="SetUsedStandartItemBuild"]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab" method="OpenPanel" binds= [1]]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab" method="OpenPanel" binds= [2]]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer2/ButtonOpenControlProject" to="Controls" method="OnOpenControlProject"]
