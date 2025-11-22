@@ -17,5 +17,10 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Model
             this.position = position;
             edges = new List<NavGraphEdge>();
         }
+
+        public override string ToString()
+        {
+            return $"NavGraphVertex ({position})";
+        }
     }
 }

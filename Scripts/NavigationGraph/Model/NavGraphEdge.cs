@@ -28,5 +28,10 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Model
                 v2.edges.Add(this);
             }
         }
+
+        public override string ToString()
+        {
+            return $"NavGraphEdge ({v1}; {v2})";
+        }
     }
 }
