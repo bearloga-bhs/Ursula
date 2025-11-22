@@ -5,6 +5,8 @@ using System.Linq;
 
 public partial class InteractiveObjectDetector : Area3D
 {
+    public VariableHolder<float> SoundDetectionValue = new(0);
+
     public Node detectedObject; // заданныйОбъект
     public Node previousDetectedObject;
     
@@ -21,6 +23,7 @@ public partial class InteractiveObjectDetector : Area3D
 
     public Action onObjectDetected;
     public Action onPlayerDetected;
+    public Action onSoundDetection;
     public Action onSoundDetected;
     public Action onPlayerInteractionObject;
 
@@ -233,9 +236,16 @@ public partial class InteractiveObjectDetector : Area3D
         if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
             previousDetectedObject = currentDetectedObject;
+            SoundDetectionValue.Value = 1f;
             onSoundDetected?.Invoke();
+        }
+        else
+        {
+            SoundDetectionValue.Value = 0f;
         }
 
         detectedObject = currentDetectedObject;
+
+        onSoundDetection?.Invoke();
     }
 }

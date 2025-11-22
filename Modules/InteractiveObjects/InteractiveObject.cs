@@ -5,6 +5,8 @@ using System.IO;
 using static MoveScript;
 using Modules.HSM;
 using Fractural.Tasks;
+using ursula.addons.Ursula.Modules.CyberiadaHSMExtensions;
+using ursula.addons.Ursula.Modules.InteractiveObjects;
 
 // Тут будет происходить парсинг XML файла, поэтапное выполнение алгоритма и связь элементов с соответствующими узлами
 public partial class InteractiveObject : Node
@@ -25,6 +27,7 @@ public partial class InteractiveObject : Node
     public InteractiveObjectModels models;
     public InteractiveObjectInitialization initialization;
     public InteractiveObjectRandomness random;
+    public InteractiveObjectEpidemic epidemic;
 
     [Export]
     public string xmlPath;
@@ -50,6 +53,7 @@ public partial class InteractiveObject : Node
     public HSMModelsModule hswModelsModule;
     public HSMInitializationModule hsmInitializationModule;
     public HSMRandomnessModule hsmRandomnessModule;
+    public HSMEpidemicModule hsmEpidemicModule;
     public HSMInteractiveObjectModule interactiveObjectModule;
 
     HSMLogger _logger;
@@ -79,6 +83,7 @@ public partial class InteractiveObject : Node
         models = LinkComponent<InteractiveObjectModels>("InteractiveObjectModels", VoxLib.mapAssets.InteractiveObjectModelsPrefab);
         initialization = LinkComponent<InteractiveObjectInitialization>("InteractiveObjectInitialization", VoxLib.mapAssets.InteractiveObjectInitializationPrefab);
         random = LinkComponent<InteractiveObjectRandomness>("InteractiveObjectRandomness", VoxLib.mapAssets.InteractiveObjectRandomnessPrefab);
+        epidemic = LinkComponent<InteractiveObjectEpidemic>("InteractiveObjectEpidemic", VoxLib.mapAssets.InteractiveObjectEpidemicPrefab);
     }
 
     private async GDTask InitHsm()
@@ -99,6 +104,7 @@ public partial class InteractiveObject : Node
         hswModelsModule = new HSMModelsModule(hsmLogic, this);
         hsmInitializationModule = new HSMInitializationModule(hsmLogic, this);
         hsmRandomnessModule = new HSMRandomnessModule(hsmLogic, this);
+        hsmEpidemicModule = new HSMEpidemicModule(hsmLogic, this);
         interactiveObjectModule = new HSMInteractiveObjectModule(hsmLogic, this);
     }
 
