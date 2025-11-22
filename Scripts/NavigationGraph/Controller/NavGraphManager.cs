@@ -43,6 +43,8 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             float directionsOffset = (dx + dy) / 16;
             float subdivisionOffset = 0.3f;
             float modelHegihtOffset = 0.01f;
+            int carsCount = 50;
+
             Vector3 offset = new Vector3(subdivisionOffset * dx - directionsOffset, modelHegihtOffset, 0);
 
             // Create undirected graph
@@ -53,6 +55,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             navGraph = NavGraphGenerator.PostProcess(navGraph, subdivisionOffset, directionsOffset);
             // Place traffic lights models
             _ = NavGraphModelPlacer.Instance.GenerateTrafficLights(navGraph, dx / 8, offset);
+            _ = NavGraphModelPlacer.Instance.GenerateCars(navGraph, carsCount, modelHegihtOffset);
 
             //visualization = new NavGraphVisualization();
             //visualization.Draw(navGraph, this, modelHegihtOffset);

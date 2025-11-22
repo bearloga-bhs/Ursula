@@ -12,7 +12,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.PathFinding
             if (TryGetClosestVertex(navGraph, point, vertexTolerance, out NavGraphVertex vertex))
                 return vertex;
             NavGraphEdge edge = GetClosestEdge(navGraph, point);
-            return edge.v1;
+            return edge.v2;
         }
 
         private static NavGraphEdge GetClosestEdge(NavGraph navGraph, Vector3 point)

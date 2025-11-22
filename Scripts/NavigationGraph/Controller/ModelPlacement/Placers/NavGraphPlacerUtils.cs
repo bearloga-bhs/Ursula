@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ursula.GameObjects.Model;
 
 namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlacement.Placers
 {
@@ -53,5 +54,19 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
 
             throw new Exception($"Couldn't encode model direction from vector {direction}");
         }
+
+        public static Aabb GetNodeAABB(IGameObjectAsset asset)
+        {
+            Node3D node = asset.Model3d as Node3D;
+            return AABBBuilder.BuildAabb(node);
+        }
+
+        public static float GetRadiusFromAABB(Aabb aabb)
+        {
+            Vector3 size = aabb.Size;
+            float max = Mathf.Max(Mathf.Max(size.X, size.Y), size.Z);
+            return max / 2;
+        }
     }
 }
+

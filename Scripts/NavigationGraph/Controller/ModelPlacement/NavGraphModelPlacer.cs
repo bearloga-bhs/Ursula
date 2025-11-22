@@ -36,7 +36,11 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
         private GameObjectAssetInfo trafficLightGreen;
         private GameObjectAssetInfo trafficLightRed;
 
+        private GameObjectAssetInfo car;
+
         public static NavGraphModelPlacer Instance { get; private set; }
+
+        private RandomNumberGenerator rng = new RandomNumberGenerator();
 
         public override void _Ready()
         {
@@ -73,6 +77,13 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
 
             trafficLightGreen = GetEmbeddedAsset(trafficLightGreenId).Info;
             trafficLightRed = GetEmbeddedAsset(trafficLightRedId).Info;
+        }
+
+        private void LoadCarsAssets()
+        {
+            string CarId = $"{GameObjectAssetsEmbeddedSource.LibId}.Cow";
+
+            car = GetEmbeddedAsset(CarId).Info;
         }
 
         public async GDTask GenerateRoads(NavGraph navGraph, float scale, float heightOffset)
@@ -124,6 +135,33 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
                     trafficLightsPlacer.PlaceTrafficLights(trafficLightRed, edge, scale, offset);
                     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
                 }
+            }
+        }
+
+        public async GDTask GenerateCars(NavGraph navGraph, int carCount, float modelHegihtOffset)
+        {
+            if (navGraph is null)
+            {
+                throw new ArgumentNullException(nameof(navGraph));
+            }
+
+            LoadCarsAssets();
+
+            bool isTryGetItem = gameObjectLibraryManager.TryGetItem(car.Id, out IGameObjectAsset asset);
+            if (!isTryGetItem)
+                return;
+            if (asset.Model3d == null)
+                return;
+
+            Aabb aabb = NavGraphPlacerUtils.GetNodeAABB(asset);
+            float modelRadius = NavGraphPlacerUtils.GetRadiusFromAABB(aabb);
+
+            NavGraphCarPlacer carPlacer = new NavGraphCarPlacer(gameObjectCollectionModel, gameObjectCreateItemsModel, modelRadius);
+            carPlacer.AssignEdgesUniform(navGraph, carCount, rng);
+            foreach (NavGraphEdge edge in navGraph.edges)
+            {
+                if (carPlacer.PlaceCars(car, edge, 1, modelHegihtOffset))
+                    await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             }
         }
 
