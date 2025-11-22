@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/ItemPropsScript.cs" id="3_q261k"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x8cp5"]
+size = Vector3(1, 0.02, 1)
 
 [node name="ToadT" type="Node3D"]
 

@@ -42,7 +42,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             float connectionProbability = 0.6f;
             float directionsOffset = (dx + dy) / 16;
             float subdivisionOffset = 0.3f;
-            float modelHegihtOffset = 1f;
+            float modelHegihtOffset = 0.01f;
             Vector3 offset = new Vector3(subdivisionOffset * dx - directionsOffset, modelHegihtOffset, 0);
 
             // Create undirected graph
@@ -54,35 +54,34 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             // Place traffic lights models
             _ = NavGraphModelPlacer.Instance.GenerateTrafficLights(navGraph, dx / 8, offset);
 
-            visualization = new NavGraphVisualization();
+            //visualization = new NavGraphVisualization();
             //visualization.Draw(navGraph, this, modelHegihtOffset);
 
-            List<NavGraphVertex> path = BuildPath(navGraph.vertices[0].position, navGraph.vertices[navGraph.vertices.Count - 1].position);
-            List<NavGraphEdge> pathEdges = new List<NavGraphEdge>(); 
-            for (int i = 0; i < path.Count - 2; i++)
-            {
-                pathEdges.Add(new NavGraphEdge(path[i], path[i + 1], true));
-            }
-            NavGraph pathGraph = new NavGraph(pathEdges, path);
+            //List<NavGraphVertex> path = BuildPath(navGraph.vertices[0].position, navGraph.vertices[navGraph.vertices.Count - 1].position);
+            //List<NavGraphEdge> pathEdges = new List<NavGraphEdge>(); 
+            //for (int i = 0; i < path.Count - 2; i++)
+            //{
+            //    pathEdges.Add(new NavGraphEdge(path[i], path[i + 1], true));
+            //}
+            //NavGraph pathGraph = new NavGraph(pathEdges, path);
 
-            pathVisualization = new NavGraphVisualization();
-            pathVisualization.Draw(pathGraph, this, modelHegihtOffset);
+            //pathVisualization = new NavGraphVisualization();
+            //pathVisualization.Draw(pathGraph, this, modelHegihtOffset);
         }
 
-        public List<NavGraphVertex> BuildPath(Vector3 from, Vector3 to)
+        public Queue<Vector3> BuildPath(Vector3 from, Vector3 to)
         {
             float vertexTolerance = 1f;
             NavGraphVertex fromVertex = NavGraphVertexFinder.GetVertex(navGraph, from, vertexTolerance);
             NavGraphVertex toVertex = NavGraphVertexFinder.GetVertex(navGraph, to, vertexTolerance);
             List<NavGraphVertex> path = NavGraphPathFinder.GetPath(fromVertex, toVertex);
             // TODO:
-            //List<Vector3> pathPoints = new List<Vector3>();
-            //foreach (NavGraphVertex vertex in path)
-            //{
-            //    pathPoints.Add(vertex.position);
-            //}
-            //return pathPoints;
-            return path;
+            Queue<Vector3> pathPoints = new Queue<Vector3>();
+            foreach (NavGraphVertex vertex in path)
+            {
+                pathPoints.Enqueue(vertex.position);
+            }
+            return pathPoints;
         }
 
         public Vector3 GetRandomPoint()

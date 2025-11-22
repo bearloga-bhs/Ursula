@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/ItemPropsScript.cs" id="3_v6bx1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_oacc8"]
+size = Vector3(1, 0.02, 1)
 
 [node name="RoadTurn" type="Node3D"]
 

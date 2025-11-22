@@ -9,6 +9,25 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualizatio
         private Dictionary<NavGraphVertex, MeshInstance3D> points = new Dictionary<NavGraphVertex, MeshInstance3D>();
         private List<MeshInstance3D> lines = new List<MeshInstance3D>();
 
+        public void DrawPath(IEnumerable<Vector3> pathPoints, Node parent, float heightOffset)
+        {
+            List<NavGraphVertex> vertices = new List<NavGraphVertex>();
+            List<NavGraphEdge> edges = new List<NavGraphEdge>();
+
+            foreach (Vector3 point in pathPoints)
+            {
+                vertices.Add(new NavGraphVertex(point));
+            }
+
+            for (int i = 0; i < vertices.Count - 1; i++)
+            {
+                edges.Add(new NavGraphEdge(vertices[i], vertices[i + 1]));
+            }
+
+            NavGraph navGraphPath = new NavGraph(edges, vertices);
+            Draw(navGraphPath, parent, heightOffset);
+        }
+
         public void Draw(NavGraph graph, Node parent, float heightOffset)
         {
             foreach (NavGraphVertex vertex in graph.vertices)

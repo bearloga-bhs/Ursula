@@ -3,6 +3,9 @@ using System;
 using System.Reflection;
 using System.Xml.Linq;
 using Modules.HSM;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
+using System.Collections.Generic;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualization;
 
 public partial class InteractiveObjectMove : Node3D
 {
@@ -19,6 +22,9 @@ public partial class InteractiveObjectMove : Node3D
     public Action animationCycleCompleted;
 
     public Vector3 movePosition;
+    public Queue<Vector3> movePath;
+
+    private NavGraphVisualization visualization = new NavGraphVisualization();
 
     public MoveScript moveScript 
     { 
@@ -118,6 +124,34 @@ public partial class InteractiveObjectMove : Node3D
         movePosition = Vector3.Zero;
         moveScript?.ResetCoordinates();
 
+        return null;
+    }
+
+    public object BuildRandomPath()
+    {
+        NavGraphManager navGraph = NavGraphManager.Instance;
+        if (navGraph == null)
+            return null;
+
+        Vector3 nextPoint = navGraph.GetRandomPoint();
+        Vector3? position = moveScript?.Position;
+        if (!position.HasValue)
+            return null;
+
+        movePath = NavGraphManager.Instance.BuildPath(position.Value, nextPoint);
+
+        visualization.Clear();
+        visualization.DrawPath(movePath, NavGraphManager.Instance, 0.03f);
+
+        return null;
+    }
+
+    public object GetNextPathPoint()
+    {
+        if (movePath == null || movePath.Count == 0)
+            return null;
+
+        movePosition = movePath.Dequeue();
         return null;
     }
 

@@ -16,7 +16,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.PathFinding
             // Path recovery map
             Dictionary<NavGraphVertex, NavGraphVertex> cameFrom = new Dictionary<NavGraphVertex, NavGraphVertex>();
 
-            // gScore: cumulative edge transition cost, for now each edge costs 0.
+            // gScore: cumulative edge transition cost.
             Dictionary<NavGraphVertex, float> gScore = new Dictionary<NavGraphVertex, float>();
             gScore[from] = 0f;
 

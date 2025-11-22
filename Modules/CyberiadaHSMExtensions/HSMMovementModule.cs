@@ -31,9 +31,12 @@ public class HSMMovementModule
     const string StopMovingCommandKey = $"{ModuleName}.Стоп";
     const string SetObjectNameCommandKey = $"{ModuleName}.ЗадатьИмяОбъекта";
     const string SetMoveDistanceCommandKey = $"{ModuleName}.ЗадатьПройденноеРасстояние";
+    const string BuildPathCommandKey = $"{ModuleName}.ПостроитьМаршрутДоСлучайнойТочки";
+    const string GetNextPathPointCommandKey = $"{ModuleName}.ПолучитьКоординатыТочкиМаршрута";
 
     // Variable keys
     const string DistanceVariableKey = $"{ModuleName}.ПройденноеРасстояние";
+    const string PathPointsCountVariableKey = $"{ModuleName}.КоличествоТочекВМаршруте";
 
     public HSMMovementModule(CyberiadaLogic logic, InteractiveObject interactiveObject)
     {
@@ -67,9 +70,12 @@ public class HSMMovementModule
         logic.localBus.AddCommandListener(StopMovingCommandKey, StopMoving);
         logic.localBus.AddCommandListener(SetObjectNameCommandKey, SetObjectName);
         logic.localBus.AddCommandListener(SetMoveDistanceCommandKey, SetMoveDistance);
+        logic.localBus.AddCommandListener(BuildPathCommandKey, BuildRandomPath);
+        logic.localBus.AddCommandListener(GetNextPathPointCommandKey, GetNextPathPoint);
 
         // Variables
         logic.localBus.AddVariableGetter(DistanceVariableKey, () => _object.move.moveDistance.Value);
+        logic.localBus.AddVariableGetter(PathPointsCountVariableKey, () => _object.move.movePath.Count);
     }
 
 
@@ -174,6 +180,20 @@ public class HSMMovementModule
     {
         _object.move.SetMoveDistance(
             HSMUtils.GetValue<float>(value[0]));
+
+        return true;
+    }
+
+    bool BuildRandomPath(List<Tuple<string, string>> value)
+    {
+        _object.move.BuildRandomPath();
+
+        return true;
+    }
+
+    bool GetNextPathPoint(List<Tuple<string, string>> value)
+    {
+        _object.move.GetNextPathPoint();
 
         return true;
     }

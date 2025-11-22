@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://addons/Ursula/Modules/InteractiveObjects/InteractiveObject.cs" id="3_ma0dq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ffy11"]
+size = Vector3(1, 0.02, 1)
 
 [node name="RoadStraight" type="Node3D"]
 
