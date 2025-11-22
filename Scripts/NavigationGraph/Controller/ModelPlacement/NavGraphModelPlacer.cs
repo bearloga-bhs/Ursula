@@ -3,6 +3,7 @@ using bearloga.addons.Ursula.Scripts.NavigationGraph.Model;
 using Fractural.Tasks;
 using Godot;
 using System;
+using System.Drawing;
 using Ursula.Core.DI;
 using Ursula.GameObjects.Model;
 using Ursula.MapManagers.Setters;
@@ -28,15 +29,15 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
         private ISingletonProvider<GameObjectCollectionModel> _gameObjectCollectionModelProvider;
         private GameObjectCollectionModel gameObjectCollectionModel;
 
-        private GameObjectAssetInfo roadCross;
-        private GameObjectAssetInfo roadT;
-        private GameObjectAssetInfo roadStraight;
-        private GameObjectAssetInfo roadTurn;
+        private IGameObjectAsset roadCross;
+        private IGameObjectAsset roadT;
+        private IGameObjectAsset roadStraight;
+        private IGameObjectAsset roadTurn;
 
-        private GameObjectAssetInfo trafficLightGreen;
-        private GameObjectAssetInfo trafficLightRed;
+        private IGameObjectAsset trafficLightGreen;
+        private IGameObjectAsset trafficLightRed;
 
-        private GameObjectAssetInfo car;
+        private IGameObjectAsset car;
 
         public static NavGraphModelPlacer Instance { get; private set; }
 
@@ -64,10 +65,10 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             string roadStraightId = $"{GameObjectAssetsEmbeddedSource.LibId}.road_straight";
             string roadTurnId = $"{GameObjectAssetsEmbeddedSource.LibId}.road_turn";
 
-            roadCross = GetEmbeddedAsset(roadCrossId).Info;
-            roadT = GetEmbeddedAsset(roadTId).Info;
-            roadStraight = GetEmbeddedAsset(roadStraightId).Info;
-            roadTurn = GetEmbeddedAsset(roadTurnId).Info;
+            roadCross = GetEmbeddedAsset(roadCrossId);
+            roadT = GetEmbeddedAsset(roadTId);
+            roadStraight = GetEmbeddedAsset(roadStraightId);
+            roadTurn = GetEmbeddedAsset(roadTurnId);
         }
 
         private void LoadTrafficLightsAssets()
@@ -75,18 +76,25 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             string trafficLightGreenId = $"{GameObjectAssetsEmbeddedSource.LibId}.traffic_light_green";
             string trafficLightRedId = $"{GameObjectAssetsEmbeddedSource.LibId}.traffic_light_red";
 
-            trafficLightGreen = GetEmbeddedAsset(trafficLightGreenId).Info;
-            trafficLightRed = GetEmbeddedAsset(trafficLightRedId).Info;
+            trafficLightGreen = GetEmbeddedAsset(trafficLightGreenId);
+            trafficLightRed = GetEmbeddedAsset(trafficLightRedId);
         }
 
         private void LoadCarsAssets()
         {
             string CarId = $"{GameObjectAssetsEmbeddedSource.LibId}.Cow";
 
-            car = GetEmbeddedAsset(CarId).Info;
+            car = GetEmbeddedAsset(CarId);
         }
 
-        public async GDTask GenerateRoads(NavGraph navGraph, float scale, float heightOffset)
+        private float GetScale(IGameObjectAsset asset, float size)
+        {
+            Aabb aabb = NavGraphPlacerUtils.GetNodeAABB(asset);
+            float modelRadius = NavGraphPlacerUtils.GetRadiusFromAABB(aabb);
+            return size / modelRadius / 2;
+        }
+
+        public async GDTask GenerateRoads(NavGraph navGraph, float size, float heightOffset)
         {
             if (navGraph is null)
             {
@@ -94,22 +102,28 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             }
 
             LoadRoadAssets();
+
+            float roadStraightScale = GetScale(roadStraight, size);
+            float roadTurnScale = GetScale(roadTurn, size);
+            float roadTScale = GetScale(roadT, size);
+            float roadCrossScale = GetScale(roadCross, size);
+
             NavGraphRoadPlacer roadPlacer = new NavGraphRoadPlacer(gameObjectCollectionModel, gameObjectCreateItemsModel);
             foreach (NavGraphVertex vertex in navGraph.vertices)
             {
                 switch (vertex.edges.Count)
                 {
                     case 1:
-                        roadPlacer.PlaceRoadStraight(roadStraight, vertex, scale, heightOffset);
+                        roadPlacer.PlaceRoadStraight(roadStraight.Info, vertex, roadStraightScale, heightOffset);
                         break;
                     case 2:
-                        roadPlacer.PlaceRoadStraightOrTurn(roadStraight, roadTurn, vertex, scale, heightOffset);
+                        roadPlacer.PlaceRoadStraightOrTurn(roadStraight.Info, roadTurn.Info, vertex, roadStraightScale, roadTurnScale, heightOffset);
                         break;
                     case 3:
-                        roadPlacer.PlaceRoadT(roadT, vertex, scale, heightOffset);
+                        roadPlacer.PlaceRoadT(roadT.Info, vertex, roadTScale, heightOffset);
                         break;
                     case 4:
-                        roadPlacer.PlaceRoadCross(roadCross, vertex, scale, heightOffset);
+                        roadPlacer.PlaceRoadCross(roadCross.Info, vertex, roadCrossScale, heightOffset);
                         break;
                     default:
                         throw new Exception("Encountered vertex with wrong number of edges connected.");
@@ -119,7 +133,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             }
         }
 
-        public async GDTask GenerateTrafficLights(NavGraph navGraph, float scale, Vector3 offset)
+        public async GDTask GenerateTrafficLights(NavGraph navGraph, float size, Vector3 offset)
         {
             if (navGraph is null)
             {
@@ -127,12 +141,15 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             }
 
             LoadTrafficLightsAssets();
+
+            float trafficLightRedScale = GetScale(trafficLightRed, size);
+
             NavGraphTrafficLightsPlacer trafficLightsPlacer = new NavGraphTrafficLightsPlacer(gameObjectCollectionModel, gameObjectCreateItemsModel);
             foreach (NavGraphEdge edge in navGraph.edges)
             {
                 if (edge.v2.shedule != null)
                 {
-                    trafficLightsPlacer.PlaceTrafficLights(trafficLightRed, edge, scale, offset);
+                    trafficLightsPlacer.PlaceTrafficLights(trafficLightRed.Info, edge, trafficLightRedScale, offset);
                     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
                 }
             }
@@ -147,20 +164,14 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
 
             LoadCarsAssets();
 
-            bool isTryGetItem = gameObjectLibraryManager.TryGetItem(car.Id, out IGameObjectAsset asset);
-            if (!isTryGetItem)
-                return;
-            if (asset.Model3d == null)
-                return;
-
-            Aabb aabb = NavGraphPlacerUtils.GetNodeAABB(asset);
+            Aabb aabb = NavGraphPlacerUtils.GetNodeAABB(car);
             float modelRadius = NavGraphPlacerUtils.GetRadiusFromAABB(aabb);
 
             NavGraphCarPlacer carPlacer = new NavGraphCarPlacer(gameObjectCollectionModel, gameObjectCreateItemsModel, modelRadius);
             carPlacer.AssignEdgesUniform(navGraph, carCount, rng);
             foreach (NavGraphEdge edge in navGraph.edges)
             {
-                if (carPlacer.PlaceCars(car, edge, 1, modelHegihtOffset))
+                if (carPlacer.PlaceCars(car.Info, edge, 1, modelHegihtOffset))
                     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             }
         }

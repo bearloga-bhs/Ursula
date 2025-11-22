@@ -20,12 +20,12 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             this.gameObjectCreateItemsModel = gameObjectCreateItemsModel;
         }
 
-        public void PlaceRoadStraightOrTurn(GameObjectAssetInfo roadStraight, GameObjectAssetInfo roadTurn, NavGraphVertex vertex, float scale, float heightOffset)
+        public void PlaceRoadStraightOrTurn(GameObjectAssetInfo roadStraight, GameObjectAssetInfo roadTurn, NavGraphVertex vertex, float roadStraightScale, float roadTurnScale, float heightOffset)
         {
             if (NavGraphPlacerUtils.IsRoadStraight(vertex))
-                PlaceRoadStraight(roadStraight, vertex, scale, heightOffset);
+                PlaceRoadStraight(roadStraight, vertex, roadStraightScale, heightOffset);
             else
-                PlaceRoadTurn(roadTurn, vertex, scale, heightOffset);
+                PlaceRoadTurn(roadTurn, vertex, roadTurnScale, heightOffset);
         }
 
         public void PlaceRoadStraight(GameObjectAssetInfo roadStraight, NavGraphVertex vertex, float scale, float heightOffset)

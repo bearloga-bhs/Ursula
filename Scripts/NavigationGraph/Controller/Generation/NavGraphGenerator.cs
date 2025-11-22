@@ -12,7 +12,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
 {
     public static class NavGraphGenerator
     {
-        public static NavGraph Generate(float range, float height, float dx, float dy, float connectionProbability)
+        public static NavGraph Generate(float range, float height, float delta, float connectionProbability)
         {
             if (range < 0 || !float.IsNormal(range))
                 throw new ArgumentOutOfRangeException(nameof(range));
@@ -20,16 +20,13 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation
             if (float.IsInfinity(height) || float.IsNaN(height))
                 throw new ArgumentOutOfRangeException(nameof(height));
 
-            if (dx < 0 || !float.IsNormal(dx))
-                throw new ArgumentOutOfRangeException(nameof(dx));
-
-            if (dy < 0 || !float.IsNormal(dy))
-                throw new ArgumentOutOfRangeException(nameof(dy));
+            if (delta < 0 || !float.IsNormal(delta))
+                throw new ArgumentOutOfRangeException(nameof(delta));
 
             if (connectionProbability < 0 || connectionProbability > 1)
                 throw new ArgumentOutOfRangeException(nameof(connectionProbability));
 
-            NavGraph navGraph = NavGraphUndirectedStage.CreateBaseForm(range, height, dx, dy, connectionProbability);
+            NavGraph navGraph = NavGraphUndirectedStage.CreateBaseForm(range, height, delta, connectionProbability);
             navGraph = NavGraphIslandStage.EraseIslands(navGraph);
             return navGraph;
         }

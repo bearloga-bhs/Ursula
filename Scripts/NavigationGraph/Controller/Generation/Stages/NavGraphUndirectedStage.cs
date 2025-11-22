@@ -8,12 +8,12 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation.S
     public static class NavGraphUndirectedStage
     {
         // Creates undirected graph on a rectangular grid
-        public static NavGraph CreateBaseForm(float range, float height, float dx, float dy, float connectionProbability)
+        public static NavGraph CreateBaseForm(float range, float height, float delta, float connectionProbability)
         {
             RandomNumberGenerator rng = new RandomNumberGenerator();
 
-            int gridSizeX = (int)(range / dx) - 1;
-            int gridSizeY = (int)(range / dy) - 1;
+            int gridSizeX = (int)(range / delta) - 1;
+            int gridSizeY = (int)(range / delta) - 1;
 
             // Create grid filled with placeholders
             NavGraphVertex[] vertices = new NavGraphVertex[gridSizeX * gridSizeY];
@@ -30,12 +30,12 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation.S
                     {
                         // Create current vertex or check it's position if already exists
                         int index1 = GetGridIndex(i, j, gridSizeX);
-                        Vector3 position1 = GetPosition(i, j, height, dx, dy);
+                        Vector3 position1 = GetPosition(i, j, height, delta, delta);
                         CheckCreateVertex(index1, position1, vertices);
 
                         // Create neighbor vertex or check it's position if already exists
                         int index2 = GetGridIndex(i + 1, j, gridSizeX);
-                        Vector3 position2 = GetPosition(i + 1, j, height, dx, dy);
+                        Vector3 position2 = GetPosition(i + 1, j, height, delta, delta);
                         CheckCreateVertex(index2, position2, vertices);
 
                         // Create edge
@@ -51,12 +51,12 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation.S
                     {
                         // Create current vertex or check it's position if already exists
                         int index1 = GetGridIndex(i, j, gridSizeX);
-                        Vector3 position1 = GetPosition(i, j, height, dx, dy);
+                        Vector3 position1 = GetPosition(i, j, height, delta, delta);
                         CheckCreateVertex(index1, position1, vertices);
 
                         // Create neighbor vertex or check it's position if already exists
                         int index2 = GetGridIndex(i, j + 1, gridSizeX);
-                        Vector3 position2 = GetPosition(i, j + 1, height, dx, dy);
+                        Vector3 position2 = GetPosition(i, j + 1, height, delta, delta);
                         CheckCreateVertex(index2, position2, vertices);
 
                         // Create edge
