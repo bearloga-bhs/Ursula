@@ -35,7 +35,6 @@ public class HSMDetectorTwoModule
         _object.detector2.onObjectDetected += () => logic.localBus.InvokeEvent(ObjectDetectedModuleKey);
         _object.detector2.onPlayerDetected += () => logic.localBus.InvokeEvent(PlayerDetectedModuleKey);
         _object.detector2.onSoundDetected += () => logic.localBus.InvokeEvent(SoundDetectedModuleKey);
-        _object.detector2.onSoundDetection += () => logic.localBus.InvokeEvent(SoundDetectionModuleKey);
 
         if (_object.move.moveScript != null)
             _object.move.moveScript.onTargetLost += () => logic.localBus.InvokeEvent(TargetLostModuleKey);
@@ -52,9 +51,6 @@ public class HSMDetectorTwoModule
         logic.localBus.AddCommandListener(SoundScanCommandKey, StartSoundScan);
         logic.localBus.AddCommandListener(StopScanningCommandKey, StopScanning);
         logic.localBus.AddCommandListener(PlayerObjectInteractionScanCommandKey, StartPlayerObjectInteractionScan);
-
-        // Variables
-        logic.localBus.AddVariableGetter(SoundDetectionVariableKey, () => _object.detector.SoundDetectionValue);
     }
 
     bool StartPlayerScan(List<Tuple<string, string>> values)

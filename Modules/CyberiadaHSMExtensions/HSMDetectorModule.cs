@@ -12,7 +12,6 @@ public class HSMDetectorModule
     const string PlayerDetectedModuleKey = $"{ModuleName}.ИгрокОбнаружен";
 
     const string SoundDetectedModuleKey = $"{ModuleName}.ЗвукОбнаружен";
-    const string SoundDetectionModuleKey = $"{ModuleName}.ОбнаружениеЗвука";
 
     const string TargetLostModuleKey = $"{ModuleName}.ЦельПотеряна";
     const string ThisInteractionModuleKey = $"{ModuleName}.ВзаимодействиеИгрока";
@@ -35,7 +34,6 @@ public class HSMDetectorModule
         _object.detector.onObjectDetected += () => logic.localBus.InvokeEvent(ObjectDetectedModuleKey);
         _object.detector.onPlayerDetected += () => logic.localBus.InvokeEvent(PlayerDetectedModuleKey);
         _object.detector.onSoundDetected += () => logic.localBus.InvokeEvent(SoundDetectedModuleKey);
-        _object.detector.onSoundDetection += () => logic.localBus.InvokeEvent(SoundDetectionModuleKey);
 
         if (_object.move.moveScript != null)
             _object.move.moveScript.onTargetLost += () => logic.localBus.InvokeEvent(TargetLostModuleKey);
@@ -52,9 +50,6 @@ public class HSMDetectorModule
         logic.localBus.AddCommandListener(SoundScanCommandKey, StartSoundScan);
         logic.localBus.AddCommandListener(StopScanningCommandKey, StopScanning);
         logic.localBus.AddCommandListener(PlayerObjectInteractionScanCommandKey, StartPlayerObjectInteractionScan);
-
-        // Variables
-        logic.localBus.AddVariableGetter(SoundDetectionVariableKey, () => _object.detector.SoundDetectionValue);
     }
 
     bool StartPlayerScan(List<Tuple<string, string>> values)
