@@ -12,170 +12,201 @@ using Ursula.GameObjects.Model;
 
 namespace ursula.addons.Ursula.Scripts.GameObjects.View
 {
-    public partial class EcosystemGeneratorAssetView : Control
-    {
-        [Export]
-        private Label LabelNameAsset;
+	public partial class EcosystemGeneratorAssetView : Control
+	{
+		[Export]
+		private Label LabelNameAsset;
 
-        [Export]
-        private Button ButtonClickAsset;
+		[Export]
+		private Button ButtonClickAsset;
 
-        [Export]
-        TextureRect PreviewImageRect;
+		[Export]
+		TextureRect PreviewImageRect;
 
-        [Export]
-        TextureRect LoadObjectImageRect;
+		[Export]
+		TextureRect LoadObjectImageRect;
 
-        [Export]
-        OptionButton OptionButtonType;
+		[Export]
+		OptionButton OptionButtonType;
 
-        [Export]
-        OptionButton OptionButtonSex;
+		[Export]
+		OptionButton OptionButtonSex;
 
-        [Export]
-        SliderShowValue SliderPopulationCount;
+		[Export]
+		SliderShowValue SliderPopulationCount;
 
-        [Export]
-        SliderShowValue SliderFamine;
+		[Export]
+		SliderShowValue SliderFamine;
 
-        [Export]
-        Control ControlChildCount;
+		[Export]
+		Control ControlChildCount;
 
-        [Export]
-        SliderShowValue SliderShowChildCount;
+		[Export]
+		SliderShowValue SliderShowChildCount;
 
-        public Action<EcosystemGeneratorAssetView> clickItemEvent;
+		public Action<EcosystemGeneratorAssetView> clickItemEvent;
 
-        EcosystemGeneratorAssetInfo _gameObjectAssetInfo;
+		EcosystemGeneratorAssetInfo _gameObjectAssetInfo;
 
-        public EcosystemGeneratorAssetInfo GameObjectAssetInfo
-        {
-            get { return _gameObjectAssetInfo; }
-        }
+		public EcosystemGeneratorAssetInfo GameObjectAssetInfo
+		{
+			get { return _gameObjectAssetInfo; }
+		}
 
-        public override void _Ready()
-        {
-            base._Ready();
+		public override void _Ready()
+		{
+			base._Ready();
 
-            ButtonClickAsset.ButtonDown += OnItemClickEvent;
-            OptionButtonType.ItemSelected += OnOptionButtonTypeItemSelected;
-            OptionButtonSex.ItemSelected += OnOptionButtonSexItemSelected;
-            SliderPopulationCount.ValueChanged += OnSliderPopulationCountValueChanged;
-            SliderFamine.ValueChanged += OnSliderFamineValueChanged;
-            SliderShowChildCount.ValueChanged += OnSliderShowChildCountValueChanged;
-            
-            ControlChildCount.Visible = false;
-        }
+			ButtonClickAsset.ButtonDown += OnItemClickEvent;
+			OptionButtonType.ItemSelected += OnOptionButtonTypeItemSelected;
+			OptionButtonSex.ItemSelected += OnOptionButtonSexItemSelected;
+			SliderPopulationCount.ValueChanged += OnSliderPopulationCountValueChanged;
+			SliderFamine.ValueChanged += OnSliderFamineValueChanged;
+			SliderShowChildCount.ValueChanged += OnSliderShowChildCountValueChanged;
+			
+			ControlChildCount.Visible = false;
+		}
 
-        public override void _ExitTree()
-        {
-            base._ExitTree();
-            ButtonClickAsset.ButtonDown -= OnItemClickEvent;
-        }
+		public override void _ExitTree()
+		{
+			base._ExitTree();
+			ButtonClickAsset.ButtonDown -= OnItemClickEvent;
+		}
 
-        public async void Invalidate(GameObjectAssetInfo assetInfo)
-        {
-            PreviewImageRect.Visible = false;
-            if (assetInfo != null)
-            {
-                _gameObjectAssetInfo = new EcosystemGeneratorAssetInfo(assetInfo);
-                LabelNameAsset.Text = _gameObjectAssetInfo.Name;
+		public async void Invalidate(GameObjectAssetInfo assetInfo)
+		{
+			PreviewImageRect.Visible = false;
+			if (assetInfo != null)
+			{
+				_gameObjectAssetInfo = new EcosystemGeneratorAssetInfo(assetInfo);
+				LabelNameAsset.Text = _gameObjectAssetInfo.Name;
 
-                PreviewImageRect.Texture = await _gameObjectAssetInfo.GetPreviewImage();
+				PreviewImageRect.Texture = await _gameObjectAssetInfo.GetPreviewImage();
 
-                PreviewImageRect.Visible = PreviewImageRect.Texture != null;
+				PreviewImageRect.Visible = PreviewImageRect.Texture != null;
 
-                LoadObjectImageRect.Visible = false;
-            }
-            else
-            {
-                LabelNameAsset.Visible = false;
-                LoadObjectImageRect.Visible = true;
-            }
-        }
+				LoadObjectImageRect.Visible = false;
 
-        async GDTask LoadPreviewImage(string path)
-        {
-            PreviewImageRect.Texture = await _LoadPreviewImage(path);
-        }
+				CheckAssetTemplate();
+			}
+			else
+			{
+				LabelNameAsset.Visible = false;
+				LoadObjectImageRect.Visible = true;
+			}
+		}
 
-        private async GDTask<Texture2D> _LoadPreviewImage(string path)
-        {
-            Texture2D tex;
-            Image img = new Image();
+		async GDTask LoadPreviewImage(string path)
+		{
+			PreviewImageRect.Texture = await _LoadPreviewImage(path);
+		}
 
-            var err = await Task.Run(() => img.Load(path));
+		private async GDTask<Texture2D> _LoadPreviewImage(string path)
+		{
+			Texture2D tex;
+			Image img = new Image();
 
-            if (err != Error.Ok)
-            {
-                GD.Print("Failed to load image from path: " + path);
-            }
-            else
-            {
-                tex = ImageTexture.CreateFromImage(img);
-                return tex;
-            }
-            return null;
-        }
+			var err = await Task.Run(() => img.Load(path));
 
-        private void OnItemClickEvent()
-        {
-            clickItemEvent?.Invoke(this);
-        }
+			if (err != Error.Ok)
+			{
+				GD.Print("Failed to load image from path: " + path);
+			}
+			else
+			{
+				tex = ImageTexture.CreateFromImage(img);
+				return tex;
+			}
+			return null;
+		}
 
-        private void OnOptionButtonTypeItemSelected(long index)
-        {
-            if (_gameObjectAssetInfo != null)
-            {
-                _gameObjectAssetInfo.Type = OptionButtonType.GetItemText((int)index);
-            }
-        }
+		private void OnItemClickEvent()
+		{
+			clickItemEvent?.Invoke(this);
+		}
 
-        private void OnSliderShowChildCountValueChanged(double value)
-        {
-            if (_gameObjectAssetInfo != null)
-            {
-                _gameObjectAssetInfo.ChildCount = (int)Math.Round(SliderShowChildCount.Value);
-            }
-        }
+		private void OnOptionButtonTypeItemSelected(long index)
+		{
+			if (_gameObjectAssetInfo != null)
+			{
+				_gameObjectAssetInfo.Type = OptionButtonType.GetItemText((int)index);
+				CheckAssetTemplate();
+			}
+		}
 
-        private void OnSliderPopulationCountValueChanged(double value)
-        {
-            if (_gameObjectAssetInfo != null)
-            {
-                _gameObjectAssetInfo.PopulationCount = (int)Math.Round(SliderPopulationCount.Value);
-            }
-        }
+		private void OnSliderShowChildCountValueChanged(double value)
+		{
+			if (_gameObjectAssetInfo != null)
+			{
+				_gameObjectAssetInfo.ChildCount = (int)Math.Round(SliderShowChildCount.Value);
+			}
+		}
 
-        private void OnSliderFamineValueChanged(double value)
-        {
-            if (_gameObjectAssetInfo != null)
-            {
-                _gameObjectAssetInfo.Famine = (int)Math.Round(SliderFamine.Value);
-            }
-        }
+		private void OnSliderPopulationCountValueChanged(double value)
+		{
+			if (_gameObjectAssetInfo != null)
+			{
+				_gameObjectAssetInfo.PopulationCount = (int)Math.Round(SliderPopulationCount.Value);
+			}
+		}
 
-        private void OnOptionButtonSexItemSelected(long index)
-        {
-            if (_gameObjectAssetInfo == null)
-            {
-                return;
-            }
-            _gameObjectAssetInfo.Sex = OptionButtonSex.GetItemText((int)index);
+		private void OnSliderFamineValueChanged(double value)
+		{
+			if (_gameObjectAssetInfo != null)
+			{
+				_gameObjectAssetInfo.Famine = (int)Math.Round(SliderFamine.Value);
+			}
+		}
 
-            if (_gameObjectAssetInfo.Sex == "Женский")
-            {
-                ControlChildCount.Visible = true;
-            }
-            else
-            {
-                ControlChildCount.Visible = false;
-            }
-        }
+		private void OnOptionButtonSexItemSelected(long index)
+		{
+			if (_gameObjectAssetInfo == null)
+			{
+				return;
+			}
+			_gameObjectAssetInfo.Sex = OptionButtonSex.GetItemText((int)index);
 
-        public void OnDependenciesInjected()
-        {
-            throw new NotImplementedException();
-        }
-    }
+			if (_gameObjectAssetInfo.Sex == "Женский")
+			{
+				ControlChildCount.Visible = true;
+			}
+			else
+			{
+				ControlChildCount.Visible = false;
+			}
+
+			CheckAssetTemplate();
+		}
+
+		public void OnDependenciesInjected()
+		{
+			//throw new NotImplementedException();
+		}
+
+		private void CheckAssetTemplate()
+		{
+			if (_gameObjectAssetInfo.Type == "Травоядное")
+			{
+				if (_gameObjectAssetInfo.Sex == "Женский")
+				{
+					_gameObjectAssetInfo.Template.GameObjectSample = "ТравоядноеЖ";
+				}
+				else
+				{
+					_gameObjectAssetInfo.Template.GameObjectSample = "ТравоядноеМ";
+				}
+			}
+			else
+			{
+				if (_gameObjectAssetInfo.Sex == "Женский")
+				{
+					_gameObjectAssetInfo.Template.GameObjectSample = "ХищникЖ";
+				}
+				else
+				{
+					_gameObjectAssetInfo.Template.GameObjectSample = "ХищникМ";
+				}
+			}
+		}
+	}
 }

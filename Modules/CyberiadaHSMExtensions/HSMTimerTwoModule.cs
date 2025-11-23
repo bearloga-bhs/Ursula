@@ -18,7 +18,9 @@ public partial class HSMTimerTwoModule : Node
     const string TimerStartRangeCommandKey = $"{ModuleName}.ТаймерЗапускДиапазон";
     const string TimerStopCommandKey = $"{ModuleName}.ТаймерСтоп";
     const string TimerResetCommandKey = $"{ModuleName}.ТаймерСброс";
-
+    const string TimerPauseOnCommandKey = $"{ModuleName}.ТаймерВклПауза";
+    const string TimerPauseOffCommandKey = $"{ModuleName}.ТаймерВыклПауза";
+    
     // Variable keys
     const string CurrentTimerValueVariableKey = $"{ModuleName}.ТекущееЗначениеТаймера";
 
@@ -36,7 +38,9 @@ public partial class HSMTimerTwoModule : Node
         logic.localBus.AddCommandListener(TimerStartRangeCommandKey, StartRandom);
         logic.localBus.AddCommandListener(TimerStopCommandKey, StopTimer);
         logic.localBus.AddCommandListener(TimerResetCommandKey, ResetTimer);
-
+        logic.localBus.AddCommandListener(TimerPauseOnCommandKey, PauseOnTimer);
+        logic.localBus.AddCommandListener(TimerPauseOffCommandKey, PauseOffTimer);
+        
         // Variables
         logic.localBus.AddVariableGetter(CurrentTimerValueVariableKey, () => _object.timer2.CurrentTimerValue.Value);
     }
@@ -65,6 +69,20 @@ public partial class HSMTimerTwoModule : Node
     bool ResetTimer(List<Tuple<string, string>> value)
     {
         _object.timer2.ResetTimer();
+
+        return true;
+    }
+    
+    bool PauseOnTimer(List<Tuple<string, string>> value)
+    {
+        _object.timer2.PauseTimer();
+
+        return true;
+    }
+    
+    bool PauseOffTimer(List<Tuple<string, string>> value)
+    {
+        _object.timer2.UnPauseTimer();
 
         return true;
     }

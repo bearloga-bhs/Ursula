@@ -6,11 +6,11 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Model
     [Serializable]
     public class EcosystemGeneratorAssetInfo : GameObjectAssetInfo
     {
-        public string Type;
-        public string Sex;
-        public int PopulationCount;
-        public int Famine;
-        public int ChildCount;
+        public string Type = "Травоядное";
+        public string Sex = "Мужской";
+        public int PopulationCount = 100;
+        public int Famine = 300;
+        public int ChildCount = 1;
 
         public EcosystemGeneratorAssetInfo(string name, string providerId, GameObjectTemplate template) : base(name, providerId, template)
         {
