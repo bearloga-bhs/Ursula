@@ -518,7 +518,7 @@ public partial class TerrainManager : TerrainModel, IInjectable
 
         GenerateEdgesMap();
 
-        NavGraphManager.Instance.Generate(256, vertices[vertices.Length / 2].Y + positionOffset.Y);
+        _ = NavGraphManager.Instance.Generate(256, vertices[vertices.Length / 2].Y + positionOffset.Y);
     }
 
     private void CreateNewMaterialTerrain()

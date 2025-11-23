@@ -57,6 +57,7 @@ namespace Ursula.Core.Initialization
             InstallSingleton<ControlSettingsViewModel>(services);            
 
             InstallSingleton<MapManager>(services);
+            InstallSingleton<MapManagerItemSetter>(services);
             InstallSingleton<MapManagerController>(services);
             InstallSingleton<MapManagerModel>(services);
 

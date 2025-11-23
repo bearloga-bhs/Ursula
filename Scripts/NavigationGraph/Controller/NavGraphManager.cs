@@ -7,6 +7,7 @@ using Ursula.Core.DI;
 using System;
 using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.PathFinding;
 using System.Collections.Generic;
+using Fractural.Tasks;
 
 namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
 {
@@ -35,27 +36,34 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             }
         }
 
-        public void Generate(float range, float height)
+        public async GDTask Generate(float range, float height)
         {
-            float delta = 10;
+            // Гиперпараметры
+            float delta = 25;
+            int carsCount = 50;
+            float minTrafficLightsGreenTime = 1f;
+            float maxTrafficLightsGreenTime = 5f;
+
+            // Внутренние параметры симуляции
             float connectionProbability = 0.6f;
             float directionsOffset = delta / 8;
             float subdivisionOffset = 0.3f;
             float modelHegihtOffset = 0.01f;
-            int carsCount = 50;
 
             Vector3 offset = new Vector3(subdivisionOffset * delta - directionsOffset, modelHegihtOffset, 0);
 
             // Create undirected graph
-            navGraph = NavGraphGenerator.Generate(range, height, delta, connectionProbability);
+            NavGraph navGraphUndirected = NavGraphGenerator.Generate(range, height, delta, connectionProbability);
             // Place road models
-            _ = NavGraphModelPlacer.Instance.GenerateRoads(navGraph, delta, modelHegihtOffset);
-            // Create directed graph and assign shedules
-            navGraph = NavGraphGenerator.PostProcess(navGraph, subdivisionOffset, directionsOffset);
-            // Place traffic lights models
-            _ = NavGraphModelPlacer.Instance.GenerateTrafficLights(navGraph, delta / 4, offset);
-            _ = NavGraphModelPlacer.Instance.GenerateCars(navGraph, carsCount, modelHegihtOffset);
+            GDTask roadGeneration = NavGraphModelPlacer.Instance.GenerateRoads(navGraphUndirected, delta, modelHegihtOffset);
 
+            // Create directed graph and assign shedules
+            navGraph = NavGraphGenerator.PostProcess(navGraphUndirected, subdivisionOffset, directionsOffset);
+            // Place traffic lights models
+            GDTask trafficLightsGeneration = NavGraphModelPlacer.Instance.GenerateTrafficLights(navGraph, delta / 4, offset);
+            GDTask carsGeneration = NavGraphModelPlacer.Instance.GenerateCars(navGraph, carsCount, modelHegihtOffset);
+
+            await GDTask.WhenAll(roadGeneration, trafficLightsGeneration, carsGeneration);
             visualization = new NavGraphVisualization();
             visualization.Draw(navGraph, this, modelHegihtOffset);
 

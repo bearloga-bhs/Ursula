@@ -1,25 +1,25 @@
-﻿using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlacement.Placers;
+﻿using bearloga.addons.Ursula.Modules.LogicInjector;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlacement.Placers;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlacement.Placers.InjectorBuilders;
 using bearloga.addons.Ursula.Scripts.NavigationGraph.Model;
 using Fractural.Tasks;
 using Godot;
 using System;
-using System.Drawing;
+using System.Collections.Generic;
 using Ursula.Core.DI;
 using Ursula.GameObjects.Model;
 using Ursula.MapManagers.Setters;
-using Ursula.Water.Model;
 
 namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlacement
 {
     public partial class NavGraphModelPlacer : Node, IInjectable
     {
+        [Export]
+        public MapManagerItemSetter mapManagerItemSetter;
+
         [Inject]
         private ISingletonProvider<GameObjectLibraryManager> _commonLibraryProvider;
-        GameObjectLibraryManager gameObjectLibraryManager;
-
-        //[Inject]
-        //private ISingletonProvider<MapManagerItemSetter> _MapManagerItemSetterProvider;
-        //private MapManagerItemSetter mapManagerItemSetter;
+        private GameObjectLibraryManager gameObjectLibraryManager;
 
         [Inject]
         private ISingletonProvider<GameObjectCreateItemsModel> _gameObjectCreateItemsModelProvider;
@@ -53,7 +53,6 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
         private async GDTask SubscribeEvent()
         {
             gameObjectLibraryManager = await _commonLibraryProvider.GetAsync();
-            //mapManagerItemSetter = await _MapManagerItemSetterProvider.GetAsync();
             gameObjectCreateItemsModel = await _gameObjectCreateItemsModelProvider.GetAsync();
             gameObjectCollectionModel = await _gameObjectCollectionModelProvider.GetAsync();
         }
@@ -144,15 +143,24 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
 
             float trafficLightRedScale = GetScale(trafficLightRed, size);
 
-            NavGraphTrafficLightsPlacer trafficLightsPlacer = new NavGraphTrafficLightsPlacer(gameObjectCollectionModel, gameObjectCreateItemsModel);
+            NavGraphTrafficLightsPlacer trafficLightsPlacer = new NavGraphTrafficLightsPlacer(gameObjectCollectionModel, gameObjectCreateItemsModel, mapManagerItemSetter);
+            //Dictionary<Node, NavGraphVertexShedule> sheduleMap = new Dictionary<Node, NavGraphVertexShedule>();
             foreach (NavGraphEdge edge in navGraph.edges)
             {
                 if (edge.v2.shedule != null)
                 {
-                    trafficLightsPlacer.PlaceTrafficLights(trafficLightRed.Info, edge, trafficLightRedScale, offset);
+                    Injector injector = TrafficLightsSheduleInjectorBuilder.CreateInjector(edge.v2.shedule);
+                    Node node = trafficLightsPlacer.PlaceTrafficLights(trafficLightRed.Info, edge, trafficLightRedScale, offset, injector);
+                    //sheduleMap[node] = edge.v2.shedule;
                     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
                 }
             }
+
+            //foreach (Node node in sheduleMap.Keys)
+            //{
+            //    NavGraphVertexShedule shedule = sheduleMap[node];
+            //    trafficLightsPlacer.InjectShedule(node, shedule);
+            //}
         }
 
         public async GDTask GenerateCars(NavGraph navGraph, int carCount, float modelHegihtOffset)
@@ -174,6 +182,11 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
                 if (carPlacer.PlaceCars(car.Info, edge, 1, modelHegihtOffset))
                     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             }
+        }
+
+        public void InjectTrafficLightsShedule(NavGraph navGraph)
+        {
+
         }
 
         private IGameObjectAsset GetEmbeddedAsset(string id)

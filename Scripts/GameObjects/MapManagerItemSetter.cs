@@ -1,8 +1,10 @@
-﻿using Fractural.Tasks;
+﻿using bearloga.addons.Ursula.Modules.LogicInjector;
+using Fractural.Tasks;
 using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Ursula.Core.DI;
 using Ursula.GameObjects.Model;
 using Ursula.MapManagers.Model;
@@ -35,6 +37,8 @@ namespace Ursula.MapManagers.Setters
         private GameObjectCreateItemsModel _gameObjectCreateItemsModel;
         private GameObjectCollectionModel _gameObjectCollectionModel;
 
+        ManualResetEventSlim resetEvent = new ManualResetEventSlim();
+
         void IInjectable.OnDependenciesInjected()
         {
 
@@ -59,6 +63,8 @@ namespace Ursula.MapManagers.Setters
 
             _gameObjectCreateItemsModel.GameObjectCreateItem_EventHandler += GameObjectCreateItems_CreateItemEventHandler;
             _gameObjectCreateItemsModel.GameObjectDeleteItem_EventHandler += GameObjectCreateItems_DeleteItemEventHandler;
+
+            resetEvent.Set();
         }
 
         private void GameObjectCreateItems_CreateItemEventHandler(object sender, EventArgs e)
@@ -110,15 +116,18 @@ namespace Ursula.MapManagers.Setters
             GameObjectAssetInfo assetInfo,
             byte rotation,
             float scale,
-            float x, 
-            float y, 
+            float x,
+            float y,
             float z,
             int state,
             int id,
             bool isSnapGrid = false,
-            string AssetFoderPath = ""
+            string AssetFoderPath = "",
+            Injector injector = null
             )
         {
+            resetEvent.Wait();
+
             IGameObjectAsset asset;
             bool isTryGetItem = _gameObjectLibraryManager.TryGetItem(assetInfo.Id, out asset);
             if (!isTryGetItem) return null;
@@ -171,6 +180,7 @@ namespace Ursula.MapManagers.Setters
                 if (io != null && !string.IsNullOrEmpty(assetInfo.Template.GraphXmlPath))
                 {
                     io.xmlPath = assetInfo.Template.GraphXmlPath;
+                    io.injector = injector;
                     if (string.IsNullOrEmpty(AssetFoderPath))
                     {
                         io.xmlPath = $"{assetInfo.GetAssetPath()}/{io.xmlPath}";

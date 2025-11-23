@@ -140,8 +140,8 @@ public partial class InteractiveObjectMove : Node3D
 
         movePath = NavGraphManager.Instance.BuildPath(position.Value, nextPoint);
 
-        visualization.Clear();
-        visualization.DrawPath(movePath, NavGraphManager.Instance, 0.03f);
+        //visualization.Clear();
+        //visualization.DrawPath(movePath, NavGraphManager.Instance, 0.03f);
 
         return null;
     }

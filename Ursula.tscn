@@ -3116,8 +3116,9 @@ script = ExtResource("25_jfqi2")
 [node name="NavGraphManager" type="Node3D" parent="."]
 script = ExtResource("59_622bu")
 
-[node name="NavGraphModelPlacer" type="Node3D" parent="NavGraphManager"]
+[node name="NavGraphModelPlacer" type="Node3D" parent="NavGraphManager" node_paths=PackedStringArray("mapManagerItemSetter")]
 script = ExtResource("60_lvi7v")
+mapManagerItemSetter = NodePath("../../MapManagers/MapManagerItemSetter")
 
 [node name="WaterManager" type="Node3D" parent="."]
 script = ExtResource("47_25wwj")

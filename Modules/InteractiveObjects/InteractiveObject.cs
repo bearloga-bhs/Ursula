@@ -5,6 +5,8 @@ using System.IO;
 using static MoveScript;
 using Modules.HSM;
 using Fractural.Tasks;
+using System.Threading;
+using bearloga.addons.Ursula.Modules.LogicInjector;
 
 // Тут будет происходить парсинг XML файла, поэтапное выполнение алгоритма и связь элементов с соответствующими узлами
 public partial class InteractiveObject : Node
@@ -29,6 +31,7 @@ public partial class InteractiveObject : Node
     string workFolderPath = "res://addons/Ursula/Modules/InteractiveObjects";
 
     public CyberiadaLogic hsmLogic;
+    public Injector injector = null;
 
     public HSMDetectorModule hsmDetectorModule;
     public HSMMovementModule hsmMovementModule;
@@ -41,7 +44,7 @@ public partial class InteractiveObject : Node
 
     HSMLogger _logger;
 
-
+    public ManualResetEvent resetEvent = new ManualResetEvent(false);
 
     public override void _Ready()
 	{
@@ -74,6 +77,8 @@ public partial class InteractiveObject : Node
         hsmCounterOneModule = new HSMCounterOneModule(hsmLogic, this);
         hsmCounterTwoModule = new HSMCounterTwoModule(hsmLogic, this);
         hsmWorldInteractingModule = new HSMWorldInteractingModule(hsmLogic, this);
+
+        resetEvent.Set();
     }
 
     public void ReloadAlgorithm()
@@ -96,6 +101,7 @@ public partial class InteractiveObject : Node
                 if (File.Exists(ProjectSettings.GlobalizePath(xmlPath)))
                 {
                     hsmLogic = CyberiadaLogic.Load(xmlPath);
+                    injector?.TryApply(hsmLogic.RootaState);
                     _= InitHsm();
                     _logger = new HSMLogger(this);
                     hsmLogic.SubscribeLogger(_logger);
