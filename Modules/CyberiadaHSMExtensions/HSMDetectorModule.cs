@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 // МодульОбнаружения
@@ -10,7 +10,9 @@ public class HSMDetectorModule
 
     const string ObjectDetectedModuleKey = $"{ModuleName}.ОбъектОбнаружен";
     const string PlayerDetectedModuleKey = $"{ModuleName}.ИгрокОбнаружен";
+
     const string SoundDetectedModuleKey = $"{ModuleName}.ЗвукОбнаружен";
+
     const string TargetLostModuleKey = $"{ModuleName}.ЦельПотеряна";
     const string ThisInteractionModuleKey = $"{ModuleName}.ВзаимодействиеИгрока";
     const string PlayerInteractionObjectModuleKey = $"{ModuleName}.ВзаимодействиеИгрокаСОбъектом";
@@ -21,6 +23,8 @@ public class HSMDetectorModule
     const string SoundScanCommandKey = $"{ModuleName}.ОбнаружениеВоспроизведенияЗвука";
     const string StopScanningCommandKey = $"{ModuleName}.ОстановкаПоиска";
     const string PlayerObjectInteractionScanCommandKey = $"{ModuleName}.ВзаимодействиеИгрокаСОбъектом";
+
+    const string SoundDetectionVariableKey = $"{ModuleName}.ЗначениеОбнаруженияЗвука";
 
     public HSMDetectorModule(CyberiadaLogic logic, InteractiveObject interactiveObject)
     {

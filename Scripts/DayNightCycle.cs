@@ -7,7 +7,8 @@ public partial class DayNightCycle : Node
 
     public float FullDayLength = 120f * 4f; // Полный день в секундах
     private float _currentTime = 0f; // Текущее время суток
-
+    public bool IsDay = false;
+    
     [Export]
     public DirectionalLight3D Sun; // Ссылка на объект Солнца
 
@@ -57,12 +58,14 @@ public partial class DayNightCycle : Node
             proceduralSkyMaterial.SkyCoverModulate = proceduralSkyMaterial.SkyCoverModulate.Lerp(proceduralColorDay, 0.01f);
             proceduralSkyMaterial.SkyEnergyMultiplier = Mathf.Lerp(proceduralSkyMaterial.SkyEnergyMultiplier, 1f, 0.01f);
             proceduralSkyMaterial.GroundEnergyMultiplier = Mathf.Lerp(proceduralSkyMaterial.SkyEnergyMultiplier, 1f, 0.01f);
+            IsDay = true;
         }
         else // Вечер
         {
             proceduralSkyMaterial.SkyCoverModulate = proceduralSkyMaterial.SkyCoverModulate.Lerp(proceduralColorNyght, 0.01f);
             proceduralSkyMaterial.SkyEnergyMultiplier = Mathf.Lerp(proceduralSkyMaterial.SkyEnergyMultiplier, 0.15f, 0.01f);
             proceduralSkyMaterial.GroundEnergyMultiplier = Mathf.Lerp(proceduralSkyMaterial.SkyEnergyMultiplier, 0.15f, 0.01f);
+            IsDay = false;
         }
 
         if (percentOfDay < 0.270f || percentOfDay > 0.700f) // Утро 0.28

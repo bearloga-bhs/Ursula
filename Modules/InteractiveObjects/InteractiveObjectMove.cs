@@ -15,6 +15,7 @@ public partial class InteractiveObjectMove : Node3D
     public VariableHolder<float> heightWorld = new(0.0f);
     public VariableHolder<float> surfaceType = new(0.0f);
     public VariableHolder<float> timesOfDay = new(0.0f);
+    public VariableHolder<bool> isDay = new(false);
 
     public Action moveDistanceStart;
     public Action moveDistanceCompleted;
@@ -63,6 +64,22 @@ public partial class InteractiveObjectMove : Node3D
         return null;
     }
 
+    public object MoveToTarget2()
+    {
+        var movementTarget = interactiveObject.GetCurrentTargetObject2();
+        moveScript?.MoveToTargetSetup(movementTarget);
+
+        return null;
+    }
+
+    public object MoveFromTarget2()
+    {
+        var movementTarget = interactiveObject.GetCurrentTargetObject2();
+        moveScript?.MoveFromTargetSetup(movementTarget);
+
+        return null;
+    }
+    
     public object MoveToRandom()
     {
         moveScript?.MoveToRandomSetup();
@@ -165,7 +182,12 @@ public partial class InteractiveObjectMove : Node3D
 
             //if (moveScript.GetMoveDistance() > moveDistance.Value) moveScript.onMovingDistanceFinished.Invoke();
         }
-        if (DayNightCycle.instance != null) timesOfDay.Value = DayNightCycle.instance.TimesOfDay();
+
+        if (DayNightCycle.instance != null)
+        {
+            timesOfDay.Value = DayNightCycle.instance.TimesOfDay();
+            isDay.Value = DayNightCycle.instance.IsDay;
+        }
     }
 
     public object SetMoveDistance(float distance)
