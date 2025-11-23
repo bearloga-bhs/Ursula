@@ -219,7 +219,7 @@ public partial class MoveScript : CharacterBody3D
         Vector3 currentAgentPosition = GlobalTransform.Origin;
         float distanceToTarget = currentAgentPosition.DistanceTo(MovementTarget.GlobalPosition);
 
-        Vector3 direction = (currentAgentPosition - MovementTarget.Position).Normalized();
+        Vector3 direction = (currentAgentPosition - MovementTarget.GlobalPosition).Normalized();
         _targetVelocity = direction * _movementSpeed;
     }
 

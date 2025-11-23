@@ -235,7 +235,11 @@ public partial class InteractiveObjectDetector : Area3D
             previousDetectedObject = currentDetectedObject;
             onSoundDetected?.Invoke();
         }
-
+        else
+        {
+            onAnyObjectsNotDetected?.Invoke();
+        }
+        
         detectedObject = currentDetectedObject;
     }
 }
