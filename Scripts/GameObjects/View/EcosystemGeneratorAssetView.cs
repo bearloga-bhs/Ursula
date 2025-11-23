@@ -33,6 +33,9 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         OptionButton OptionButtonSex;
 
         [Export]
+        SliderShowValue SliderPopulationCount;
+
+        [Export]
         SliderShowValue SliderFamine;
 
         [Export]
@@ -41,7 +44,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         [Export]
         SliderShowValue SliderShowChildCount;
 
-        public Action<EcosystemGeneratorAssetView> clickItemEvent = null;
+        public Action<EcosystemGeneratorAssetView> clickItemEvent;
 
         EcosystemGeneratorAssetInfo _gameObjectAssetInfo;
 
@@ -57,6 +60,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             ButtonClickAsset.ButtonDown += OnItemClickEvent;
             OptionButtonType.ItemSelected += OnOptionButtonTypeItemSelected;
             OptionButtonSex.ItemSelected += OnOptionButtonSexItemSelected;
+            SliderPopulationCount.ValueChanged += OnSliderPopulationCountValueChanged;
             SliderFamine.ValueChanged += OnSliderFamineValueChanged;
             SliderShowChildCount.ValueChanged += OnSliderShowChildCountValueChanged;
             
@@ -74,10 +78,10 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             PreviewImageRect.Visible = false;
             if (assetInfo != null)
             {
-                _gameObjectAssetInfo = (EcosystemGeneratorAssetInfo)assetInfo;
-                LabelNameAsset.Text = assetInfo.Name;
+                _gameObjectAssetInfo = new EcosystemGeneratorAssetInfo(assetInfo);
+                LabelNameAsset.Text = _gameObjectAssetInfo.Name;
 
-                PreviewImageRect.Texture = await assetInfo.GetPreviewImage();
+                PreviewImageRect.Texture = await _gameObjectAssetInfo.GetPreviewImage();
 
                 PreviewImageRect.Visible = PreviewImageRect.Texture != null;
 
@@ -135,6 +139,14 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             }
         }
 
+        private void OnSliderPopulationCountValueChanged(double value)
+        {
+            if (_gameObjectAssetInfo != null)
+            {
+                _gameObjectAssetInfo.PopulationCount = (int)Math.Round(SliderPopulationCount.Value);
+            }
+        }
+
         private void OnSliderFamineValueChanged(double value)
         {
             if (_gameObjectAssetInfo != null)
@@ -145,18 +157,19 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 
         private void OnOptionButtonSexItemSelected(long index)
         {
-            if (_gameObjectAssetInfo != null)
+            if (_gameObjectAssetInfo == null)
             {
-                _gameObjectAssetInfo.Sex = OptionButtonType.GetItemText((int)index);
+                return;
+            }
+            _gameObjectAssetInfo.Sex = OptionButtonSex.GetItemText((int)index);
 
-                if (_gameObjectAssetInfo.Sex == "Женский")
-                {
-                    ControlChildCount.Visible = true;
-                }
-                else
-                {
-                    ControlChildCount.Visible = false;
-                }
+            if (_gameObjectAssetInfo.Sex == "Женский")
+            {
+                ControlChildCount.Visible = true;
+            }
+            else
+            {
+                ControlChildCount.Visible = false;
             }
         }
 

@@ -101,7 +101,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
             /*await*/ SpawnAssetAsync(asset2, secondAssetCount);
         }
 
-        private /*async GDTask*/ void SpawnAssetAsync(GameObjectAssetInfo assetInfo, int count)
+        private void SpawnAssetAsync(GameObjectAssetInfo assetInfo, int count)
         {
             if (assetInfo == null || count <= 0)
                 return;

@@ -10,12 +10,12 @@
 [ext_resource type="StyleBox" uid="uid://dguuwmgm80720" path="res://addons/Ursula/Assets/Themes/SliderArea.tres" id="8_f5c3j"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/UI/SliderShowValue.cs" id="9_3vhqn"]
 
-[node name="TransportFlowAssetInfoViewPrefab" type="Control" node_paths=PackedStringArray("LabelNameAsset", "ButtonClickAsset", "PreviewImageRect", "LoadObjectImageRect", "OptionButtonType", "OptionButtonSex", "SliderFamine", "ControlChildCount", "SliderShowChildCount")]
-custom_minimum_size = Vector2(280, 380)
+[node name="TransportFlowAssetInfoViewPrefab" type="Control" node_paths=PackedStringArray("LabelNameAsset", "ButtonClickAsset", "PreviewImageRect", "LoadObjectImageRect", "OptionButtonType", "OptionButtonSex", "SliderPopulationCount", "SliderFamine", "ControlChildCount", "SliderShowChildCount")]
+custom_minimum_size = Vector2(280, 430)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 280.0
-offset_bottom = 380.0
+offset_bottom = 430.0
 script = ExtResource("1_gl660")
 LabelNameAsset = NodePath("Control/Label")
 ButtonClickAsset = NodePath("Control/Button")
@@ -23,6 +23,7 @@ PreviewImageRect = NodePath("Control/Icon")
 LoadObjectImageRect = NodePath("Control/Load")
 OptionButtonType = NodePath("VBoxContainer/Type/OptionButton")
 OptionButtonSex = NodePath("VBoxContainer/Sex/OptionButton")
+SliderPopulationCount = NodePath("VBoxContainer/PopulationCount/Panel/HSliderPower")
 SliderFamine = NodePath("VBoxContainer/Famine/Panel/HSliderPower")
 ControlChildCount = NodePath("VBoxContainer/ChildCount")
 SliderShowChildCount = NodePath("VBoxContainer/ChildCount/Panel/HSliderPower")
@@ -160,6 +161,55 @@ popup/item_0/text = "Мужской"
 popup/item_1/text = "Женский"
 popup/item_1/id = 1
 
+[node name="PopulationCount" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PopulationCount"]
+layout_mode = 2
+text = "Количество популяции"
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PopulationCount"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_snmmq")
+
+[node name="HSliderPower" type="HSlider" parent="VBoxContainer/PopulationCount/Panel" node_paths=PackedStringArray("_hSlider")]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_icons/grabber = ExtResource("6_ob7yu")
+theme_override_icons/grabber_highlight = ExtResource("6_ob7yu")
+theme_override_styles/slider = ExtResource("7_ph5u0")
+theme_override_styles/grabber_area = ExtResource("8_f5c3j")
+theme_override_styles/grabber_area_highlight = ExtResource("8_f5c3j")
+value = 100.0
+script = ExtResource("9_3vhqn")
+_hSlider = NodePath(".")
+
+[node name="Label" type="Label" parent="VBoxContainer/PopulationCount/Panel/HSliderPower"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -16.0
+offset_right = -43.0
+offset_bottom = 9.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="Famine" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
@@ -188,7 +238,9 @@ theme_override_icons/grabber_highlight = ExtResource("6_ob7yu")
 theme_override_styles/slider = ExtResource("7_ph5u0")
 theme_override_styles/grabber_area = ExtResource("8_f5c3j")
 theme_override_styles/grabber_area_highlight = ExtResource("8_f5c3j")
-value = 50.0
+min_value = 300.0
+max_value = 900.0
+value = 300.0
 script = ExtResource("9_3vhqn")
 _hSlider = NodePath(".")
 
@@ -238,7 +290,9 @@ theme_override_icons/grabber_highlight = ExtResource("6_ob7yu")
 theme_override_styles/slider = ExtResource("7_ph5u0")
 theme_override_styles/grabber_area = ExtResource("8_f5c3j")
 theme_override_styles/grabber_area_highlight = ExtResource("8_f5c3j")
-value = 50.0
+min_value = 1.0
+max_value = 5.0
+value = 5.0
 script = ExtResource("9_3vhqn")
 _hSlider = NodePath(".")
 
