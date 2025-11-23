@@ -1,3 +1,5 @@
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlacement;
 using Fractural.Tasks;
 using Godot;
 using System;
@@ -82,7 +84,23 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         {
             GD.Print("Generate Transport Flow");
             GD.Print($"scale - {scale}, carsCount - {carsCount}, minTrafficLightsGreenTime - {minTrafficLightsGreenTime}, maxTrafficLightsGreenTime - {maxTrafficLightsGreenTime}");
-            // Логика генерации транспортного потока
+
+            // Init
+            NavGraphModelPlacer.Instance.Init(
+                RoadCrossPrefab.GameObjectAssetInfo, 
+                RoadTPrefab.GameObjectAssetInfo, 
+                RoadStraightPrefab.GameObjectAssetInfo, 
+                RoadTurnPrefab.GameObjectAssetInfo, 
+                TrafficLightGreenPrefab.GameObjectAssetInfo, 
+                TrafficLightRedPrefab.GameObjectAssetInfo, 
+                CarPrefab.GameObjectAssetInfo
+                );
+            NavGraphManager.Instance.Init(scale, carsCount, minTrafficLightsGreenTime, maxTrafficLightsGreenTime);
+            
+            // Generate
+            TerrainManager terrainManager = VoxLib.terrainManager;
+            float height = terrainManager.GetTerrainHeight(terrainManager.size / 2, terrainManager.size / 2);
+           _ = NavGraphManager.Instance.Generate(terrainManager.countBlock, height);
         }
         private void OnButtonClearClick()
         {

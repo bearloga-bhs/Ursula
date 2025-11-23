@@ -13,10 +13,22 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
 {
     public partial class NavGraphManager : Node, IInjectable
     {
-        NavGraph navGraph;
-        NavGraphVisualization visualization;
-        NavGraphVisualization pathVisualization;
-        RandomNumberGenerator rng;
+        private NavGraph navGraph;
+        private NavGraphVisualization visualization;
+        private RandomNumberGenerator rng;
+
+        // Гиперпараметры
+        private float delta;
+        private int carsCount;
+        private float minTrafficLightsGreenTime;
+        private float maxTrafficLightsGreenTime;
+
+        // Внутренние параметры симуляции
+        private readonly float connectionProbability = 0.6f;
+        private readonly float subdivisionOffset = 0.3f;
+        private readonly float modelHegihtOffset = 0.1f;
+
+        private bool initialized = false;
 
         public static NavGraphManager Instance { get; private set; }
 
@@ -36,20 +48,26 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             }
         }
 
+        public void Init(float delta, int carsCount, float minTrafficLightsGreenTime, float maxTrafficLightsGreenTime)
+        {
+            this.delta = delta;
+            this.carsCount = carsCount;
+            this.minTrafficLightsGreenTime = minTrafficLightsGreenTime;
+            this.maxTrafficLightsGreenTime = maxTrafficLightsGreenTime;
+            initialized = true;
+        }
+
+        private void CheckInitialized()
+        {
+            if (!initialized)
+                throw new Exception("NavGraphManager wasn't initialized. Call method Init first.");
+        }
+
         public async GDTask Generate(float range, float height)
         {
-            // Гиперпараметры
-            float delta = 25;
-            int carsCount = 50;
-            float minTrafficLightsGreenTime = 1f;
-            float maxTrafficLightsGreenTime = 5f;
+            CheckInitialized();
 
-            // Внутренние параметры симуляции
-            float connectionProbability = 0.6f;
             float directionsOffset = delta / 8;
-            float subdivisionOffset = 0.3f;
-            float modelHegihtOffset = 0.01f;
-
             Vector3 offset = new Vector3(subdivisionOffset * delta - directionsOffset, modelHegihtOffset, 0);
 
             // Create undirected graph
@@ -59,39 +77,44 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
 
             // Create directed graph and assign shedules
             navGraph = NavGraphGenerator.PostProcess(navGraphUndirected, subdivisionOffset, directionsOffset);
-            // Place traffic lights models
+            // Place traffic lights and car models
             GDTask trafficLightsGeneration = NavGraphModelPlacer.Instance.GenerateTrafficLights(navGraph, delta / 4, offset);
             GDTask carsGeneration = NavGraphModelPlacer.Instance.GenerateCars(navGraph, carsCount, modelHegihtOffset);
 
             await GDTask.WhenAll(roadGeneration, trafficLightsGeneration, carsGeneration);
-            visualization = new NavGraphVisualization();
-            visualization.Draw(navGraph, this, modelHegihtOffset);
 
-            //List<NavGraphVertex> path = BuildPath(navGraph.vertices[0].position, navGraph.vertices[navGraph.vertices.Count - 1].position);
-            //List<NavGraphEdge> pathEdges = new List<NavGraphEdge>(); 
-            //for (int i = 0; i < path.Count - 2; i++)
-            //{
-            //    pathEdges.Add(new NavGraphEdge(path[i], path[i + 1], true));
-            //}
-            //NavGraph pathGraph = new NavGraph(pathEdges, path);
-
-            //pathVisualization = new NavGraphVisualization();
-            //pathVisualization.Draw(pathGraph, this, modelHegihtOffset);
+            GD.Print($"Генерация транспортных потоков завершена.");
         }
 
         public Queue<Vector3> BuildPath(Vector3 from, Vector3 to)
         {
+            if (navGraph == null)
+                return null;
+
             float vertexTolerance = 1f;
             NavGraphVertex fromVertex = NavGraphVertexFinder.GetVertex(navGraph, from, vertexTolerance);
             NavGraphVertex toVertex = NavGraphVertexFinder.GetVertex(navGraph, to, vertexTolerance);
             List<NavGraphVertex> path = NavGraphPathFinder.GetPath(fromVertex, toVertex);
-            // TODO:
             Queue<Vector3> pathPoints = new Queue<Vector3>();
             foreach (NavGraphVertex vertex in path)
             {
                 pathPoints.Enqueue(vertex.position);
             }
             return pathPoints;
+        }
+
+        public void ShowDebugGraph()
+        {
+            if (navGraph == null)
+                return;
+
+            visualization = new NavGraphVisualization();
+            visualization.Draw(navGraph, this, modelHegihtOffset);
+        }
+
+        public void HideDebugGraph()
+        {
+            visualization.Clear();
         }
 
         public Vector3 GetRandomPoint()

@@ -39,6 +39,8 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
 
         private IGameObjectAsset car;
 
+        private bool initialized = false;
+
         public static NavGraphModelPlacer Instance { get; private set; }
 
         private RandomNumberGenerator rng = new RandomNumberGenerator();
@@ -57,33 +59,31 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             gameObjectCollectionModel = await _gameObjectCollectionModelProvider.GetAsync();
         }
 
-        private void LoadRoadAssets()
+        public void Init(
+            GameObjectAssetInfo roadCross,
+            GameObjectAssetInfo roadT,
+            GameObjectAssetInfo roadStraight,
+            GameObjectAssetInfo roadTurn,
+            GameObjectAssetInfo trafficLightsGreen,
+            GameObjectAssetInfo trafficLightsRed,
+            GameObjectAssetInfo car
+            )
         {
-            string roadCrossId = $"{GameObjectAssetsEmbeddedSource.LibId}.road_cross";
-            string roadTId = $"{GameObjectAssetsEmbeddedSource.LibId}.road_t";
-            string roadStraightId = $"{GameObjectAssetsEmbeddedSource.LibId}.road_straight";
-            string roadTurnId = $"{GameObjectAssetsEmbeddedSource.LibId}.road_turn";
+            this.roadCross = GetAsset(roadCross.Id);
+            this.roadT = GetAsset(roadT.Id);
+            this.roadStraight = GetAsset(roadStraight.Id);
+            this.roadTurn = GetAsset(roadTurn.Id);
+            this.trafficLightGreen = GetAsset(trafficLightsGreen.Id);
+            this.trafficLightRed = GetAsset(trafficLightsRed.Id);
+            this.car = GetAsset(car.Id);
 
-            roadCross = GetEmbeddedAsset(roadCrossId);
-            roadT = GetEmbeddedAsset(roadTId);
-            roadStraight = GetEmbeddedAsset(roadStraightId);
-            roadTurn = GetEmbeddedAsset(roadTurnId);
+            initialized = true;
         }
 
-        private void LoadTrafficLightsAssets()
+        private void CheckInitialized()
         {
-            string trafficLightGreenId = $"{GameObjectAssetsEmbeddedSource.LibId}.traffic_light_green";
-            string trafficLightRedId = $"{GameObjectAssetsEmbeddedSource.LibId}.traffic_light_red";
-
-            trafficLightGreen = GetEmbeddedAsset(trafficLightGreenId);
-            trafficLightRed = GetEmbeddedAsset(trafficLightRedId);
-        }
-
-        private void LoadCarsAssets()
-        {
-            string CarId = $"{GameObjectAssetsEmbeddedSource.LibId}.Cow";
-
-            car = GetEmbeddedAsset(CarId);
+            if (!initialized)
+                throw new Exception("NavGraphModelPlacer wasn't initialized. Call method Init first.");
         }
 
         private float GetScale(IGameObjectAsset asset, float size)
@@ -100,7 +100,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
                 throw new ArgumentNullException(nameof(navGraph));
             }
 
-            LoadRoadAssets();
+            CheckInitialized();
 
             float roadStraightScale = GetScale(roadStraight, size);
             float roadTurnScale = GetScale(roadTurn, size);
@@ -139,28 +139,20 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
                 throw new ArgumentNullException(nameof(navGraph));
             }
 
-            LoadTrafficLightsAssets();
+            CheckInitialized();
 
             float trafficLightRedScale = GetScale(trafficLightRed, size);
 
             NavGraphTrafficLightsPlacer trafficLightsPlacer = new NavGraphTrafficLightsPlacer(gameObjectCollectionModel, gameObjectCreateItemsModel, mapManagerItemSetter);
-            //Dictionary<Node, NavGraphVertexShedule> sheduleMap = new Dictionary<Node, NavGraphVertexShedule>();
             foreach (NavGraphEdge edge in navGraph.edges)
             {
                 if (edge.v2.shedule != null)
                 {
                     Injector injector = TrafficLightsSheduleInjectorBuilder.CreateInjector(edge.v2.shedule);
                     Node node = trafficLightsPlacer.PlaceTrafficLights(trafficLightRed.Info, edge, trafficLightRedScale, offset, injector);
-                    //sheduleMap[node] = edge.v2.shedule;
                     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
                 }
             }
-
-            //foreach (Node node in sheduleMap.Keys)
-            //{
-            //    NavGraphVertexShedule shedule = sheduleMap[node];
-            //    trafficLightsPlacer.InjectShedule(node, shedule);
-            //}
         }
 
         public async GDTask GenerateCars(NavGraph navGraph, int carCount, float modelHegihtOffset)
@@ -170,7 +162,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
                 throw new ArgumentNullException(nameof(navGraph));
             }
 
-            LoadCarsAssets();
+            CheckInitialized();
 
             Aabb aabb = NavGraphPlacerUtils.GetNodeAABB(car);
             float modelRadius = NavGraphPlacerUtils.GetRadiusFromAABB(aabb);
@@ -184,12 +176,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlaceme
             }
         }
 
-        public void InjectTrafficLightsShedule(NavGraph navGraph)
-        {
-
-        }
-
-        private IGameObjectAsset GetEmbeddedAsset(string id)
+        private IGameObjectAsset GetAsset(string id)
         {
             if (gameObjectLibraryManager.TryGetItem(id, out IGameObjectAsset asset))
             {
