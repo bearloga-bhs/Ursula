@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://dgc042g3ej4rj"]
+[gd_scene load_steps=87 format=3 uid="uid://dgc042g3ej4rj"]
 
 [ext_resource type="PackedScene" uid="uid://dn1jem1nnefln" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/project_timer.tscn" id="1_wxxnd"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/Core/Initialization/UrsulaEntryPoint.cs" id="1_xjqfu"]
@@ -56,6 +56,7 @@
 [ext_resource type="Texture2D" uid="uid://cceh2ccis1t63" path="res://addons/Ursula/Assets/Themes/ArrowLeft.png" id="38_544k6"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/View/SimulationGeneratorView.cs" id="38_wuvcs"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/View/EcosystemGeneratorView.cs" id="40_m5gvt"]
+[ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/View/TransportFlowGeneratorView.cs" id="40_m8nei"]
 [ext_resource type="PackedScene" uid="uid://dndold6tr7uhn" path="res://addons/Ursula/Prefabs/GameObjects/EcosystemGameObjectAssetInfoViewPrefab.tscn" id="41_yjobr"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/Controller/GameObjectCollectionController.cs" id="42_rqra7"]
 [ext_resource type="StyleBox" uid="uid://ccj7ltfpijtug" path="res://addons/Ursula/Assets/Themes/ButtonStartup.tres" id="43_0nvn3"]
@@ -73,6 +74,8 @@
 [ext_resource type="StyleBox" uid="uid://c06y7nq7pqiyd" path="res://addons/Ursula/Assets/Themes/ButtonStandart.tres" id="51_ffq47"]
 [ext_resource type="StyleBox" uid="uid://bwkxycn6p1ew0" path="res://addons/Ursula/Assets/Themes/Panel.tres" id="51_qas0a"]
 [ext_resource type="Texture2D" uid="uid://mn7avqdknfbk" path="res://addons/Ursula/Assets/Themes/File.png" id="56_qj0h5"]
+[ext_resource type="Script" path="res://addons/Ursula/Scripts/NavigationGraph/Controller/NavGraphManager.cs" id="59_622bu"]
+[ext_resource type="Script" path="res://addons/Ursula/Scripts/NavigationGraph/Controller/ModelPlacement/NavGraphModelPlacer.cs" id="60_lvi7v"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/GameObjects/Controller/SimulationGeneratorController.cs" id="72_8jok7"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_elju3"]
@@ -1846,6 +1849,7 @@ texture = ExtResource("10_ymu3k")
 expand_mode = 1
 
 [node name="Arrow2" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonObject"]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -1862,7 +1866,6 @@ texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
 [node name="PanelGameObjectLibraryView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonObject"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2166,7 +2169,7 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_qiu05")
 text = "Транспортные потоки"
 script = ExtResource("6_1h5ru")
-PanelMenu = NodePath("PanelConstructorWaterMenuView")
+PanelMenu = NodePath("PanelTransport")
 
 [node name="Icon" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport"]
 visible = false
@@ -2216,21 +2219,29 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelConstructorWaterMenuView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" node_paths=PackedStringArray("HSliderWaterLevel", "TypeWaterOption", "CheckButtonWaterStatic", "ButtonCreateWater")]
-visible = false
+[node name="PanelTransport" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" node_paths=PackedStringArray("RoadCrossPrefab", "RoadTPrefab", "RoadStraightPrefab", "RoadTurnPrefab", "TrafficLightGreenPrefab", "TrafficLightRedPrefab", "CarPrefab", "SliderScale", "SliderCarsCount", "SliderMinTrafficLightsGreenTime", "SliderMaxTrafficLightsGreenTime", "ButtonGenerate", "ButtonClear")]
 layout_mode = 0
 offset_left = -115.0
 offset_top = 50.0
 offset_right = 295.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
-script = ExtResource("34_bxh7g")
-HSliderWaterLevel = NodePath("ScrollContainer/VBoxContainer/VBoxContainerWaterOffset/Panel/HSliderWaterOffset")
-TypeWaterOption = NodePath("ScrollContainer/VBoxContainer/VBoxContainerWaterType/TypeWaterOption")
-CheckButtonWaterStatic = NodePath("ScrollContainer/VBoxContainer/CheckBoxStaticWater")
-ButtonCreateWater = NodePath("ScrollContainer/VBoxContainer/ButtonCreateWater")
+script = ExtResource("40_m8nei")
+RoadCrossPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerRoadCross/RoadCrossGameObjectAssetInfoViewPrefab")
+RoadTPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerRoadT/RoadTGameObjectAssetInfoViewPrefab")
+RoadStraightPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerRoadStraight/StraightGameObjectAssetInfoViewPrefab")
+RoadTurnPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerRoadTurn/RoadTurnGameObjectAssetInfoViewPrefab")
+TrafficLightGreenPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerTrafficLightGreen/TrafficLightGreenGameObjectAssetInfoViewPrefab")
+TrafficLightRedPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerTrafficLightRed/TrafficLightRedGameObjectAssetInfoViewPrefab")
+CarPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerCar/CarGameObjectAssetInfoViewPrefab")
+SliderScale = NodePath("VBoxContainer/VBoxContainerScale/Panel/HSliderScale")
+SliderCarsCount = NodePath("VBoxContainer/VBoxContainerCarCount/Panel/HSliderCarCount")
+SliderMinTrafficLightsGreenTime = NodePath("VBoxContainer/VBoxContainerMinTrafficLightsGreenTime/Panel/HSliderMinTrafficLightsGreenTime")
+SliderMaxTrafficLightsGreenTime = NodePath("VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime/Panel/HSliderMaxTrafficLightsGreenTime")
+ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
+ButtonClear = NodePath("HBoxContainer/ButtonClear")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2238,30 +2249,154 @@ anchor_bottom = 1.0
 offset_left = 12.0
 offset_top = -1.0
 offset_right = -13.0
-offset_bottom = -8.0
+offset_bottom = -328.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+columns = 3
 
-[node name="VBoxContainerWaterOffset" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+[node name="VBoxContainerRoadCross" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer/VBoxContainerWaterOffset"]
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerRoadCross"]
 layout_mode = 2
-text = "Уровень воды"
+text = "RoadCross"
 
-[node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer/VBoxContainerWaterOffset"]
-custom_minimum_size = Vector2(0, 30)
+[node name="RoadCrossGameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerRoadCross" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
+[node name="VBoxContainerRoadT" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerRoadT"]
+layout_mode = 2
+text = "RoadT"
+
+[node name="RoadTGameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerRoadT" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
+[node name="VBoxContainerRoadStraight" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerRoadStraight"]
+layout_mode = 2
+text = "RoadStraight"
+
+[node name="StraightGameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerRoadStraight" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
+[node name="VBoxContainerRoadTurn" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerRoadTurn"]
+layout_mode = 2
+text = "RoadTurn"
+
+[node name="RoadTurnGameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerRoadTurn" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
+[node name="VBoxContainerTrafficLightGreen" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerTrafficLightGreen"]
+layout_mode = 2
+text = " TrafficLightGreen"
+
+[node name="TrafficLightGreenGameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerTrafficLightGreen" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
+[node name="VBoxContainerTrafficLightRed" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerTrafficLightRed"]
+layout_mode = 2
+text = " TrafficLightRed"
+
+[node name="TrafficLightRedGameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerTrafficLightRed" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
+[node name="VBoxContainerCar" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerCar"]
+layout_mode = 2
+text = " Car"
+
+[node name="CarGameObjectAssetInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/ScrollContainer/GridContainer/VBoxContainerCar" instance=ExtResource("16_1eb3b")]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport"]
+custom_minimum_size = Vector2(385, 250)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 180.0
+offset_right = 397.0
+offset_bottom = 220.0
+
+[node name="VBoxContainerScale" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerScale"]
+layout_mode = 2
+text = "Scale"
+
+[node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerScale"]
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("46_h4d78")
 
-[node name="HSliderWaterOffset" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer/VBoxContainerWaterOffset/Panel" node_paths=PackedStringArray("_hSlider")]
+[node name="HSliderScale" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerScale/Panel" node_paths=PackedStringArray("_hSlider")]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -4.5
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_icons/grabber = ExtResource("22_m1i1r")
+theme_override_icons/grabber_highlight = ExtResource("22_m1i1r")
+theme_override_styles/slider = ExtResource("23_8khbg")
+theme_override_styles/grabber_area = ExtResource("24_ux6rg")
+theme_override_styles/grabber_area_highlight = ExtResource("24_ux6rg")
+value = 10.0
+script = ExtResource("25_l6pvw")
+_hSlider = NodePath(".")
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerScale/Panel/HSliderScale"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -16.0
+offset_right = -43.0
+offset_bottom = 9.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="VBoxContainerCarCount" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerCarCount"]
+layout_mode = 2
+text = "Cars Count"
+
+[node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerCarCount"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("46_h4d78")
+
+[node name="HSliderCarCount" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerCarCount/Panel" node_paths=PackedStringArray("_hSlider")]
 custom_minimum_size = Vector2(100, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -2281,87 +2416,131 @@ value = 50.0
 script = ExtResource("25_l6pvw")
 _hSlider = NodePath(".")
 
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer/VBoxContainerWaterOffset/Panel/HSliderWaterOffset"]
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerCarCount/Panel/HSliderCarCount"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -228.0
-offset_top = -13.0
-offset_right = -199.0
-offset_bottom = 12.0
+offset_left = -72.0
+offset_top = -16.0
+offset_right = -43.0
+offset_bottom = 9.0
 grow_horizontal = 0
 grow_vertical = 2
 text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="VBoxContainerWaterType" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer/VBoxContainerWaterType"]
-layout_mode = 2
-text = "Тип воды"
-
-[node name="TypeWaterOption" type="OptionButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer/VBoxContainerWaterType"]
-layout_mode = 2
-size_flags_vertical = 3
-focus_mode = 1
-selected = 0
-item_count = 4
-popup/item_0/text = "Вода"
-popup/item_0/id = 1
-popup/item_1/text = "Лава"
-popup/item_1/id = 2
-popup/item_2/text = "Лёд"
-popup/item_2/id = 3
-popup/item_3/text = "Болото"
-popup/item_3/id = 4
-
-[node name="CheckBoxStaticWater" type="CheckBox" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Анимация воды"
-
-[node name="LabelTextureID" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-text = "Текстура для ландшафта"
-
-[node name="TabBar" type="TabBar" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer"]
-visible = false
-clip_contents = true
-layout_mode = 2
-theme_override_constants/outline_size = 0
-theme_override_constants/h_separation = 10
-theme_override_constants/icon_max_width = 80
-theme_override_styles/button_highlight = ExtResource("26_u4kls")
-theme_override_styles/button_pressed = ExtResource("26_u4kls")
-theme_override_styles/tab_unselected = ExtResource("27_bd2qi")
-theme_override_styles/tab_selected = ExtResource("26_u4kls")
-theme_override_styles/tab_disabled = ExtResource("27_bd2qi")
-theme_override_styles/tab_focus = ExtResource("26_u4kls")
-current_tab = 0
-tab_count = 2
-tab_0/title = "12345"
-tab_1/title = "12345"
-
-[node name="GridContainer" type="GridContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(80, 60)
-layout_direction = 2
-layout_mode = 2
-columns = 5
-
-[node name="StartupItemInfoViewPrefab" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource("28_losxi")]
-custom_minimum_size = Vector2(60, 60)
+[node name="VBoxContainerMinTrafficLightsGreenTime" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer"]
 layout_mode = 2
 
-[node name="ButtonCreateWater" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMinTrafficLightsGreenTime"]
+layout_mode = 2
+text = "Min Traffic Lights Green Time"
+
+[node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMinTrafficLightsGreenTime"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("46_h4d78")
+
+[node name="HSliderMinTrafficLightsGreenTime" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMinTrafficLightsGreenTime/Panel" node_paths=PackedStringArray("_hSlider")]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_icons/grabber = ExtResource("22_m1i1r")
+theme_override_icons/grabber_highlight = ExtResource("22_m1i1r")
+theme_override_styles/slider = ExtResource("23_8khbg")
+theme_override_styles/grabber_area = ExtResource("24_ux6rg")
+theme_override_styles/grabber_area_highlight = ExtResource("24_ux6rg")
+max_value = 10.0
+value = 1.0
+script = ExtResource("25_l6pvw")
+_hSlider = NodePath(".")
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMinTrafficLightsGreenTime/Panel/HSliderMinTrafficLightsGreenTime"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -16.0
+offset_right = -43.0
+offset_bottom = 9.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="VBoxContainerMaxTrafficLightsGreenTime" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime"]
+layout_mode = 2
+text = "Max Traffic Lights Green Time"
+
+[node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("46_h4d78")
+
+[node name="HSliderMaxTrafficLightsGreenTime" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime/Panel" node_paths=PackedStringArray("_hSlider")]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_icons/grabber = ExtResource("22_m1i1r")
+theme_override_icons/grabber_highlight = ExtResource("22_m1i1r")
+theme_override_styles/slider = ExtResource("23_8khbg")
+theme_override_styles/grabber_area = ExtResource("24_ux6rg")
+theme_override_styles/grabber_area_highlight = ExtResource("24_ux6rg")
+max_value = 10.0
+value = 5.0
+script = ExtResource("25_l6pvw")
+_hSlider = NodePath(".")
+
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime/Panel/HSliderMaxTrafficLightsGreenTime"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -16.0
+offset_right = -43.0
+offset_bottom = 9.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 450.0
+offset_right = 244.0
+offset_bottom = 500.0
+
+[node name="ButtonGenerate" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/HBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 focus_mode = 0
@@ -2369,10 +2548,35 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/hover = ExtResource("18_c37xe")
 theme_override_styles/pressed = ExtResource("18_c37xe")
 theme_override_styles/normal = ExtResource("18_c37xe")
-text = "Генерировать воду"
+text = "Сгенерировать"
 icon_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelConstructorWaterMenuView/ScrollContainer/VBoxContainer/ButtonCreateWater"]
+[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/HBoxContainer/ButtonGenerate"]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.07996
+offset_top = -9.0
+offset_right = 21.08
+offset_bottom = 10.0
+grow_vertical = 2
+texture = ExtResource("19_c8ee4")
+expand_mode = 1
+
+[node name="ButtonClear" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = ExtResource("18_c37xe")
+theme_override_styles/pressed = ExtResource("18_c37xe")
+theme_override_styles/normal = ExtResource("18_c37xe")
+text = "Очистить"
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/HBoxContainer/ButtonClear"]
 visible = false
 layout_mode = 1
 anchors_preset = 4
@@ -2447,6 +2651,7 @@ texture = ExtResource("8_4saec")
 expand_mode = 1
 
 [node name="PanelEcosystem" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" node_paths=PackedStringArray("prefabs", "ButtonGenerate", "ButtonClear")]
+visible = false
 layout_mode = 0
 offset_left = -298.0
 offset_top = 50.0
@@ -2454,7 +2659,7 @@ offset_right = 112.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("40_m5gvt")
-prefabs = [NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab2"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab3"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab4")]
+prefabs = []
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
 ButtonClear = NodePath("HBoxContainer/ButtonClear")
 
@@ -3699,11 +3904,9 @@ anchor_bottom = 0.0
 grow_vertical = 1
 
 [node name="VideoPlayer" parent="." instance=ExtResource("22_6diaf")]
-visible = false
 layout_mode = 1
 
 [node name="Loading" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -3743,6 +3946,13 @@ script = ExtResource("23_56bgx")
 
 [node name="TerrainManager" type="Node3D" parent="."]
 script = ExtResource("25_jfqi2")
+
+[node name="NavGraphManager" type="Node3D" parent="."]
+script = ExtResource("59_622bu")
+
+[node name="NavGraphModelPlacer" type="Node3D" parent="NavGraphManager" node_paths=PackedStringArray("mapManagerItemSetter")]
+script = ExtResource("60_lvi7v")
+mapManagerItemSetter = NodePath("../../MapManagers/MapManagerItemSetter")
 
 [node name="WaterManager" type="Node3D" parent="."]
 script = ExtResource("47_25wwj")
