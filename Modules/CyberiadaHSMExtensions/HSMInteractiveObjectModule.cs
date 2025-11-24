@@ -10,6 +10,7 @@ public class HSMInteractiveObjectModule
 
     // Command keys
     const string DuplicateObjectCommandKey = $"{ModuleName}.ДублироватьОбъект";
+    const string BornObjectCommandKey = $"{ModuleName}.Рождение";
     const string RemoveCurrentObjectCommandKey = $"{ModuleName}.УдалитьЭтотОбъект";
     const string RemoveFoundedObjectCommandKey = $"{ModuleName}.УдалитьНайденныйОбъект";
     const string RemoveFoundedObject2CommandKey = $"{ModuleName}.УдалитьНайденныйОбъект2";
@@ -20,12 +21,35 @@ public class HSMInteractiveObjectModule
 
         // Commands
         logic.localBus.AddCommandListener(DuplicateObjectCommandKey, DuplicateObject);
+        logic.localBus.AddCommandListener(BornObjectCommandKey, BornObject);
         logic.localBus.AddCommandListener(RemoveCurrentObjectCommandKey, RemoveCurrentObject);
         logic.localBus.AddCommandListener(RemoveFoundedObjectCommandKey, RemoveFoundedObject);
         logic.localBus.AddCommandListener(RemoveFoundedObject2CommandKey, RemoveFounded2Object);
     }
-
-
+    
+    bool BornObject(List<Tuple<string, string>> value)
+    {
+        Random random = new Random();
+        
+        int num_child = HSMUtils.GetValue<int>(value[0]);
+        for (int i = 0; i < num_child; i++)
+        {
+            int randomNumber = random.Next(0, 2);
+            if (randomNumber == 0)
+            {
+                InteractiveObjectsManager.Instance.DuplicateObject(_object);
+            }
+            else
+            {
+                var target = _object.GetCurrentTargetObject2();
+                var interactiveObject = GetChildByType<InteractiveObject>(target.GetParent());
+                InteractiveObjectsManager.Instance.DuplicateObject(interactiveObject);
+            }
+        }
+        
+        return true;
+    }
+    
     bool DuplicateObject(List<Tuple<string, string>> value)
     {
         InteractiveObjectsManager.Instance.DuplicateObject(_object);
