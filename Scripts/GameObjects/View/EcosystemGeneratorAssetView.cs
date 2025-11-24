@@ -86,8 +86,6 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 				PreviewImageRect.Visible = PreviewImageRect.Texture != null;
 
 				LoadObjectImageRect.Visible = false;
-
-				CheckAssetTemplate();
 			}
 			else
 			{
@@ -130,7 +128,6 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 			if (_gameObjectAssetInfo != null)
 			{
 				_gameObjectAssetInfo.Type = OptionButtonType.GetItemText((int)index);
-				CheckAssetTemplate();
 			}
 		}
 
@@ -174,39 +171,11 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 			{
 				ControlChildCount.Visible = false;
 			}
-
-			CheckAssetTemplate();
 		}
 
 		public void OnDependenciesInjected()
 		{
 			//throw new NotImplementedException();
-		}
-
-		private void CheckAssetTemplate()
-		{
-			if (_gameObjectAssetInfo.Type == "Травоядное")
-			{
-				if (_gameObjectAssetInfo.Sex == "Женский")
-				{
-					_gameObjectAssetInfo.Template.GameObjectSample = "ТравоядноеЖ";
-				}
-				else
-				{
-					_gameObjectAssetInfo.Template.GameObjectSample = "ТравоядноеМ";
-				}
-			}
-			else
-			{
-				if (_gameObjectAssetInfo.Sex == "Женский")
-				{
-					_gameObjectAssetInfo.Template.GameObjectSample = "ХищникЖ";
-				}
-				else
-				{
-					_gameObjectAssetInfo.Template.GameObjectSample = "ХищникМ";
-				}
-			}
 		}
 	}
 }

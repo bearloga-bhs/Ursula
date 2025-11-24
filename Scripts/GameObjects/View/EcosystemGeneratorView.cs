@@ -107,7 +107,9 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
                 var info = view.GameObjectAssetInfo;
                 if (info == null)
                     continue;
-
+                
+                CheckAssetTemplate(info);
+                
                 int count = Mathf.Max(0, info.PopulationCount);
                 if (count <= 0)
                     continue;
@@ -160,6 +162,32 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         // Реализация IInjectable; логика инициализации — в SubscribeEvent()
         public void OnDependenciesInjected()
         {
+        }
+        
+        private void CheckAssetTemplate(EcosystemGeneratorAssetInfo info)
+        {
+            if (info.Type == "Травоядное")
+            {
+                if (info.Sex == "Женский")
+                {
+                    info.Template.GameObjectSample = "ТравоядноеЖ";
+                }
+                else
+                {
+                    info.Template.GameObjectSample = "ТравоядноеМ";
+                }
+            }
+            else
+            {
+                if (info.Sex == "Женский")
+                {
+                    info.Template.GameObjectSample = "ХищникЖ";
+                }
+                else
+                {
+                    info.Template.GameObjectSample = "ХищникМ";
+                }
+            }
         }
     }
 }
