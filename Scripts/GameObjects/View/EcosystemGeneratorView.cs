@@ -3,6 +3,7 @@ using Godot;
 using Godot.Collections;
 using System;
 using System.Collections.Generic;
+using bearloga.addons.Ursula.Modules.LogicInjector;
 using ursula.addons.Ursula.Scripts.GameObjects.Model;
 using ursula.addons.Ursula.Scripts.GameObjects.Controller;
 using Ursula.Core.DI;
@@ -10,6 +11,31 @@ using Ursula.GameObjects.Model;
 
 namespace ursula.addons.Ursula.Scripts.GameObjects.View
 {
+    
+    public static class EcosystemInjectorBuilder
+    {
+        public static Injector CreateInjector(float foodTimer, float childCount)
+        {
+            InjectorStateOverride green = CreateFoodTimerOverride(foodTimer);
+            //InjectorStateOverride red = CreateChildCountOverride(childCount);
+            return new Injector(new List<InjectorStateOverride>() { green/*, red*/ });
+        }
+
+        private static InjectorStateOverride CreateFoodTimerOverride(float foodTimer)
+        {
+            InjectorStateCommandOverride commandOverride = new InjectorStateCommandOverride("Таймер2.ТаймерЗапуск", 0, foodTimer.ToString());
+            InjectorStateEventOverride eventOverride = new InjectorStateEventOverride("Enter", new List<InjectorStateCommandOverride>() { commandOverride });
+            return new InjectorStateOverride("Инициализация", new List<InjectorStateEventOverride>() { eventOverride });
+        }
+
+        /*private static InjectorStateOverride CreateChildCountOverride(float childCount)
+        {
+            InjectorStateCommandOverride commandOverride = new InjectorStateCommandOverride("Таймер.ТаймерЗапуск", 0, timeClosed.ToString());
+            InjectorStateEventOverride eventOverride = new InjectorStateEventOverride("Enter", new List<InjectorStateCommandOverride>() { commandOverride });
+            return new InjectorStateOverride("[Inject] Red", new List<InjectorStateEventOverride>() { eventOverride });
+        }*/
+    }
+    
     public partial class EcosystemGeneratorView : Control, IInjectable
     {
         [Inject]
@@ -114,13 +140,16 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
                 if (count <= 0)
                     continue;
 
+                var injector = EcosystemInjectorBuilder.CreateInjector(info.Famine, info.ChildCount);
+                
                 // Генерируем этот ассет как 100% один тип
                 _simulationGeneratorController.GenerateSimulationItems(
                     info,   // asset1
                     info,   // asset2 тот же самый
                     count,  // количество объектов
                     100f,   // 100% первого (и единственного) типа
-                    0f      // coefficient — пока 0, при необходимости можно прокинуть из UI
+                    0f,      // coefficient — пока 0, при необходимости можно прокинуть из UI
+                    injector
                 );
 
                 GD.Print($"EcosystemGeneratorView: generated {count} entities of {info.Name}.");

@@ -10,6 +10,7 @@ using Ursula.Core.DI;
 using Ursula.GameObjects.Model;
 using Ursula.GameObjects.View;
 using Ursula.GameProjects.Model;
+using Ursula.MapManagers.Setters;
 using Ursula.Terrain.Model;
 using Ursula.Water.Model;
 using static Godot.TileSet;
@@ -41,7 +42,9 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         [Export]
         private GameObjectAssetInfoView view2;
 
-
+        [Export]
+        public MapManagerItemSetter mapManagerItemSetter;
+        
         [Inject]
         protected ISingletonProvider<SimulationGeneratorController> _simulationGeneratorControllerProvider;
         protected SimulationGeneratorController _simulationGeneratorController;
@@ -97,6 +100,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             _simulationGeneratorController.Init(
                 _gameObjectCreateItemsModel,
                 _gameObjectCollectionModel,
+                mapManagerItemSetter,
                 _terrainModel,
                 _terrainManager,
                 _waterModel);

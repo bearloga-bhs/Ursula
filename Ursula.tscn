@@ -2069,7 +2069,7 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "ButtonGenerate", "view1", "view2")]
+[node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "ButtonGenerate", "view1", "view2", "mapManagerItemSetter")]
 layout_mode = 0
 offset_left = -11.0
 offset_top = 50.0
@@ -2086,6 +2086,7 @@ TextEditCoefficient = NodePath("ScrollContainer/VBoxContainer/TextEditCoefficien
 ButtonGenerate = NodePath("ScrollContainer/VBoxContainer/ButtonGenerate")
 view1 = NodePath("ScrollContainer/VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab1")
 view2 = NodePath("ScrollContainer/VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab2")
+mapManagerItemSetter = NodePath("../../../../../../../../../../MapManagers/MapManagerItemSetter")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView"]
 layout_mode = 1
@@ -2659,7 +2660,7 @@ offset_right = 112.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("40_m5gvt")
-prefabs = []
+prefabs = [NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab2"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab3"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab4")]
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
 ButtonClear = NodePath("HBoxContainer/ButtonClear")
 

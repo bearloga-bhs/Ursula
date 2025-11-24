@@ -1,8 +1,10 @@
 using Fractural.Tasks;
 using Godot;
 using System;
+using bearloga.addons.Ursula.Modules.LogicInjector;
 using Ursula.Core.DI;
 using Ursula.GameObjects.Model;
+using Ursula.MapManagers.Setters;
 using Ursula.Terrain.Model;
 using Ursula.Water.Model;
 
@@ -30,6 +32,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
 
         private GameObjectCreateItemsModel _gameObjectCreateItemsModel;
         private GameObjectCollectionModel _gameObjectCollectionModel;
+        private MapManagerItemSetter _mapManagerItemSetter;
         private TerrainModel _terrainModel;
         private TerrainManager _terrainManager;
         private WaterModel _waterModel;
@@ -50,12 +53,14 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
         public void Init(
             GameObjectCreateItemsModel gameObjectCreateItemsModel,
             GameObjectCollectionModel gameObjectCollectionModel,
+            MapManagerItemSetter mapManagerItemSetter,
             TerrainModel terrainModel,
             TerrainManager terrainManager,
             WaterModel waterModel)
         {
             _gameObjectCreateItemsModel = gameObjectCreateItemsModel;
             _gameObjectCollectionModel = gameObjectCollectionModel;
+            _mapManagerItemSetter = mapManagerItemSetter;
             _terrainModel = terrainModel;
             _terrainManager = terrainManager;
             _waterModel = waterModel;
@@ -77,7 +82,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
             base.Dispose(disposing);
         }
 
-        public async void GenerateSimulationItems(GameObjectAssetInfo asset1, GameObjectAssetInfo asset2, int entitiesCount, float percent, float coefficient)
+        public async void GenerateSimulationItems(GameObjectAssetInfo asset1, GameObjectAssetInfo asset2, int entitiesCount, float percent, float coefficient, Injector injector = null)
         {
             if (_gameObjectCreateItemsModel == null
                 || _gameObjectCollectionModel == null
@@ -97,11 +102,11 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
             firstAssetCount = Mathf.Clamp(firstAssetCount, 0, entitiesCount);
             int secondAssetCount = entitiesCount - firstAssetCount;
 
-            /*await*/ SpawnAssetAsync(asset1, firstAssetCount);
-            /*await*/ SpawnAssetAsync(asset2, secondAssetCount);
+            /*await*/ SpawnAssetAsync(asset1, firstAssetCount, injector);
+            /*await*/ SpawnAssetAsync(asset2, secondAssetCount, injector);
         }
 
-        private void SpawnAssetAsync(GameObjectAssetInfo assetInfo, int count)
+        private void SpawnAssetAsync(GameObjectAssetInfo assetInfo, int count, Injector injector = null)
         {
             if (assetInfo == null || count <= 0)
                 return;
@@ -115,8 +120,19 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Controller
                     break;
 
                 _gameObjectCollectionModel.SetGameObjectAssetSelected(assetInfo);
-                _gameObjectCreateItemsModel.SetGameObjectCreateItem(position, 1f, 0);
-                //await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                _gameObjectCreateItemsModel.SetGameObjectCreateItem(position, 1f, 0, false);
+                
+                Vector3 positionNode = _gameObjectCreateItemsModel.PositionNode;
+                float scaleNode = _gameObjectCreateItemsModel.ScaleNode;
+                byte rotationNode = _gameObjectCreateItemsModel.RotationNode;
+
+                int _x = Mathf.RoundToInt(positionNode.X);
+                int _y = Mathf.RoundToInt(positionNode.Y);
+                int _z = Mathf.RoundToInt(positionNode.Z);
+
+                int id = _x + _y * 256 + _z * 256 * 256;
+
+                Node item = _mapManagerItemSetter.CreateGameItem(assetInfo, rotationNode, scaleNode, positionNode.X, positionNode.Y, positionNode.Z, 0, id, false, injector: injector);
             }
         }
 
