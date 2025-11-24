@@ -1,3 +1,4 @@
+using bearloga.addons.Ursula.Modules.LogicInjector;
 using Fractural.Tasks;
 using Godot;
 using System;
@@ -17,30 +18,129 @@ using static Godot.TileSet;
 
 namespace ursula.addons.Ursula.Scripts.GameObjects.View
 {
+    public static class EpidemicInjectorBuilder
+    {
+        // type – количество типов (в твоём случае всегда 2)
+        public static Injector CreateInjector(int type, float distanceHealthy, float distanceIll, int pillCount)
+        {
+            InjectorStateOverride generateValueOverride = GenerateValueOverride(type);
+            InjectorStateOverride distanceOverrideHealthy = DistanceHealthyOverride(distanceHealthy);
+            InjectorStateOverride distanceOverrideIll = DistanceIllOverride(distanceIll);
+            InjectorStateOverride pillCountOverride = PillCountOverride(pillCount);
+
+            return new Injector(new List<InjectorStateOverride>
+            {
+                generateValueOverride,
+                distanceOverrideHealthy,
+                distanceOverrideIll,
+                pillCountOverride
+            });
+        }
+
+        private static InjectorStateOverride PillCountOverride(int pillCount)
+        {
+            var commandOverride = new InjectorStateCommandOverride(
+                "МодульСлучайности.СгенерироватьИзПромежутка",
+                0,
+                pillCount.ToString()
+            );
+
+            var eventOverride = new InjectorStateEventOverride(
+                "Enter",
+                new List<InjectorStateCommandOverride> { commandOverride });
+
+            return new InjectorStateOverride(
+                "Init_healty",
+                new List<InjectorStateEventOverride> { eventOverride });
+        }
+
+        private static InjectorStateOverride DistanceIllOverride(float distance)
+        {
+            var commandOverride = new InjectorStateCommandOverride(
+                "ВоспроизведениеЗвука.УстановитьРадиусСлышимости",
+                0,
+                distance.ToString()
+            );
+
+            var eventOverride = new InjectorStateEventOverride(
+                "Enter",
+                new List<InjectorStateCommandOverride> { commandOverride });
+
+            return new InjectorStateOverride(
+                "Init_ill",
+                new List<InjectorStateEventOverride> { eventOverride });
+        }
+
+        private static InjectorStateOverride DistanceHealthyOverride(float distance)
+        {
+            var commandOverride = new InjectorStateCommandOverride(
+                "ВоспроизведениеЗвука.УстановитьРадиусСлышимости",
+                0,
+                distance.ToString()
+            );
+
+            var eventOverride = new InjectorStateEventOverride(
+                "Enter",
+                new List<InjectorStateCommandOverride> { commandOverride });
+
+            // тут, судя по названию, должен быть Init_healty, а не Init_ill
+            return new InjectorStateOverride(
+                "Init_healty",
+                new List<InjectorStateEventOverride> { eventOverride });
+        }
+
+        private static InjectorStateOverride GenerateValueOverride(int type)
+        {
+            var commandOverride = new InjectorStateCommandOverride(
+                "МодульСлучайности.СгенерироватьИзПромежутка",
+                0,
+                type.ToString()
+            );
+
+            var commandOverride2 = new InjectorStateCommandOverride(
+                "МодульСлучайности.СгенерироватьИзПромежутка",
+                1,
+                type.ToString()
+            );
+
+            var eventOverride = new InjectorStateEventOverride(
+                "Enter",
+                new List<InjectorStateCommandOverride> { commandOverride, commandOverride2 });
+
+            return new InjectorStateOverride(
+                "Epidemic_beh",
+                new List<InjectorStateEventOverride> { eventOverride });
+        }
+    }
+
     public partial class SimulationGeneratorView : Control, IInjectable
     {
         [Export]
-        private Label LabelEntitiesCount;
-        [Export]
-        private TextEdit TextEditEntitiesCount;
+        private Slider SliderEntitiesCount;
 
         [Export]
-        private Label LabelPetcent;
-        [Export]
-        private TextEdit TextEditPercent;
+        private Slider SliderPercent;
 
         [Export]
-        private Label LabelCoefficient;
+        private Slider SliderCoefficient;
+
         [Export]
-        private TextEdit TextEditCoefficient;
+        private Slider SliderDistanceHealthy;
+
+        [Export]
+        private Slider SliderDistanceIll;
+
+        [Export]
+        private Slider SliderPillCount;
+        
+        [Export]
+        private GameObjectAssetInfoView Asset;
 
         [Export]
         private Button ButtonGenerate;
 
         [Export]
-        private GameObjectAssetInfoView view1;
-        [Export]
-        private GameObjectAssetInfoView view2;
+        private Button ButtonClear;
 
         [Export]
         public MapManagerItemSetter mapManagerItemSetter;
@@ -81,10 +181,15 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             base._Ready();
             _ = SubscribeEvent();
 
-            //ButtonClickAsset.ButtonDown += OnItemClickEvent;
+            Asset.clickItemEvent += OnAssetClickEvent;
+
             ButtonGenerate.ButtonDown += OnButtonGenerateClickEvent;
-            view1.clickItemEvent += OnView1ClickEvent;
-            view2.clickItemEvent += OnView2ClickEvent;
+            ButtonClear.ButtonDown += OnButtonClearClickEvent;
+        }
+
+        private void OnButtonClearClickEvent()
+        {
+            throw new NotImplementedException();
         }
 
         private async GDTask SubscribeEvent()
@@ -114,25 +219,75 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 
         private void OnButtonGenerateClickEvent()
         {
-            int entitiesCount = Convert.ToInt32(TextEditEntitiesCount.Text);
-            float percent = Convert.ToSingle(TextEditPercent.Text);
-            float coefficient = Convert.ToSingle(TextEditCoefficient.Text);
-            GD.Print($"Generate Simulation with params: entitiesCount={entitiesCount}, percent={percent}, coefficient={coefficient}");
-            _simulationGeneratorController.GenerateSimulationItems(view1.GameObjectAssetInfo, view2.GameObjectAssetInfo, entitiesCount, percent, coefficient);
+            int entitiesCount = Convert.ToInt32(SliderEntitiesCount.Value);
+            float percent = Convert.ToSingle(SliderPercent.Value);        // процент здоровых
+            float coefficient = Convert.ToSingle(SliderCoefficient.Value);
+            float distanceHealthy = Convert.ToSingle(SliderDistanceHealthy.Value);
+            float distanceIll = Convert.ToSingle(SliderDistanceIll.Value);
+            int pillCount = Convert.ToInt32(SliderPillCount.Value);
+
+            entitiesCount = Mathf.Max(0, entitiesCount);
+            percent = Mathf.Clamp(percent, 0f, 100f);
+
+            // Считаем, сколько будет здоровых и больных
+            int healthyCount = Mathf.RoundToInt(entitiesCount * (percent * 0.01f));
+            healthyCount = Mathf.Clamp(healthyCount, 0, entitiesCount);
+            int illCount = entitiesCount - healthyCount;
+
+            GD.Print(
+                $"Generate Simulation with params: " +
+                $"entitiesCount={entitiesCount}, percent={percent}, coefficient={coefficient}, " +
+                $"healthy={healthyCount}, ill={illCount}, " +
+                $"distanceHealthy={distanceHealthy}, distanceIll={distanceIll}, pillCount={pillCount}"
+            );
+
+            // Инжектор для здоровых (тип 0)
+            var healthyInjector = EpidemicInjectorBuilder.CreateInjector(
+                type: 0,
+                distanceHealthy: distanceHealthy,
+                distanceIll: distanceIll,
+                pillCount: pillCount
+            );
+
+            // Инжектор для больных (тип 1)
+            var illInjector = EpidemicInjectorBuilder.CreateInjector(
+                type: 1,
+                distanceHealthy: distanceHealthy,
+                distanceIll: distanceIll,
+                pillCount: pillCount
+            );
+
+            // Генерация здоровых
+            if (healthyCount > 0)
+            {
+                _simulationGeneratorController.GenerateSimulationItems(
+                    Asset.GameObjectAssetInfo,   // используем один и тот же Asset
+                    null,
+                    healthyCount,
+                    100f,                        // тут все объекты будут здоровыми
+                    coefficient,
+                    healthyInjector
+                );
+            }
+
+            // Генерация больных
+            if (illCount > 0)
+            {
+                _simulationGeneratorController.GenerateSimulationItems(
+                    Asset.GameObjectAssetInfo,   // тот же Asset, другое поведение через Injector
+                    null,
+                    illCount,
+                    100f,                        // тут все объекты будут больными
+                    coefficient,
+                    illInjector
+                );
+            }
         }
 
-        private void OnView1ClickEvent(GameObjectAssetInfo assetInfo)
+
+        private void OnAssetClickEvent(GameObjectAssetInfo info)
         {
-            view1.Invalidate(_gameObjectCollectionModel.AssetSelected);
-
-            GD.Print($"Set assetInfo1 {view1.GameObjectAssetInfo} {view1.GameObjectAssetInfo.Name}  {view1.GameObjectAssetInfo.GetGraphXmlPath()}");
-        }
-
-        private void OnView2ClickEvent(GameObjectAssetInfo assetInfo)
-        {
-            view2.Invalidate(_gameObjectCollectionModel.AssetSelected);
-
-            GD.Print($"Set assetInfo2 {view2.GameObjectAssetInfo} {view2.GameObjectAssetInfo.Name} {view2.GameObjectAssetInfo.GetGraphXmlPath()}");
+            Asset.Invalidate(_gameObjectCollectionModel.AssetSelected);
         }
     }
 }
