@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Talent.Logic.HSM;
 
@@ -9,7 +10,9 @@ namespace bearloga.addons.Ursula.Modules.LogicInjector
 {
     public class InjectorStateOverride
     {
+        [JsonInclude]
         private string stateName;
+        [JsonInclude]
         private List<InjectorStateEventOverride> eventOverrides;
 
         public InjectorStateOverride(string stateName, List<InjectorStateEventOverride> eventOverrides)
@@ -20,6 +23,9 @@ namespace bearloga.addons.Ursula.Modules.LogicInjector
 
         public void TryApply(State state)
         {
+            if (eventOverrides == null)
+                return;
+
             if (state.Label == stateName)
             {
                 List<Command> enterCommands = state.EnterCommands.ToList();
@@ -28,9 +34,12 @@ namespace bearloga.addons.Ursula.Modules.LogicInjector
 
                 foreach (InjectorStateEventOverride eventOverride in eventOverrides)
                 {
-                    foreach (Event hsmEvent in events)
+                    if (events != null)
                     {
-                        eventOverride.TryApply(hsmEvent);
+                        foreach (Event hsmEvent in events)
+                        {
+                            eventOverride.TryApply(hsmEvent);
+                        }
                     }
 
                     eventOverride.TryApplyEnter(enterCommands);

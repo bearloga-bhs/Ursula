@@ -1,4 +1,5 @@
-﻿using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
+﻿using bearloga.addons.Ursula.Modules.LogicInjector;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
 using Fractural.Tasks;
 using Godot;
 using System;
@@ -1021,6 +1022,7 @@ public partial class MapManager : Node, IInjectable
             itemData.Add("z", saveItems[i].z.ToString());
             itemData.Add("scale", saveItems[i].scale.ToString());
 
+
             //Node item = saveItems[i] as Node;
             //var obj = item.GetNodeOrNull("InteractiveObject");
             //if (obj == null) obj = item.GetParent().FindChild("InteractiveObject", true, true);
@@ -1048,6 +1050,12 @@ public partial class MapManager : Node, IInjectable
 
             string ips = JsonSerializer.Serialize(itemData);
             mapData.Add("item" + i, ips);
+
+            if (saveItems[i].LogicInjector != null)
+            {
+                string injector = JsonSerializer.Serialize(saveItems[i].LogicInjector);
+                mapData.Add("injector" + i, injector);
+            }
         }
 
         float[,] mapHeight = VoxLib.terrainManager.mapHeight;
@@ -1281,6 +1289,18 @@ public partial class MapManager : Node, IInjectable
 
         for (int i = 0; i < saveItems; i++)
         {
+            Injector logicInjector = null;
+
+            if (mapData.ContainsKey("injector" + i))
+            {
+                string injector = mapData["injector" + i];
+                try
+                {
+                    logicInjector = JsonSerializer.Deserialize<Injector>(injector);
+                }
+                catch { }
+            }
+
             if (mapData.ContainsKey("item" + i))
             {
                 string items = mapData["item" + i];
@@ -1330,7 +1350,8 @@ public partial class MapManager : Node, IInjectable
                             state,
                             id,
                             false,
-                            assetFolder
+                            assetFolder,
+                            logicInjector
                         );
 
                     }

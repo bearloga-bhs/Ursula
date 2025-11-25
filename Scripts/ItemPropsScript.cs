@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using bearloga.addons.Ursula.Modules.LogicInjector;
+using Godot;
 using System;
 
 [Serializable]
@@ -22,6 +23,8 @@ public partial class ItemPropsScript : ItemBase
     public byte rotation;
 
     public InteractiveObject IO;
+
+    public Injector LogicInjector;
 
     float _scale = 1;
 
