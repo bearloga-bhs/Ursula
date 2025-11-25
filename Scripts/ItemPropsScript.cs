@@ -13,11 +13,11 @@ public partial class ItemPropsScript : ItemBase
 
 	public int state;
 
-	public int x => Mathf.RoundToInt(GlobalTransform.Origin.X);
-	public int y => Mathf.RoundToInt(GlobalTransform.Origin.Y);
-	public int z => Mathf.RoundToInt(GlobalTransform.Origin.Z);
+	public float x => (int)(GlobalTransform.Origin.X * 100) / 100f;
+	public float y => (int)(GlobalTransform.Origin.Y * 100) / 100f;
+    public float z => (int)(GlobalTransform.Origin.Z * 100) / 100f;
 
-	public float positionY;
+    public float positionY;
 
     public byte rotation;
 
@@ -35,9 +35,7 @@ public partial class ItemPropsScript : ItemBase
 		}
 		set
 		{
-			if (value > 10)
-				_scale = 10;
-			else if (value < 0)
+            if (value < 0)
 				_scale = 0.1f;
 			else
 				_scale = value;

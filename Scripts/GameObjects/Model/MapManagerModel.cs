@@ -71,7 +71,7 @@ namespace Ursula.MapManagers.Model
             _mapManagerData.itemsGO.AddChild(node);
             _mapManagerData.gameItems.Add(ips);
 
-            ChangeWorldBytesItem(ips.x, ips.y, ips.z, itemToVox(ips.type), (byte)(ips.rotation + ips.state * 6));
+            ChangeWorldBytesItem((int)ips.x, (int)ips.y, (int)ips.z, itemToVox(ips.type), (byte)(ips.rotation + ips.state * 6));
         }
 
         public void RemoveAllGameItems()
@@ -121,7 +121,7 @@ namespace Ursula.MapManagers.Model
                 if (_mapManagerData.gameItems.Contains(ips))
                 {
                     _mapManagerData.gameItems.Remove(ips);
-                    ChangeWorldBytesItem(ips.x, ips.y, ips.z, 0, 0);
+                    ChangeWorldBytesItem((int)ips.x, (int)ips.y, (int)ips.z, 0, 0);
                 }
 
                 parentNode?.QueueFree();

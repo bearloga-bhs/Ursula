@@ -1,4 +1,5 @@
-﻿using Fractural.Tasks;
+﻿using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
+using Fractural.Tasks;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
@@ -309,19 +311,19 @@ public partial class MapManager : Node, IInjectable
         for (int i = 0; i < gameItems.Count; i++)
         {
             ItemPropsScript ips = gameItems[i];
-            float heightLandscape = TerrainManager.instance.mapHeight[ips.x, ips.z];
+            float heightLandscape = TerrainManager.instance.GetTerrainHeight(ips.x, ips.z);
 
-            ChangeWorldBytesItem(ips.x, ips.y, ips.z, (byte)0, (byte)0);
-            if (VoxLib.mapManager.voxTypes != null) VoxLib.mapManager.voxTypes[ips.x, ips.y, ips.z] = 0;
-            if (VoxLib.mapManager.voxData != null) VoxLib.mapManager.voxData[ips.x, ips.y, ips.z] = 0;
-            if (VoxLib.mapManager._voxGrid != null) VoxLib.mapManager._voxGrid.Set(ips.x, ips.y, ips.z, 0);
+            ChangeWorldBytesItem((int)ips.x, (int)ips.y, (int)ips.z, (byte)0, (byte)0);
+            if (VoxLib.mapManager.voxTypes != null) VoxLib.mapManager.voxTypes[(int)ips.x, (int)ips.y, (int)ips.z] = 0;
+            if (VoxLib.mapManager.voxData != null) VoxLib.mapManager.voxData[(int)ips.x, (int)ips.y, (int)ips.z] = 0;
+            if (VoxLib.mapManager._voxGrid != null) VoxLib.mapManager._voxGrid.Set((int)ips.x, (int)ips.y, (int)ips.z, 0);
 
             float y = heightLandscape + TerrainManager.instance.positionOffset.Y;
 
             Node3D parent = ips.GetParent() as Node3D;
             parent.Position = new Vector3(ips.x, y, ips.z);
 
-            ChangeWorldBytesItem(ips.x, Mathf.RoundToInt(y), ips.z, itemToVox(ips.type), (byte)(ips.rotation + ips.state * 6));
+            ChangeWorldBytesItem((int)ips.x, Mathf.RoundToInt(y), (int)ips.z, itemToVox(ips.type), (byte)(ips.rotation + ips.state * 6));
             ips.positionY = y;
         }
     }
@@ -1072,6 +1074,7 @@ public partial class MapManager : Node, IInjectable
             }
         }
         mapData.Add("mapHeight", sb.ToString());
+        mapData.Add("navGraph", NavGraphManager.Instance.SaveGraph());
 
         if (!string.IsNullOrEmpty(gameImagePath))
             mapData.Add("gameImagePath", gameImagePath);
@@ -1288,9 +1291,13 @@ public partial class MapManager : Node, IInjectable
                     int numItem = int.Parse(itemData["type"]);
                     byte rotation = byte.Parse(itemData["rotation"]);
                     int state = int.Parse(itemData["state"]);
-                    int x = int.Parse(itemData["x"]);
-                    int y = int.Parse(itemData["y"]);
-                    int z = int.Parse(itemData["z"]);
+                    float x = float.Parse(itemData["x"]);
+                    float y = float.Parse(itemData["y"]);
+                    float z = float.Parse(itemData["z"]);
+
+                    int _x = (int)x;
+                    int _y = (int)y;
+                    int _z = (int)z;
 
                     float scaleItem = itemData.ContainsKey("scale") ? float.Parse(itemData["scale"]) : 1f;
 
@@ -1300,7 +1307,7 @@ public partial class MapManager : Node, IInjectable
                         positionY = float.Parse(itemData["positionY"]);
                     }
 
-                    int id = x + z * 256 + y * 256 * 256;
+                    int id = _x + _z * 256 + _y * 256 * 256;
 
                     if (itemData.ContainsKey("AssetInfoId"))
                     {
@@ -1329,6 +1336,11 @@ public partial class MapManager : Node, IInjectable
                     }
                 }
             }
+        }
+
+        if (mapData.ContainsKey("navGraph"))
+        {
+            NavGraphManager.Instance.LoadGraph(mapData["navGraph"]);
         }
 
         if (mapData.ContainsKey("gameImagePath"))

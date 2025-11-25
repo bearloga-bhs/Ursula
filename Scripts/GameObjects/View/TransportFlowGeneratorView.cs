@@ -122,6 +122,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             float height = terrainManager.GetTerrainHeight(terrainManager.size / 2, terrainManager.size / 2);
            _ = NavGraphManager.Instance.Generate(terrainManager.countBlock, height);
         }
+
         private void OnButtonClearClick()
         {
             GD.Print("Clear Transport Flow");

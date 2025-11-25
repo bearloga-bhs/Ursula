@@ -8,6 +8,8 @@ using System;
 using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.PathFinding;
 using System.Collections.Generic;
 using Fractural.Tasks;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
 {
@@ -83,7 +85,21 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
 
             await GDTask.WhenAll(roadGeneration, trafficLightsGeneration, carsGeneration);
 
+            ShowDebugGraph();
+
             GD.Print($"Генерация транспортных потоков завершена.");
+        }
+
+        public string SaveGraph()
+        {
+            return NavGraphSerializer.Serialize(navGraph);
+        }
+
+        public void LoadGraph(string serializedGraph)
+        {
+            navGraph = NavGraphSerializer.Deserialize(serializedGraph);
+
+            ShowDebugGraph();
         }
 
         public Queue<Vector3> BuildPath(Vector3 from, Vector3 to)
@@ -108,13 +124,14 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             if (navGraph == null)
                 return;
 
+            visualization?.Clear();
             visualization = new NavGraphVisualization();
             visualization.Draw(navGraph, this, modelHegihtOffset);
         }
 
         public void HideDebugGraph()
         {
-            visualization.Clear();
+            visualization?.Clear();
         }
 
         public Vector3 GetRandomPoint()
