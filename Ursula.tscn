@@ -1866,6 +1866,7 @@ texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
 [node name="PanelGameObjectLibraryView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonObject"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1989,6 +1990,7 @@ texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
 [node name="PanelTab" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" node_paths=PackedStringArray("panels")]
+visible = false
 layout_mode = 0
 offset_top = 40.0
 offset_right = 410.0
@@ -2069,7 +2071,7 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "ButtonGenerate", "view1", "view2", "mapManagerItemSetter")]
+[node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("LabelEntitiesCount", "TextEditEntitiesCount", "LabelPetcent", "TextEditPercent", "LabelCoefficient", "TextEditCoefficient", "ButtonGenerate", "view1", "view2")]
 layout_mode = 0
 offset_left = -11.0
 offset_top = 50.0
@@ -2086,7 +2088,6 @@ TextEditCoefficient = NodePath("ScrollContainer/VBoxContainer/TextEditCoefficien
 ButtonGenerate = NodePath("ScrollContainer/VBoxContainer/ButtonGenerate")
 view1 = NodePath("ScrollContainer/VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab1")
 view2 = NodePath("ScrollContainer/VBoxContainer/GridContainer/GameObjectAssetInfoViewPrefab2")
-mapManagerItemSetter = NodePath("../../../../../../../../../../MapManagers/MapManagerItemSetter")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView"]
 layout_mode = 1
@@ -3908,6 +3909,7 @@ grow_vertical = 1
 layout_mode = 1
 
 [node name="Loading" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
