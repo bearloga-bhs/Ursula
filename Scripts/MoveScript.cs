@@ -412,9 +412,17 @@ public partial class MoveScript : CharacterBody3D
             }
         }
 
-        float interpolationFactor = (float)Engine.GetPhysicsInterpolationFraction();
-        base.GlobalPosition = oldGlobalPosition.Lerp(GlobalPosition, interpolationFactor);
-        base.Rotation = oldRotation.Lerp(Rotation, interpolationFactor);
+        if (oldGlobalPosition != Vector3.Zero)
+        {
+            float interpolationFactor = (float)Engine.GetPhysicsInterpolationFraction();
+            base.GlobalPosition = oldGlobalPosition.Lerp(GlobalPosition, interpolationFactor);
+            base.Rotation = oldRotation.Lerp(Rotation, interpolationFactor);
+        }
+        else
+        {
+            base.GlobalPosition = GlobalPosition;
+            base.Rotation = Rotation;
+        }
     }
 
     private float navigationProcessTimer = 0f;
@@ -500,7 +508,7 @@ public partial class MoveScript : CharacterBody3D
         //{
         Velocity = velocity;
 
-        MoveAndSlide();
+        // MoveAndSlide();
         globalPositionCacheUpdated = false;
         rotationCacheUpdated = false;
 
