@@ -508,7 +508,7 @@ public partial class MoveScript : CharacterBody3D
         //{
         Velocity = velocity;
 
-        // MoveAndSlide();
+        MoveAndSlide();
         globalPositionCacheUpdated = false;
         rotationCacheUpdated = false;
 
