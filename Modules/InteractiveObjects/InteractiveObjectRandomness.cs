@@ -1,12 +1,14 @@
-﻿using Godot;
+using Godot;
 using Modules.HSM;
 using System;
 
 public partial class InteractiveObjectRandomness : Node
 {
     public VariableHolder<int> CurrentValue = new(0);
+    public VariableHolder<float> RandomValue = new(0);
 
     public Action ValueChanged;
+    public Action RandomValueActoin;
 
     static Random random;
     private bool valueChanged;
@@ -22,6 +24,18 @@ public partial class InteractiveObjectRandomness : Node
             return random;
         }
     }
+
+    public float RandomFloat
+    {
+        get
+        {
+            float value = (float)Random.NextDouble();
+            RandomValue.Value = value;
+            GD.Print($"[HSMRandomnessModule] Сгенерировано случайное число в диапазоне [{0}, {1}]: {value}");
+            return value;
+        }
+    }
+
 
     public object GenerateRange(int a, int b)
     {
@@ -46,6 +60,12 @@ public partial class InteractiveObjectRandomness : Node
             valueChanged = false;
         }
 
+        return null;
+    }
+
+    public object InvokeRandomEvent()
+    {
+        RandomValueActoin?.Invoke();
         return null;
     }
 }

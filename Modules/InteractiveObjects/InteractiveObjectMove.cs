@@ -3,6 +3,9 @@ using System;
 using System.Reflection;
 using System.Xml.Linq;
 using Modules.HSM;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
+using System.Collections.Generic;
+using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Visualization;
 
 public partial class InteractiveObjectMove : Node
 {
@@ -12,6 +15,7 @@ public partial class InteractiveObjectMove : Node
     public VariableHolderLazy<float> heightWorld;
     public VariableHolder<float> surfaceType = new(0.0f);
     public VariableHolder<float> timesOfDay = new(0.0f);
+    public VariableHolder<bool> isDay = new(false);
 
     public Action moveDistanceStart;
     public Action moveDistanceCompleted;
@@ -20,6 +24,9 @@ public partial class InteractiveObjectMove : Node
 
     public Vector3 movePosition;
     private MoveScript moveScriptCache;
+    public Queue<Vector3> movePath;
+
+    private NavGraphVisualization visualization = new NavGraphVisualization();
 
     public MoveScript moveScript 
     { 
@@ -68,6 +75,22 @@ public partial class InteractiveObjectMove : Node
         return null;
     }
 
+    public object MoveToTarget2()
+    {
+        var movementTarget = interactiveObject.GetCurrentTargetObject2();
+        moveScript?.MoveToTargetSetup(movementTarget);
+
+        return null;
+    }
+
+    public object MoveFromTarget2()
+    {
+        var movementTarget = interactiveObject.GetCurrentTargetObject2();
+        moveScript?.MoveFromTargetSetup(movementTarget);
+
+        return null;
+    }
+    
     public object MoveToRandom()
     {
         moveScript?.MoveToRandomSetup();
@@ -132,9 +155,36 @@ public partial class InteractiveObjectMove : Node
         return null;
     }
 
+    public object BuildRandomPath()
+    {
+        NavGraphManager navGraph = NavGraphManager.Instance;
+        if (navGraph == null)
+            return null;
+
+        Vector3 nextPoint = navGraph.GetRandomPoint();
+        Vector3? position = moveScript?.Position;
+        if (!position.HasValue)
+            return null;
+
+        movePath = NavGraphManager.Instance.BuildPath(position.Value, nextPoint);
+
+        //visualization.Clear();
+        //visualization.DrawPath(movePath, NavGraphManager.Instance, 0.03f);
+
+        return null;
+    }
+
+    public object GetNextPathPoint()
+    {
+        if (movePath == null || movePath.Count == 0)
+            return null;
+
+        movePosition = movePath.Dequeue();
+        return null;
+    }
+
     public void CSProcess(double delta)
     {
-        return;
         if (moveScript != null)
         {
             moveDistance.Value = moveScript.GetMoveDistance();
@@ -142,7 +192,12 @@ public partial class InteractiveObjectMove : Node
 
             //if (moveScript.GetMoveDistance() > moveDistance.Value) moveScript.onMovingDistanceFinished.Invoke();
         }
-        if (DayNightCycle.instance != null) timesOfDay.Value = DayNightCycle.instance.TimesOfDay();
+
+        if (DayNightCycle.instance != null)
+        {
+            timesOfDay.Value = DayNightCycle.instance.TimesOfDay();
+            isDay.Value = DayNightCycle.instance.IsDay;
+        }
     }
 
     public object SetMoveDistance(float distance)

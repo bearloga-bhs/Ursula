@@ -8,6 +8,7 @@ using Fractural.Tasks;
 using System.Diagnostics;
 using static Godot.TileSet;
 using System.Linq;
+using System.Collections.Generic;
 
 public partial class MoveScript : CharacterBody3D
 {
@@ -165,8 +166,8 @@ public partial class MoveScript : CharacterBody3D
 
         // These values need to be adjusted for the actor's speed
         // and the navigation layout.
-        _navigationAgent.PathDesiredDistance = 1.5f;
-        _navigationAgent.TargetDesiredDistance = 0.5f;
+        _navigationAgent.PathDesiredDistance = 3.0f;
+        _navigationAgent.TargetDesiredDistance = 3.0f;
 
         waterLevel = VoxLib.mapManager.WaterLevel;
 
@@ -259,9 +260,9 @@ public partial class MoveScript : CharacterBody3D
         }
         else
         {
-            //GD.Print("Moved to point");
-            onMovementFinished.Invoke();
-            //stateMashine = StateMashine.idle;
+            GD.Print("Moved to point");
+            onMovementFinished?.Invoke();
+            stateMashine = StateMashine.idle;
             _targetVelocity = Vector3.Zero;
             oldPathPosition = Vector3.Zero;
             return Vector3.Zero;
@@ -281,7 +282,7 @@ public partial class MoveScript : CharacterBody3D
         Vector3 currentAgentPosition = GlobalTransform.Origin;
         float distanceToTarget = currentAgentPosition.DistanceTo(MovementTarget.GlobalPosition);
 
-        Vector3 direction = (currentAgentPosition - MovementTarget.Position).Normalized();
+        Vector3 direction = (currentAgentPosition - MovementTarget.GlobalPosition).Normalized();
         _targetVelocity = direction * _movementSpeed;
         return _targetVelocity;
     }
@@ -444,7 +445,7 @@ public partial class MoveScript : CharacterBody3D
             UpdateSurfaceType();
 
             var isNavigationFinished = _navigationAgent.IsNavigationFinished();
-
+            
             if (isNavigationFinished)
             {
                 if (stateMashine == StateMashine.moveToTarget || stateMashine == StateMashine.moveFromTarget)
@@ -626,7 +627,10 @@ public partial class MoveScript : CharacterBody3D
     Vector3 AddGravity(Vector3 velocity, double delta)
     {
         velocity.Y = 0;
-        velocity.Y -= (float)9.8 * (float)delta * 20;
+        if (!isOnFloor)
+        {
+            _targetVelocity.Y -= (float)9.8 * (float)delta * 20;
+        }
 
         return velocity;
     }
@@ -704,7 +708,7 @@ public partial class MoveScript : CharacterBody3D
     {
         ResetCoordinates();
         // TODO: requst to change + optimistic movement.
-        //await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
+        await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
         int X = Math.Clamp((int)newPosition.X, 0, VoxLib.mapManager.sizeX);
         float Y = VoxLib.terrainManager.positionOffset.Y;
@@ -813,10 +817,8 @@ public partial class MoveScript : CharacterBody3D
 
     Vector3 CorrectPositionByTerrainHeight(Vector3 pos, float upOffset = 0.0f)
     {
-        //float target_y = GetTerrainHeightByCurrentPos(pos) + upOffset;
         //if (pos.Y < target_y)
         return new Vector3(pos.X, GetTerrainHeightByCurrentPos(pos) + upOffset, pos.Z);
-        //return pos;
     }
 
     public void CheckMoveDistance(float distance)
