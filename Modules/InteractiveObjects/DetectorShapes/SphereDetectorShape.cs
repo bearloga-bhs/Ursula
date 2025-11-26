@@ -2,9 +2,9 @@
 
 public class SphereDetectorShape : IDetectorShape
 {
-    private Vector3 center;
-    private float radius;
-    private Node3D anchor = null;
+    public Vector3 center;
+    public float radius;
+    public Node3D anchor = null;
     
     public SphereDetectorShape(Node3D relativeTo, float radius, Vector3 center) 
     {

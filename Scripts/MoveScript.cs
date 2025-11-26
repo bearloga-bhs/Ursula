@@ -7,6 +7,7 @@ using System;
 using Fractural.Tasks;
 using System.Diagnostics;
 using static Godot.TileSet;
+using System.Collections.Generic;
 
 public partial class MoveScript : CharacterBody3D
 {
@@ -481,6 +482,7 @@ public partial class MoveScript : CharacterBody3D
 
         MoveAndSlide();
 
+        
         //Profiler.EndLastSample(false);
     }
 

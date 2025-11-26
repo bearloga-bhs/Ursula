@@ -12,7 +12,6 @@ public class HSMDetectorTwoModule
     const string PlayerDetectedModuleKey = $"{ModuleName}.ИгрокОбнаружен";
 
     const string SoundDetectedModuleKey = $"{ModuleName}.ЗвукОбнаружен";
-    const string SoundDetectionModuleKey = $"{ModuleName}.ОбнаружениеЗвука";
 
     const string TargetLostModuleKey = $"{ModuleName}.ЦельПотеряна";
     const string ThisInteractionModuleKey = $"{ModuleName}.ВзаимодействиеИгрока";
@@ -21,7 +20,9 @@ public class HSMDetectorTwoModule
 
     const string PlayerScanCommandKey = $"{ModuleName}.ПоискИгрокаВРадиусе";
     const string ObjectScanCommandKey = $"{ModuleName}.ПоискОбъектаВРадиусеПоИмени";
+    const string ObjectScanSquareCommandKey = $"{ModuleName}.ПоискОбъектаВКвадратеПоИмени";
     const string SoundScanCommandKey = $"{ModuleName}.ОбнаружениеВоспроизведенияЗвука";
+    const string SoundScanOffsetCommandKey = $"{ModuleName}.ПоискЗвукаВРадиусеСоСмещением";
     const string StopScanningCommandKey = $"{ModuleName}.ОстановкаПоиска";
     const string PlayerObjectInteractionScanCommandKey = $"{ModuleName}.ВзаимодействиеИгрокаСОбъектом";
 
@@ -48,7 +49,9 @@ public class HSMDetectorTwoModule
         // Commands
         logic.localBus.AddCommandListener(PlayerScanCommandKey, StartPlayerScan);
         logic.localBus.AddCommandListener(ObjectScanCommandKey, StartObjectScan);
+        logic.localBus.AddCommandListener(ObjectScanSquareCommandKey, StartObjectScanSquare);
         logic.localBus.AddCommandListener(SoundScanCommandKey, StartSoundScan);
+        logic.localBus.AddCommandListener(SoundScanOffsetCommandKey, StartSoundScanOffset);
         logic.localBus.AddCommandListener(StopScanningCommandKey, StopScanning);
         logic.localBus.AddCommandListener(PlayerObjectInteractionScanCommandKey, StartPlayerObjectInteractionScan);
     }
@@ -69,11 +72,33 @@ public class HSMDetectorTwoModule
         return true;
     }
 
+    bool StartObjectScanSquare(List<Tuple<string, string>> values)
+    {
+        _object.detector2.StartObjectScanSquare(
+            HSMUtils.GetValue<string>(values[0]),
+            HSMUtils.GetValue<float>(values[1]),
+            HSMUtils.GetValue<float>(values[2]),
+            HSMUtils.GetValue<float>(values[3]));
+
+        return true;
+    }
+
     bool StartSoundScan(List<Tuple<string, string>> values)
     {
         _object.detector2.StartSoundScan(
             HSMUtils.GetValue<string>(values[0]),
-            HSMUtils.GetValue<float>(values[ 1]));
+            HSMUtils.GetValue<float>(values[1]));
+
+        return true;
+    }
+
+    bool StartSoundScanOffset(List<Tuple<string, string>> values)
+    {
+        _object.detector2.StartSoundScanOffset(
+            HSMUtils.GetValue<string>(values[0]),
+            HSMUtils.GetValue<float>(values[1]),
+            HSMUtils.GetValue<float>(values[2]),
+            HSMUtils.GetValue<float>(values[3]));
 
         return true;
     }

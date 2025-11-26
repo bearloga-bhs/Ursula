@@ -1,3 +1,4 @@
+using bearloga.addons.Ursula.Modules.InteractiveObjects.DetectorShapes.DetectorShapeVisualiation;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,9 @@ public partial class InteractiveObjectDetector : Area3D
     private Action scanAction;
     private string targetObjectName;
     private string targetSoundName;
-    private float scanRadius;  
     private IDetectorShape detectorShape;
+
+    private DetectorShapeVisualization visualization = new DetectorShapeVisualization();
 
     private float timeAccumulator = 0f; 
     private const float SCAN_INTERVAL = 0.25f;
@@ -30,43 +32,71 @@ public partial class InteractiveObjectDetector : Area3D
 
     public object StartPlayerScan(float radius)
     {
-        StartScanning(radius);
+        StartScanning();
         scanAction += FindPlayer;
         detectorShape = new SphereDetectorShape(this, radius, Vector3.Zero);
+        visualization.Hide();
+        visualization.Draw(detectorShape, this);
         return null;
     }
 
     public object StartObjectScan(string objectName, float radius)
     {
         targetObjectName = objectName;
-        StartScanning(radius);
+        StartScanning();
         scanAction += FindObject;
         detectorShape = new SphereDetectorShape(this, radius, Vector3.Zero);
+        visualization.Hide();
+        visualization.Draw(detectorShape, this);
+        return null;
+    }
+
+    public object StartObjectScanSquare(string objectName, float width, float offsetX, float offsetZ)
+    {
+        targetObjectName = objectName;
+        StartScanning();
+        scanAction += FindObject;
+        detectorShape = new RectangleDetectorShape(this, width, width, new Vector3(offsetX, 0, offsetZ));
+        visualization.Hide();
+        visualization.Draw(detectorShape, this);
         return null;
     }
 
     public object StartPlayerObjectInteractionScan(string objectName, float radius)
     {
         targetObjectName = objectName;
-        scanRadius = radius;
         GameManager.onPlayerInteractionObjectAction += PlayerInteractionObject;
         detectorShape = new SphereDetectorShape(this, radius, Vector3.Zero);
+        visualization.Hide();
+        visualization.Draw(detectorShape, this);
         return null;
     }   
 
     public object StartSoundScan(string soundName, float radius)
     {
         targetSoundName = soundName;
-        StartScanning(radius);
+        StartScanning();
         scanAction += FindSound;
         detectorShape = new SphereDetectorShape(this, radius, Vector3.Zero);
+        visualization.Hide();
+        visualization.Draw(detectorShape, this);
         return null;
     }
 
-    private void StartScanning(float radius)
+    public object StartSoundScanOffset(string soundName, float radius, float offsetX, float offsetZ)
+    {
+        targetSoundName = soundName;
+        StartScanning();
+        scanAction += FindSound;
+        detectorShape = new SphereDetectorShape(this, radius, new Vector3(offsetX, 0, offsetZ));
+        visualization.Hide();
+        visualization.Draw(detectorShape, this);
+        return null;
+    }
+
+    private void StartScanning()
     {
         isScanning = true;
-        scanRadius = radius;
         GD.Print($"Scanning started...");
     }
     
