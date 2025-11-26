@@ -35,6 +35,7 @@ public partial class InteractiveObjectDetector : Node
 
     private MoveScript moveScriptCache;
 
+    
     public MoveScript moveScript
     {
         get
@@ -51,6 +52,8 @@ public partial class InteractiveObjectDetector : Node
     public override void _Ready()
     {
         CSharpBridgeRegistry.Process += CSProcess;
+        Random rnd = new Random();
+        timeAccumulator = rnd.NextSingle() * SCAN_INTERVAL;
     }
 
     public object StartPlayerScan(float radius)
@@ -59,7 +62,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindPlayer;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -70,7 +73,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindObject;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -81,7 +84,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindObject;
         detectorShape = new RectangleDetectorShape(moveScript, width, width, new Vector3(offsetX, 0, offsetZ));
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -91,7 +94,7 @@ public partial class InteractiveObjectDetector : Node
         GameManager.onPlayerInteractionObjectAction += PlayerInteractionObject;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }   
 
@@ -102,7 +105,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindSound;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -113,7 +116,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindSound;
         detectorShape = new SphereDetectorShape(moveScript, radius, new Vector3(offsetX, 0, offsetZ));
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 

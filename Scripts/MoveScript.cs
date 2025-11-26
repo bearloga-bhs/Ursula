@@ -507,8 +507,8 @@ public partial class MoveScript : CharacterBody3D
         //if (physicsLod == PhysicsLod.Lod0)
         //{
         Velocity = velocity;
-
-        // MoveAndSlide();
+        
+        MoveAndSlide();
         globalPositionCacheUpdated = false;
         rotationCacheUpdated = false;
 
@@ -635,10 +635,10 @@ public partial class MoveScript : CharacterBody3D
     Vector3 AddGravity(Vector3 velocity, double delta)
     {
         velocity.Y = 0;
-        if (!isOnFloor)
-        {
+        //if (!isOnFloor)
+        //{
             _targetVelocity.Y -= (float)9.8 * (float)delta * 20;
-        }
+        //}
 
         return velocity;
     }
