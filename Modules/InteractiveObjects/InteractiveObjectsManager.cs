@@ -1,7 +1,7 @@
-﻿using Godot;
+using Godot;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 public partial class InteractiveObjectsManager : Node
 {
@@ -37,11 +37,14 @@ public partial class InteractiveObjectsManager : Node
     #endregion
 
     public List<InteractiveObject> objects = new();
+    private Mutex mutex = new();
 
     public static void Register(InteractiveObject obj)
     {
         if (!Instance.objects.Contains(obj))
+        {
             Instance.objects.Add(obj);
+        }
     }
 
     public void RunAllObjects()
@@ -72,4 +75,32 @@ public partial class InteractiveObjectsManager : Node
         }
     }
 
+    public void RemoveObject(InteractiveObject obj)
+    {
+        mutex.Lock();
+        if (objects.Contains(obj))
+        {
+            var parent = obj.GetParent();
+            parent.QueueFree();
+            objects.Remove(obj);
+        }
+        mutex.Unlock();
+    }
+
+    public void DuplicateObject(InteractiveObject obj)
+    {
+        mutex.Lock();
+        
+        var parent = obj.GetParent();
+        Node duplicatedObject = parent.Duplicate();
+        parent.GetParent().AddChild(duplicatedObject);
+        
+        var interactiveObject = duplicatedObject.GetChildren().OfType<InteractiveObject>().FirstOrDefault();
+        if (interactiveObject != null)
+        {
+            interactiveObject.StartAlgorithm();
+        }
+        
+        mutex.Unlock();
+    }
 }
