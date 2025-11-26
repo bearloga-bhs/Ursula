@@ -27,6 +27,8 @@ public partial class DayNightCycle : Node
     [Export]
     public PanoramaSkyMaterial NightPanorama;
 
+    public Action DayNightCycleChanged;
+
     public override void _Ready()
     {
         base._Ready();
@@ -60,6 +62,7 @@ public partial class DayNightCycle : Node
             proceduralSkyMaterial.SkyEnergyMultiplier = Mathf.Lerp(proceduralSkyMaterial.SkyEnergyMultiplier, 1f, 0.01f);
             proceduralSkyMaterial.GroundEnergyMultiplier = Mathf.Lerp(proceduralSkyMaterial.SkyEnergyMultiplier, 1f, 0.01f);
             IsDay = true;
+            DayNightCycleChanged?.Invoke();
         }
         else // Вечер
         {
@@ -67,6 +70,7 @@ public partial class DayNightCycle : Node
             proceduralSkyMaterial.SkyEnergyMultiplier = Mathf.Lerp(proceduralSkyMaterial.SkyEnergyMultiplier, 0.15f, 0.01f);
             proceduralSkyMaterial.GroundEnergyMultiplier = Mathf.Lerp(proceduralSkyMaterial.SkyEnergyMultiplier, 0.15f, 0.01f);
             IsDay = false;
+            DayNightCycleChanged?.Invoke();
         }
 
         if (percentOfDay < 0.270f || percentOfDay > 0.700f) // Утро 0.28
