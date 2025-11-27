@@ -16,16 +16,27 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
     {
         public static Injector CreateInjector(float foodTimer, float childCount)
         {
+            InjectorStateOverride initFoodTimerOverride = InitFoodTimerOverride(foodTimer);
             InjectorStateOverride foodTimerOverride = CreateFoodTimerOverride(foodTimer);
             InjectorStateOverride childCountOverride = CreateChildCountOverride(childCount);
-            return new Injector(new List<InjectorStateOverride>() { foodTimerOverride, childCountOverride });
+            return new Injector(new List<InjectorStateOverride>() { initFoodTimerOverride, foodTimerOverride, childCountOverride });
         }
 
+        private static InjectorStateOverride InitFoodTimerOverride(float foodTimer)
+        {
+            Random random = new Random();
+            string initFoodTimer = (random.NextSingle() * foodTimer).ToString();
+            
+            InjectorStateCommandOverride commandOverride = new InjectorStateCommandOverride("Таймер2.ТаймерЗапуск", 0, initFoodTimer);
+            InjectorStateEventOverride eventOverride = new InjectorStateEventOverride("Enter", new List<InjectorStateCommandOverride>() { commandOverride });
+            return new InjectorStateOverride("Инициализация", new List<InjectorStateEventOverride>() { eventOverride });
+        }
+        
         private static InjectorStateOverride CreateFoodTimerOverride(float foodTimer)
         {
             InjectorStateCommandOverride commandOverride = new InjectorStateCommandOverride("Таймер2.ТаймерЗапуск", 0, foodTimer.ToString());
             InjectorStateEventOverride eventOverride = new InjectorStateEventOverride("Enter", new List<InjectorStateCommandOverride>() { commandOverride });
-            return new InjectorStateOverride("Инициализация", new List<InjectorStateEventOverride>() { eventOverride });
+            return new InjectorStateOverride("Употребление", new List<InjectorStateEventOverride>() { eventOverride });
         }
 
         private static InjectorStateOverride CreateChildCountOverride(float childCount)
