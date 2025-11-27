@@ -77,7 +77,7 @@ public partial class BaseAnimation : Node
 
     public virtual void AutoplaySetup()
     {
-        animationPlayer.Autoplay = IdleAnimationName;
+        //animationPlayer.Autoplay = IdleAnimationName;
         PlayIdleAnimation();
     }
 
