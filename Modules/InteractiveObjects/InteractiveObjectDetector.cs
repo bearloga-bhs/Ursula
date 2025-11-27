@@ -48,6 +48,138 @@ public partial class InteractiveObjectDetector : Node
         }
     }
 
+    public bool ObjectToTheRight()
+    {
+        Node3D detectedObject3D = detectedObject as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedPos = detectedObject3D.GlobalPosition;
+        Vector3 pos = moveScript.GlobalPosition;
+        Vector3 forward = parent.Quaternion * Vector3.Forward;
+        Vector3 right = Vector3.Up.Cross(forward);
+        float cross = right.Dot(detectedPos - pos);
+        if (cross > 0.7f) // угол < 45 градусов
+            return true;
+        return false;
+    }
+
+    public bool ObjectAhead()
+    {
+        Node3D detectedObject3D = detectedObject as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedPos = detectedObject3D.GlobalPosition;
+        Vector3 pos = moveScript.GlobalPosition;
+        Vector3 forward = parent.Quaternion * -Vector3.Forward;
+        float dot = forward.Dot(detectedPos - pos);
+        if (dot > 0.7f) // угол < 45 градусов
+            return true;
+        return false;
+    }
+
+    public bool ObjectCodirectional()
+    {
+        if (detectedObject == null)
+            return false;
+
+        Node3D detectedObject3D = detectedObject.GetParent() as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedForward = detectedObject3D.Quaternion * Vector3.Forward;
+        Vector3 forward = parent.Quaternion * Vector3.Forward;
+
+        float dot = forward.Dot(detectedForward);
+        if (dot > 0.7f) // угол < 45 градусов
+            return true;
+        return false;
+    }
+
+    public bool ObjectCounterdirectional()
+    {
+        if (detectedObject == null)
+            return false;
+
+        Node3D detectedObject3D = detectedObject.GetParent() as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedForward = detectedObject3D.Quaternion * Vector3.Forward;
+        Vector3 back = parent.Quaternion * Vector3.Back;
+
+        float dot = back.Dot(detectedForward);
+        if (dot > 0.7f) // угол < 45 градусов
+            return true;
+        return false;
+    }
+
+    public bool ObjectCloserToIntersection()
+    {
+        if (detectedObject == null)
+            return false;
+
+        Node3D detectedObject3D = detectedObject.GetParent() as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedForward = detectedObject3D.Quaternion * Vector3.Forward;
+        detectedForward.Y = 0;
+        Vector3 detectedPos = detectedObject3D.GlobalPosition;
+        detectedPos.Y = 0;
+
+        Vector3 forward = parent.Quaternion * Vector3.Forward;
+        forward.Y = 0;
+        Vector3 pos = parent.GlobalPosition;
+        pos.Y = 0;
+
+        float det = forward.X * detectedForward.Z - forward.Z * detectedForward.X;
+        if (Mathf.Abs(det) < Mathf.Epsilon)
+            return false; // Параллельны
+
+        Vector3 diff = detectedPos - pos;
+        float t = (diff.X * detectedForward.Z - diff.Z * detectedForward.X) / det;
+        Vector3 intersection = pos + forward * t;
+
+        float dist1 = pos.DistanceSquaredTo(intersection);
+        float dist2 = detectedPos.DistanceSquaredTo(intersection);
+
+        return dist2 < dist1;
+    }
+
+    public bool ObjectIndexBigger()
+    {
+        if (detectedObject == null)
+            return false;
+
+        ulong detectedIdx = detectedObject.GetInstanceId();
+        ulong idx = GetInstanceId();
+        if (detectedIdx > idx)
+            return true;
+        return false;
+    }
+
     public override void _Ready()
     {
         CSharpBridgeRegistry.Process += CSProcess;
@@ -80,6 +212,17 @@ public partial class InteractiveObjectDetector : Node
         StartScanning();
         scanAction += FindObject;
         detectorShape = new RectangleDetectorShape(moveScript, width, width, new Vector3(offsetX, 0, offsetZ));
+        visualization.Hide();
+        visualization.Draw(detectorShape, this);
+        return null;
+    }
+
+    public object StartObjectScanRectangle(string objectName, float width, float heihgt, float offsetX, float offsetZ)
+    {
+        targetObjectName = objectName;
+        StartScanning();
+        scanAction += FindObject;
+        detectorShape = new RectangleDetectorShape(moveScript, width, heihgt, new Vector3(offsetX, 0, offsetZ));
         visualization.Hide();
         visualization.Draw(detectorShape, this);
         return null;
@@ -174,6 +317,7 @@ public partial class InteractiveObjectDetector : Node
             }
         }
 
+        detectedObject = currentDetectedObject;
         if (currentDetectedObject != null)
         {
             onPlayerInteractionObject?.Invoke();
@@ -183,8 +327,6 @@ public partial class InteractiveObjectDetector : Node
         {
             onAnyObjectsNotDetected?.Invoke();
         }
-
-        detectedObject = currentDetectedObject;
     }
 
     public override void _ExitTree()
@@ -231,9 +373,15 @@ public partial class InteractiveObjectDetector : Node
             }
             
             float distance;
-            
-            if (node is ItemPropsScript item && item.GameObjectSample.StartsWith(targetObjectName) && 
-                node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition, out distance))
+
+            Vector3 nodePos;
+            if (!TryGetPosition(node, out nodePos))
+                continue;
+
+            if (node is ItemPropsScript item &&
+               detectorShape.IsDetected(nodePos, out distance)
+               && item.GameObjectSample.StartsWith(targetObjectName)
+               && node.GetParent() != GetParent())
             {
                 if (min_distance > distance)
                 { 
@@ -243,6 +391,7 @@ public partial class InteractiveObjectDetector : Node
             }
         }
 
+        detectedObject = currentDetectedObject;
         if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
             previousDetectedObject = currentDetectedObject;
@@ -252,8 +401,6 @@ public partial class InteractiveObjectDetector : Node
         {
             onAnyObjectsNotDetected?.Invoke();
         }
-        
-        detectedObject = currentDetectedObject;
     }
     
     private void FindSound()
@@ -271,9 +418,12 @@ public partial class InteractiveObjectDetector : Node
             }
 
             float distance;
-            
-            if (node is ItemPropsScript item && item.IO.audio.currentAudioKey.StartsWith(targetSoundName) && item.IO.audio.isPlaying &&
-                node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition, out distance))
+
+            Vector3 nodePos;
+            if (!TryGetPosition(node, out nodePos))
+                continue;
+
+            if (node is ItemPropsScript item && item.IO.audio.isPlaying && detectorShape.IsDetected(nodePos, out distance) && item.IO.audio.currentAudioKey.StartsWith(targetSoundName) && node.GetParent() != GetParent())
             {
                 if (min_distance > distance)
                 { 
@@ -283,6 +433,7 @@ public partial class InteractiveObjectDetector : Node
             }
         }
 
+        detectedObject = currentDetectedObject;
         if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
             previousDetectedObject = currentDetectedObject;
@@ -292,7 +443,5 @@ public partial class InteractiveObjectDetector : Node
         {
             onAnyObjectsNotDetected?.Invoke();
         }
-        
-        detectedObject = currentDetectedObject;
     }
 }

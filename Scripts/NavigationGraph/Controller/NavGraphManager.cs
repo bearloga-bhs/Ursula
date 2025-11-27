@@ -70,7 +70,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             CheckInitialized();
 
             float directionsOffset = delta / 8;
-            Vector3 offset = new Vector3(subdivisionOffset * delta - directionsOffset, modelHegihtOffset, 0);
+            Vector3 offset = new Vector3(subdivisionOffset * delta - directionsOffset, modelHegihtOffset, directionsOffset);
 
             // Create undirected graph
             NavGraph navGraphUndirected = NavGraphGenerator.Generate(range, height, delta, connectionProbability);
