@@ -59,6 +59,8 @@ public partial class MoveScript : CharacterBody3D
         }
     }
 
+    public Quaternion Quaternion { get; private set; }
+
     public new Vector3 Rotation
     {
         get
@@ -417,11 +419,13 @@ public partial class MoveScript : CharacterBody3D
             float interpolationFactor = (float)Engine.GetPhysicsInterpolationFraction();
             base.GlobalPosition = oldGlobalPosition.Lerp(GlobalPosition, interpolationFactor);
             base.Rotation = oldRotation.Lerp(Rotation, interpolationFactor);
+            Quaternion = base.Quaternion;
         }
         else
         {
             base.GlobalPosition = GlobalPosition;
             base.Rotation = Rotation;
+            Quaternion = base.Quaternion;
         }
     }
 
@@ -635,10 +639,10 @@ public partial class MoveScript : CharacterBody3D
     Vector3 AddGravity(Vector3 velocity, double delta)
     {
         velocity.Y = 0;
-        if (!isOnFloor)
-        {
+        //if (!isOnFloor)
+        //{
             _targetVelocity.Y -= (float)9.8 * (float)delta * 20;
-        }
+        //}
 
         return velocity;
     }

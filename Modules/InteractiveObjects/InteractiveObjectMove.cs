@@ -56,7 +56,16 @@ public partial class InteractiveObjectMove : Node
     public override void _Ready()
     {
         CSharpBridgeRegistry.Process += CSProcess;
-        heightWorld = new VariableHolderLazy<float>(moveScript.GetHeightWorld);
+        if (moveScript != null)
+            heightWorld = new VariableHolderLazy<float>(moveScript.GetHeightWorld);
+        else
+            heightWorld = new VariableHolderLazy<float>(() =>
+            {
+                Node3D parent = GetParent() as Node3D;
+                if (parent == null)
+                    return 0;
+                return parent.GlobalPosition.Y;
+            });
     }
 
     public object MoveToTarget()

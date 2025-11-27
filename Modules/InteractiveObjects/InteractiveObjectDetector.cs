@@ -4,14 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Talent.Logic.Bus;
-using Modules.HSM;
-
 public partial class InteractiveObjectDetector : Node
 {
     public Node detectedObject; // заданныйОбъект
     public Node previousDetectedObject;
-    
+
     private bool isScanning = false;
 
     private Action scanAction;
@@ -21,7 +18,7 @@ public partial class InteractiveObjectDetector : Node
 
     private DetectorShapeVisualization visualization = new DetectorShapeVisualization();
 
-    private float timeAccumulator = 0f; 
+    private float timeAccumulator = 0f;
     private const float SCAN_INTERVAL = 0.25f;
 
     public Action onObjectDetected;
@@ -34,6 +31,7 @@ public partial class InteractiveObjectDetector : Node
     public string playerName = "Player";
 
     private MoveScript moveScriptCache;
+    private static Dictionary<Node, MoveScript> moveScriptMap = new Dictionary<Node, MoveScript>();
 
     public MoveScript moveScript
     {
@@ -183,6 +181,8 @@ public partial class InteractiveObjectDetector : Node
     public override void _Ready()
     {
         CSharpBridgeRegistry.Process += CSProcess;
+        Random rnd = new Random();
+        timeAccumulator = rnd.NextSingle() * SCAN_INTERVAL;
     }
 
     public object StartPlayerScan(float radius)
@@ -191,7 +191,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindPlayer;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -202,7 +202,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindObject;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -213,7 +213,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindObject;
         detectorShape = new RectangleDetectorShape(moveScript, width, width, new Vector3(offsetX, 0, offsetZ));
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -234,9 +234,9 @@ public partial class InteractiveObjectDetector : Node
         GameManager.onPlayerInteractionObjectAction += PlayerInteractionObject;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
-    }   
+    }
 
     public object StartSoundScan(string soundName, float radius)
     {
@@ -245,7 +245,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindSound;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -256,7 +256,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindSound;
         detectorShape = new SphereDetectorShape(moveScript, radius, new Vector3(offsetX, 0, offsetZ));
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 
@@ -265,7 +265,7 @@ public partial class InteractiveObjectDetector : Node
         isScanning = true;
         GD.Print($"Scanning started...");
     }
-    
+
     public object StopScanning()
     {
         isScanning = false;
@@ -294,11 +294,11 @@ public partial class InteractiveObjectDetector : Node
             yield return ips;
         }
     }
-    
+
     private void PlayerInteractionObject()
     {
         Node currentDetectedObject = null;
-        
+
         var nodes = GetItemsNodes().ToList();
         Node player = PlayerScript.instance;
         if (player != null) nodes.Add(player);
@@ -308,7 +308,7 @@ public partial class InteractiveObjectDetector : Node
             {
                 continue;
             }
-            
+
             float distance;
             if (node is Node3D targetNode3D && detectorShape.IsDetected(targetNode3D.GlobalPosition, out distance) && node.Name.ToString().Contains(targetObjectName))
             {
@@ -337,7 +337,7 @@ public partial class InteractiveObjectDetector : Node
     private void FindPlayer()
     {
         float distance;
-        
+
         Node3D player = PlayerScript.instance;
         if (player != null && Node.IsInstanceValid(player) && detectorShape.IsDetected(player.GlobalPosition, out distance))
         {
@@ -352,18 +352,18 @@ public partial class InteractiveObjectDetector : Node
         if (detectedObject != null)
         {
             onPlayerDetected?.Invoke();
-        }                    
+        }
         else
         {
             onAnyObjectsNotDetected?.Invoke();
         }
     }
-    
+
     private void FindObject()
     {
         Node currentDetectedObject = null;
         float min_distance = float.MaxValue;
-        
+
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
@@ -371,7 +371,7 @@ public partial class InteractiveObjectDetector : Node
             {
                 continue;
             }
-            
+
             float distance;
 
             Vector3 nodePos;
@@ -380,11 +380,10 @@ public partial class InteractiveObjectDetector : Node
 
             if (node is ItemPropsScript item &&
                detectorShape.IsDetected(nodePos, out distance)
-               && item.GameObjectSample.StartsWith(targetObjectName)
-               && node.GetParent() != GetParent())
+               && item.GameObjectSample.StartsWith(targetObjectName))
             {
                 if (min_distance > distance)
-                { 
+                {
                     currentDetectedObject = node;
                     min_distance = distance;
                 }
@@ -402,13 +401,13 @@ public partial class InteractiveObjectDetector : Node
             onAnyObjectsNotDetected?.Invoke();
         }
     }
-    
+
     private void FindSound()
     {
         Node currentDetectedObject = null;
 
         float min_distance = float.MaxValue;
-        
+
         var nodes = GetItemsNodes().ToList();
         foreach (Node node in nodes)
         {
@@ -423,10 +422,10 @@ public partial class InteractiveObjectDetector : Node
             if (!TryGetPosition(node, out nodePos))
                 continue;
 
-            if (node is ItemPropsScript item && item.IO.audio.isPlaying && detectorShape.IsDetected(nodePos, out distance) && item.IO.audio.currentAudioKey.StartsWith(targetSoundName) && node.GetParent() != GetParent())
+            if (node is ItemPropsScript item && item.IO.audio.isPlaying && detectorShape.IsDetected(nodePos, out distance) && item.IO.audio.currentAudioKey.StartsWith(targetSoundName))
             {
                 if (min_distance > distance)
-                { 
+                {
                     currentDetectedObject = node;
                     min_distance = distance;
                 }
@@ -442,6 +441,43 @@ public partial class InteractiveObjectDetector : Node
         else
         {
             onAnyObjectsNotDetected?.Invoke();
+        }
+    }
+
+    private MoveScript GetChachedMoveScript(Node node)
+    {
+        if (moveScriptMap.TryGetValue(node, out MoveScript moveScript))
+        {
+            return moveScript;
+        }
+        else
+        {
+            MoveScript ms = node.GetParent() as MoveScript;
+            moveScriptMap[node] = ms;
+            return ms;
+        }
+    }
+
+    private bool TryGetPosition(Node node, out Vector3 vector)
+    {
+        MoveScript ms = GetChachedMoveScript(node);
+        if (ms == null)
+        {
+            if (node is Node3D node3D)
+            {
+                vector = node3D.GlobalPosition;
+                return true;
+            }
+            else
+            {
+                vector = Vector3.Zero;
+                return false;
+            }
+        }
+        else
+        {
+            vector = ms.GlobalPosition;
+            return true;
         }
     }
 }
