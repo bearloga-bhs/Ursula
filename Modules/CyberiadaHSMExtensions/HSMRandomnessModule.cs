@@ -8,10 +8,6 @@ public partial class HSMRandomnessModule : Node
 
     const string ModuleName = "МодульСлучайности";
 
-    // Event keys
-    const string ValueChangedEventKey = $"{ModuleName}.СлучайноеЧислоОбновилось";
-    const string RandomEventEventKey = $"{ModuleName}.СлучайноеСобытие";
-
     // Command keys
     const string GenerateRangeCommandKey = $"{ModuleName}.СгенерироватьИзПромежутка";
 
@@ -22,15 +18,6 @@ public partial class HSMRandomnessModule : Node
     public HSMRandomnessModule(CyberiadaLogic logic, InteractiveObject interactiveObject)
     {
         _object = interactiveObject;
-
-        // Sync
-        ProjectTimer.Instance.Tick += () => InvokeIfChanged();
-        ProjectTimer.Instance.Tick += () => InvokeRandomEvent();
-
-
-        // Events
-        _object.random.ValueChanged += () => logic.localBus.InvokeEvent(ValueChangedEventKey);
-        _object.random.RandomValueActoin += () => logic.localBus.InvokeEvent(RandomEventEventKey);
 
         // Commands
         logic.localBus.AddCommandListener(GenerateRangeCommandKey, GenerateRange);
@@ -48,16 +35,6 @@ public partial class HSMRandomnessModule : Node
         _object.random.GenerateRange(a, b + 1);
 
         return true;
-    }
-
-    void InvokeIfChanged()
-    {
-        _object.random.InvokeIfChanged();
-    }
-
-    private void InvokeRandomEvent()
-    {
-        _object.random.InvokeRandomEvent();
     }
 }
 

@@ -7,9 +7,6 @@ public partial class InteractiveObjectRandomness : Node
     public VariableHolder<int> CurrentValue = new(0);
     public VariableHolder<float> RandomValue = new(0);
 
-    public Action ValueChanged;
-    public Action RandomValueActoin;
-
     static Random random;
     private bool valueChanged;
 
@@ -49,23 +46,6 @@ public partial class InteractiveObjectRandomness : Node
         CurrentValue.Value = value;
         valueChanged = true;
 
-        return null;
-    }
-
-    public object InvokeIfChanged()
-    {
-        if (valueChanged)
-        {
-            ValueChanged?.Invoke();
-            valueChanged = false;
-        }
-
-        return null;
-    }
-
-    public object InvokeRandomEvent()
-    {
-        RandomValueActoin?.Invoke();
         return null;
     }
 }
