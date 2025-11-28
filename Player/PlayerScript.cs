@@ -179,7 +179,15 @@ public partial class PlayerScript : CharacterBody3D, IInjectable
             }
         }
 
-        GlobalPosition = oldPosition.Lerp(newPosition, (float)Engine.GetPhysicsInterpolationFraction());
+        if (oldPosition != Vector3.Zero)
+        {
+            GlobalPosition = oldPosition.Lerp(newPosition, (float)Engine.GetPhysicsInterpolationFraction());
+        }
+
+        if (newPosition != Vector3.Zero)
+        {
+            GlobalPosition = newPosition;
+        }
     }
 
     private async GDTask SetHudInfo(string info)

@@ -31,7 +31,8 @@ public partial class InteractiveObjectDetector : Node
     public string playerName = "Player";
 
     private MoveScript moveScriptCache;
-    private static Dictionary<Node, MoveScript> moveScriptMap = new Dictionary<Node, MoveScript>();
+    private static Dictionary<Node3D, MoveScript> moveScriptMap = new Dictionary<Node3D, MoveScript>();
+    private static Dictionary<Node3D, Vector3> staticObjectPositionMap = new Dictionary<Node3D, Vector3>();
 
     public MoveScript moveScript
     {
@@ -44,6 +45,138 @@ public partial class InteractiveObjectDetector : Node
             }
             return moveScriptCache;
         }
+    }
+
+    public bool ObjectToTheRight()
+    {
+        Node3D detectedObject3D = detectedObject as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedPos = detectedObject3D.GlobalPosition;
+        Vector3 pos = moveScript.GlobalPosition;
+        Vector3 forward = parent.Quaternion * Vector3.Forward;
+        Vector3 right = Vector3.Up.Cross(forward);
+        float cross = right.Dot(detectedPos - pos);
+        if (cross > 0.7f) // угол < 45 градусов
+            return true;
+        return false;
+    }
+
+    public bool ObjectAhead()
+    {
+        Node3D detectedObject3D = detectedObject as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedPos = detectedObject3D.GlobalPosition;
+        Vector3 pos = moveScript.GlobalPosition;
+        Vector3 forward = parent.Quaternion * -Vector3.Forward;
+        float dot = forward.Dot(detectedPos - pos);
+        if (dot > 0.7f) // угол < 45 градусов
+            return true;
+        return false;
+    }
+
+    public bool ObjectCodirectional()
+    {
+        if (detectedObject == null)
+            return false;
+
+        Node3D detectedObject3D = detectedObject.GetParent() as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedForward = detectedObject3D.Quaternion * Vector3.Forward;
+        Vector3 forward = parent.Quaternion * Vector3.Forward;
+
+        float dot = forward.Dot(detectedForward);
+        if (dot > 0.7f) // угол < 45 градусов
+            return true;
+        return false;
+    }
+
+    public bool ObjectCounterdirectional()
+    {
+        if (detectedObject == null)
+            return false;
+
+        Node3D detectedObject3D = detectedObject.GetParent() as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedForward = detectedObject3D.Quaternion * Vector3.Forward;
+        Vector3 back = parent.Quaternion * Vector3.Back;
+
+        float dot = back.Dot(detectedForward);
+        if (dot > 0.7f) // угол < 45 градусов
+            return true;
+        return false;
+    }
+
+    public bool ObjectCloserToIntersection()
+    {
+        if (detectedObject == null)
+            return false;
+
+        Node3D detectedObject3D = detectedObject.GetParent() as Node3D;
+        if (detectedObject3D == null)
+            return false;
+
+        Node3D parent = GetParent() as Node3D;
+        if (parent == null)
+            return false;
+
+        Vector3 detectedForward = detectedObject3D.Quaternion * Vector3.Forward;
+        detectedForward.Y = 0;
+        Vector3 detectedPos = detectedObject3D.GlobalPosition;
+        detectedPos.Y = 0;
+
+        Vector3 forward = parent.Quaternion * Vector3.Forward;
+        forward.Y = 0;
+        Vector3 pos = parent.GlobalPosition;
+        pos.Y = 0;
+
+        float det = forward.X * detectedForward.Z - forward.Z * detectedForward.X;
+        if (Mathf.Abs(det) < Mathf.Epsilon)
+            return false; // Параллельны
+
+        Vector3 diff = detectedPos - pos;
+        float t = (diff.X * detectedForward.Z - diff.Z * detectedForward.X) / det;
+        Vector3 intersection = pos + forward * t;
+
+        float dist1 = pos.DistanceSquaredTo(intersection);
+        float dist2 = detectedPos.DistanceSquaredTo(intersection);
+
+        return dist2 < dist1;
+    }
+
+    public bool ObjectIndexBigger()
+    {
+        if (detectedObject == null)
+            return false;
+
+        ulong detectedIdx = detectedObject.GetInstanceId();
+        ulong idx = GetInstanceId();
+        if (detectedIdx > idx)
+            return true;
+        return false;
     }
 
     public override void _Ready()
@@ -85,6 +218,17 @@ public partial class InteractiveObjectDetector : Node
         return null;
     }
 
+    public object StartObjectScanRectangle(string objectName, float width, float heihgt, float offsetX, float offsetZ)
+    {
+        targetObjectName = objectName;
+        StartScanning();
+        scanAction += FindObject;
+        detectorShape = new RectangleDetectorShape(moveScript, width, heihgt, new Vector3(offsetX, 0, offsetZ));
+        visualization.Hide();
+        //visualization.Draw(detectorShape, this);
+        return null;
+    }
+
     public object StartPlayerObjectInteractionScan(string objectName, float radius)
     {
         targetObjectName = objectName;
@@ -120,13 +264,13 @@ public partial class InteractiveObjectDetector : Node
     private void StartScanning()
     {
         isScanning = true;
-        GD.Print($"Scanning started...");
+        //GD.Print($"Scanning started...");
     }
 
     public object StopScanning()
     {
         isScanning = false;
-        GD.Print("Scanning stopped.");
+        //GD.Print("Scanning stopped.");
         return null;
     }
 
@@ -174,6 +318,7 @@ public partial class InteractiveObjectDetector : Node
             }
         }
 
+        detectedObject = currentDetectedObject;
         if (currentDetectedObject != null)
         {
             onPlayerInteractionObject?.Invoke();
@@ -183,13 +328,12 @@ public partial class InteractiveObjectDetector : Node
         {
             onAnyObjectsNotDetected?.Invoke();
         }
-
-        detectedObject = currentDetectedObject;
     }
 
     public override void _ExitTree()
     {
         GameManager.onPlayerInteractionObjectAction -= PlayerInteractionObject;
+        CSharpBridgeRegistry.Process -= CSProcess;
     }
 
     private void FindPlayer()
@@ -221,8 +365,9 @@ public partial class InteractiveObjectDetector : Node
     {
         Node currentDetectedObject = null;
         float min_distance = float.MaxValue;
+        SphereDetectorShape staticSphere = detectorShape.ToStaticSphere();
 
-        var nodes = GetItemsNodes().ToList();
+        var nodes = VoxLib.mapManager.spatialGrid.GetItemsNodes(staticSphere.center, staticSphere.radius);
         foreach (Node node in nodes)
         {
             if (!IsInstanceValid(node))
@@ -248,6 +393,7 @@ public partial class InteractiveObjectDetector : Node
             }
         }
 
+        detectedObject = currentDetectedObject;
         if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
             previousDetectedObject = currentDetectedObject;
@@ -257,8 +403,6 @@ public partial class InteractiveObjectDetector : Node
         {
             onAnyObjectsNotDetected?.Invoke();
         }
-
-        detectedObject = currentDetectedObject;
     }
 
     private void FindSound()
@@ -266,8 +410,9 @@ public partial class InteractiveObjectDetector : Node
         Node currentDetectedObject = null;
 
         float min_distance = float.MaxValue;
+        SphereDetectorShape staticSphere = detectorShape.ToStaticSphere();
 
-        var nodes = GetItemsNodes().ToList();
+        var nodes = VoxLib.mapManager.spatialGrid.GetItemsNodes(staticSphere.center, staticSphere.radius);
         foreach (Node node in nodes)
         {
             if (!IsInstanceValid(node))
@@ -291,6 +436,7 @@ public partial class InteractiveObjectDetector : Node
             }
         }
 
+        detectedObject = currentDetectedObject;
         if (currentDetectedObject != null && Node.IsInstanceValid(currentDetectedObject))
         {
             previousDetectedObject = currentDetectedObject;
@@ -300,11 +446,9 @@ public partial class InteractiveObjectDetector : Node
         {
             onAnyObjectsNotDetected?.Invoke();
         }
-
-        detectedObject = currentDetectedObject;
     }
 
-    private MoveScript GetChachedMoveScript(Node node)
+    private MoveScript GetChachedMoveScript(Node3D node)
     {
         if (moveScriptMap.TryGetValue(node, out MoveScript moveScript))
         {
@@ -318,26 +462,37 @@ public partial class InteractiveObjectDetector : Node
         }
     }
 
+    private Vector3 GetStaticObjectCachedPosition(Node3D node)
+    {
+        if (staticObjectPositionMap.TryGetValue(node, out Vector3 position))
+        {
+            return position;
+        }
+        else
+        {
+            position = node.GlobalPosition;
+            staticObjectPositionMap[node] = position;
+            return position;
+        }
+    }
+
     private bool TryGetPosition(Node node, out Vector3 vector)
     {
-        MoveScript ms = GetChachedMoveScript(node);
-        if (ms == null)
+        if (node is Node3D node3D)
         {
-            if (node is Node3D node3D)
+            MoveScript ms = GetChachedMoveScript(node3D);
+            if (ms == null)
             {
-                vector = node3D.GlobalPosition;
+                vector = GetStaticObjectCachedPosition(node3D);
                 return true;
             }
             else
             {
-                vector = Vector3.Zero;
-                return false;
+                vector = ms.GlobalPosition;
+                return true;
             }
         }
-        else
-        {
-            vector = ms.GlobalPosition;
-            return true;
-        }
+        vector = Vector3.Zero;
+        return false;
     }
 }

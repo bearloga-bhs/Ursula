@@ -23,6 +23,7 @@ namespace Ursula.MapManagers.Model
         public VoxGrid _voxGrid;
         public VoxTypesGrid voxTypes;
         public VoxDataGrid voxData;
+        public SpatialHashGrid3D spatialGrid = new SpatialHashGrid3D();
 
         // Params
         public int sizeX = 256, sizeY = 256, sizeZ = 256;
@@ -70,6 +71,7 @@ namespace Ursula.MapManagers.Model
         {
             _mapManagerData.itemsGO.AddChild(node);
             _mapManagerData.gameItems.Add(ips);
+            _mapManagerData.spatialGrid.Add(ips, ips.GlobalPosition);
 
             ChangeWorldBytesItem((int)ips.x, (int)ips.y, (int)ips.z, itemToVox(ips.type), (byte)(ips.rotation + ips.state * 6));
         }

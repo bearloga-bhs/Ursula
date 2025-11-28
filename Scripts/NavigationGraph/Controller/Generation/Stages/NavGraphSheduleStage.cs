@@ -9,21 +9,20 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Generation.S
 {
     public static class NavGraphSheduleStage
     {
-        public static void CreateShedules(NavGraph navGraph)
+        public static void CreateShedules(NavGraph navGraph, float sheduleTimeOpen)
         {
             // Go through shedule group and generate shedules for each vertex in shedule group
             foreach (NavGraphVertex vertex in navGraph.vertices)
             {
                 if (!vertex.ContainsShedule && vertex.sheduleGroup != null)
                 {
-                    CreateGroupShedule(vertex.sheduleGroup);
+                    CreateGroupShedule(vertex.sheduleGroup, sheduleTimeOpen);
                 }
             }
         }
 
-        private static void CreateGroupShedule(List<NavGraphVertex> sheduleGroup)
+        private static void CreateGroupShedule(List<NavGraphVertex> sheduleGroup, float delta)
         {
-            float delta = 5f;
             float totalTime = sheduleGroup.Count * delta;
             float timeOpen = delta;
             float timeClosed = totalTime - timeOpen;

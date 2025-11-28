@@ -47,6 +47,8 @@ namespace Ursula.Core.Initialization
             if (sceneTree != null)
                 sceneTree.NodeAdded += SceneTree_NodeAddedEventHandler;
 
+            HSMLogger.CompressionEnabled = true;
+
         }
 
         public override void _Ready()

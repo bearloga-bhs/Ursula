@@ -161,6 +161,7 @@ public partial class MapManager : Node, IInjectable
 	public VoxTypesGrid voxTypes;
 	public VoxDataGrid voxData;
 
+    public SpatialHashGrid3D spatialGrid => _mapManagerModel._mapManagerData.spatialGrid;
     public List<ItemPropsScript> gameItems { get { return _mapManagerModel._mapManagerData.gameItems; } }
 
     public Node3D itemsGO;
@@ -234,6 +235,7 @@ public partial class MapManager : Node, IInjectable
 		InitPlayer();
 
         _ = SubscribeEvent();
+        CSharpBridgeRegistry.Process += CSProcess;
     }
 
     public void GenerateProjectFolder()
@@ -399,7 +401,7 @@ public partial class MapManager : Node, IInjectable
 
         itemsGO.AddChild(instance);
 
-		var itemProp = node.GetScript();
+        var itemProp = node.GetScript();
         ItemPropsScript itemPropS = instance as ItemPropsScript;
 
 		if (itemPropS == null)
@@ -417,7 +419,7 @@ public partial class MapManager : Node, IInjectable
             itemPropS.state = state;
             itemPropS.scale = scale;
             gameItems.Add(itemPropS);
-
+            spatialGrid.Add(itemPropS, newPos);
             //itemPropS.GetParent().Name = Path.GetFileNameWithoutExtension(prefab.ResourcePath) + $"{_x}{_y}{_z}";
         }
 
@@ -1803,5 +1805,9 @@ public partial class MapManager : Node, IInjectable
         OpenInExplorer(pathImport);
     }
 
-
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        CSharpBridgeRegistry.Process -= CSProcess;
+    }
 }

@@ -37,9 +37,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         [Export]
         private SliderShowValue SliderCarsCount;
         [Export]
-        private SliderShowValue SliderMinTrafficLightsGreenTime;
-        [Export]
-        private SliderShowValue SliderMaxTrafficLightsGreenTime;
+        private SliderShowValue SliderTrafficLightsGreenTime;
 
 
         [Export]
@@ -49,8 +47,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 
         private float scale = 25;
         private int carsCount = 50;
-        private float minTrafficLightsGreenTime = 1;
-        private float maxTrafficLightsGreenTime = 5;
+        private float trafficLightsGreenTime = 5;
 
         [Inject]
         private ISingletonProvider<GameObjectCollectionModel> _gameObjectCollectionModelProvider;
@@ -79,13 +76,11 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 
             SliderScale.ValueChanged += OnSliderScaleValueChanged;
             SliderCarsCount.ValueChanged += OnSliderCarsCountValueChanged;
-            SliderMinTrafficLightsGreenTime.ValueChanged += OnSliderMinTrafficLightsGreenTimeValueChanged;
-            SliderMaxTrafficLightsGreenTime.ValueChanged += OnSliderMaxTrafficLightsGreenTimeValueChanged;
+            SliderTrafficLightsGreenTime.ValueChanged += OnSliderTrafficLightsGreenTimeValueChanged;
 
             SliderScale.Value = scale;
             SliderCarsCount.Value = carsCount;
-            SliderMinTrafficLightsGreenTime.Value = minTrafficLightsGreenTime;
-            SliderMaxTrafficLightsGreenTime.Value = maxTrafficLightsGreenTime;
+            SliderTrafficLightsGreenTime.Value = trafficLightsGreenTime;
 
             ButtonGenerate.ButtonDown += OnButtonGenerateClick;
             ButtonClear.ButtonDown += OnButtonClearClick;
@@ -103,7 +98,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         private void OnButtonGenerateClick()
         {
             GD.Print("Generate Transport Flow");
-            GD.Print($"scale - {scale}, carsCount - {carsCount}, minTrafficLightsGreenTime - {minTrafficLightsGreenTime}, maxTrafficLightsGreenTime - {maxTrafficLightsGreenTime}");
+            GD.Print($"scale - {scale}, carsCount - {carsCount}, trafficLightsGreenTime - {trafficLightsGreenTime}");
 
             // Init
             NavGraphModelPlacer.Instance.Init(
@@ -115,7 +110,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
                 TrafficLightRedPrefab.GameObjectAssetInfo, 
                 CarPrefab.GameObjectAssetInfo
                 );
-            NavGraphManager.Instance.Init(scale, carsCount, minTrafficLightsGreenTime, maxTrafficLightsGreenTime);
+            NavGraphManager.Instance.Init(scale, carsCount, trafficLightsGreenTime);
             
             // Generate
             TerrainManager terrainManager = VoxLib.terrainManager;
@@ -129,14 +124,9 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             // Логика очистки транспортного потока
         }
 
-        private void OnSliderMaxTrafficLightsGreenTimeValueChanged(double value)
+        private void OnSliderTrafficLightsGreenTimeValueChanged(double value)
         {
-            maxTrafficLightsGreenTime = Convert.ToSingle(SliderMaxTrafficLightsGreenTime.Value);
-        }
-
-        private void OnSliderMinTrafficLightsGreenTimeValueChanged(double value)
-        {
-            minTrafficLightsGreenTime = Convert.ToSingle(SliderMinTrafficLightsGreenTime.Value);
+            trafficLightsGreenTime = Convert.ToSingle(SliderTrafficLightsGreenTime.Value);
         }
 
         private void OnSliderCarsCountValueChanged(double value)

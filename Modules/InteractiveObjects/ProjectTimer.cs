@@ -43,12 +43,12 @@ public partial class ProjectTimer : Node
 
         if (_accumulatedTime >= 1.0f)
         {
-            Stopwatch stopwath = new Stopwatch();
-            stopwath.Start();
+            //Stopwatch stopwath = new Stopwatch();
+            //stopwath.Start();
             _accumulatedTime -= 1.0f;
             TickOneSecond?.Invoke();
-            GD.Print(stopwath.Elapsed.TotalMilliseconds);
-            stopwath.Stop();
+            //GD.Print($"[ProjectTimer] > [OnTick]: Elapsed: {stopwath.Elapsed.TotalMilliseconds}");
+            //stopwath.Stop();
         }
     }
 }
