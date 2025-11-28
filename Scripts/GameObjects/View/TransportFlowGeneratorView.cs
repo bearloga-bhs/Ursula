@@ -42,8 +42,6 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 
         [Export]
         private Button ButtonGenerate;
-        [Export]
-        private Button ButtonClear;
 
         private float scale = 25;
         private int carsCount = 50;
@@ -83,7 +81,6 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             SliderTrafficLightsGreenTime.Value = trafficLightsGreenTime;
 
             ButtonGenerate.ButtonDown += OnButtonGenerateClick;
-            ButtonClear.ButtonDown += OnButtonClearClick;
 
             this.VisibilityChanged += TransportFlowGeneratorView_VisibilityChanged;
         }

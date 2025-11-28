@@ -88,6 +88,8 @@ public partial class InteractiveObjectsManager : Node
         {
             obj.StopAlgorithm();
             var parent = obj.GetParent();
+            var itemPropsScript = parent.GetChildren().OfType<ItemPropsScript>().FirstOrDefault();
+            VoxLib.mapManager.spatialGrid.Remove(itemPropsScript);
             parent.QueueFree();
             objects.Remove(obj);
         }
@@ -107,10 +109,13 @@ public partial class InteractiveObjectsManager : Node
         var itemPropsScript = parent.GetChildren().OfType<ItemPropsScript>().FirstOrDefault();
         var assetInfo = _gameObjectLibraryManager.GetItemInfo(itemPropsScript.AssetInfoId);
         
-        Node3D parentNode3D = parent as Node3D;
         
+        Node3D parentNode3D = parent as Node3D;
+        Vector3 position = parentNode3D.GlobalPosition + new Vector3(2, 0, 0);
+        VoxLib.mapManager.spatialGrid.Add(itemPropsScript, position);
+
         _gameObjectCollectionModel.SetGameObjectAssetSelected(assetInfo);
-        _gameObjectCreateItemsModel.SetGameObjectCreateItem(parentNode3D.GlobalPosition + new Vector3(2, 0, 0), 1f, 0, false);
+        _gameObjectCreateItemsModel.SetGameObjectCreateItem(position, 1f, 0, false);
                 
         Vector3 positionNode = _gameObjectCreateItemsModel.PositionNode;
         float scaleNode = _gameObjectCreateItemsModel.ScaleNode;

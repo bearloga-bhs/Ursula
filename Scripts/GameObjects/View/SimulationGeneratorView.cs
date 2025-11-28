@@ -140,9 +140,6 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         private Button ButtonGenerate;
 
         [Export]
-        private Button ButtonClear;
-
-        [Export]
         public MapManagerItemSetter mapManagerItemSetter;
         
         [Inject]
@@ -184,7 +181,6 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             Asset.clickItemEvent += OnAssetClickEvent;
 
             ButtonGenerate.ButtonDown += OnButtonGenerateClickEvent;
-            ButtonClear.ButtonDown += OnButtonClearClickEvent;
         }
 
         private void OnButtonClearClickEvent()

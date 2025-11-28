@@ -2070,7 +2070,7 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("SliderEntitiesCount", "SliderPercent", "SliderCoefficient", "SliderDistanceHealthy", "SliderDistanceIll", "SliderPillCount", "Asset", "ButtonGenerate", "ButtonClear", "mapManagerItemSetter")]
+[node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("SliderEntitiesCount", "SliderPercent", "SliderCoefficient", "SliderDistanceHealthy", "SliderDistanceIll", "SliderPillCount", "Asset", "ButtonGenerate", "mapManagerItemSetter")]
 layout_mode = 0
 offset_left = -11.0
 offset_top = 50.0
@@ -2086,7 +2086,6 @@ SliderDistanceIll = NodePath("ScrollContainer/VBoxContainer/VBoxContainerDistanc
 SliderPillCount = NodePath("ScrollContainer/VBoxContainer/VBoxContainerPillCount/Panel/HSliderPillCount")
 Asset = NodePath("ScrollContainer/VBoxContainer/VBoxContainerAsset/GameObjectAssetInfoViewPrefab1")
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
-ButtonClear = NodePath("")
 mapManagerItemSetter = NodePath("../../../../../../../../../../MapManagers/MapManagerItemSetter")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView"]
@@ -2504,7 +2503,7 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelTransport" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" node_paths=PackedStringArray("RoadCrossPrefab", "RoadTPrefab", "RoadStraightPrefab", "RoadTurnPrefab", "TrafficLightGreenPrefab", "TrafficLightRedPrefab", "CarPrefab", "SliderScale", "SliderCarsCount", "SliderTrafficLightsGreenTime", "ButtonGenerate", "ButtonClear")]
+[node name="PanelTransport" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" node_paths=PackedStringArray("RoadCrossPrefab", "RoadTPrefab", "RoadStraightPrefab", "RoadTurnPrefab", "TrafficLightGreenPrefab", "TrafficLightRedPrefab", "CarPrefab", "SliderScale", "SliderCarsCount", "SliderTrafficLightsGreenTime", "ButtonGenerate")]
 layout_mode = 0
 offset_left = -115.0
 offset_top = 50.0
@@ -2523,7 +2522,6 @@ SliderScale = NodePath("VBoxContainer/VBoxContainerScale/Panel/HSliderScale")
 SliderCarsCount = NodePath("VBoxContainer/VBoxContainerCarCount/Panel/HSliderCarCount")
 SliderTrafficLightsGreenTime = NodePath("VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel/HSliderTrafficLightsGreenTime")
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
-ButtonClear = NodePath("")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport"]
 layout_mode = 1
