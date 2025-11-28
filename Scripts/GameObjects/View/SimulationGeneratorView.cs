@@ -168,6 +168,8 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         protected ISingletonProvider<WaterModel> _waterModelProvider;
         protected WaterModel _waterModel;
 
+        private bool firstTimeOpened = false;
+
 
         void IInjectable.OnDependenciesInjected()
         {
@@ -181,6 +183,22 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             Asset.clickItemEvent += OnAssetClickEvent;
 
             ButtonGenerate.ButtonDown += OnButtonGenerateClickEvent;
+            VisibilityChanged += SimulationGeneratorView_VisibilityChanged;
+        }
+
+        private void SimulationGeneratorView_VisibilityChanged()
+        {
+            if (!firstTimeOpened)
+                TryLoad(Asset, $"{GameObjectAssetsEmbeddedSource.LibId}.Cow");
+            firstTimeOpened = true;
+        }
+
+        private void TryLoad(GameObjectAssetInfoView assetInfoView, string id)
+        {
+            if (VoxLib.mapManager._gameObjectLibraryManager.TryGetItem(id, out IGameObjectAsset asset))
+            {
+                assetInfoView.Invalidate(asset.Info);
+            }
         }
 
         private void OnButtonClearClickEvent()
