@@ -40,7 +40,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         private static InjectorStateOverride PillCountOverride(int pillCount)
         {
             var commandOverride = new InjectorStateCommandOverride(
-                "МодульСлучайности.СгенерироватьИзПромежутка",
+                "Счётчик1.ПрибавитьЗначение",
                 0,
                 pillCount.ToString()
             );
@@ -50,7 +50,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
                 new List<InjectorStateCommandOverride> { commandOverride });
 
             return new InjectorStateOverride(
-                "Init_healty",
+                "[Inject] Инициализация здорового",
                 new List<InjectorStateEventOverride> { eventOverride });
         }
 
@@ -67,15 +67,15 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
                 new List<InjectorStateCommandOverride> { commandOverride });
 
             return new InjectorStateOverride(
-                "Init_ill",
+                "[Inject] Инициализация больного",
                 new List<InjectorStateEventOverride> { eventOverride });
         }
 
         private static InjectorStateOverride DistanceHealthyOverride(float distance)
         {
             var commandOverride = new InjectorStateCommandOverride(
-                "ВоспроизведениеЗвука.УстановитьРадиусСлышимости",
-                0,
+                "МодульОбнаружения.ОбнаружениеВоспроизведенияЗвука",
+                1,
                 distance.ToString()
             );
 
@@ -85,7 +85,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 
             // тут, судя по названию, должен быть Init_healty, а не Init_ill
             return new InjectorStateOverride(
-                "Init_healty",
+                "[Inject] Инициализация здорового",
                 new List<InjectorStateEventOverride> { eventOverride });
         }
 
@@ -108,7 +108,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
                 new List<InjectorStateCommandOverride> { commandOverride, commandOverride2 });
 
             return new InjectorStateOverride(
-                "Epidemic_beh",
+                "[Inject] Выбор",
                 new List<InjectorStateEventOverride> { eventOverride });
         }
     }

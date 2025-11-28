@@ -2413,6 +2413,7 @@ size_flags_horizontal = 4
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView"]
+layout_mode = 0
 offset_left = 3.0
 offset_top = 428.0
 offset_right = 584.0
