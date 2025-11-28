@@ -684,7 +684,10 @@ public partial class MapManager : Node, IInjectable
 	{
 		GD.Print("GenerateNewPlants...");
 
-		VoxLib.RemoveAllChildren(itemsGO);
+        foreach (var item in gameItems)
+            spatialGrid.Remove(item);
+
+        VoxLib.RemoveAllChildren(itemsGO);
 
 		if (VoxLib.terrainManager == null || VoxLib.terrainManager.mapHeight == null) return;
 

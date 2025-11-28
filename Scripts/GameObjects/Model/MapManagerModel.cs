@@ -78,6 +78,8 @@ namespace Ursula.MapManagers.Model
 
         public void RemoveAllGameItems()
         {
+            foreach (var item in _mapManagerData.gameItems)
+                _mapManagerData.spatialGrid.Remove(item);
             _mapManagerData.gameItems.Clear();
             VoxLib.RemoveAllChildren(_mapManagerData.itemsGO);
         }
@@ -119,7 +121,7 @@ namespace Ursula.MapManagers.Model
             if (ips != null)
             {
                 //ips.DeleteItem();
-
+                _mapManagerData.spatialGrid.Remove(ips);
                 if (_mapManagerData.gameItems.Contains(ips))
                 {
                     _mapManagerData.gameItems.Remove(ips);
