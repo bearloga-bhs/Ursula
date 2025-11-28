@@ -31,7 +31,8 @@ public partial class InteractiveObjectDetector : Node
     public string playerName = "Player";
 
     private MoveScript moveScriptCache;
-    private static Dictionary<Node, MoveScript> moveScriptMap = new Dictionary<Node, MoveScript>();
+    private static Dictionary<Node3D, MoveScript> moveScriptMap = new Dictionary<Node3D, MoveScript>();
+    private static Dictionary<Node3D, Vector3> staticObjectPositionMap = new Dictionary<Node3D, Vector3>();
 
     public MoveScript moveScript
     {
@@ -445,7 +446,7 @@ public partial class InteractiveObjectDetector : Node
         }
     }
 
-    private MoveScript GetChachedMoveScript(Node node)
+    private MoveScript GetChachedMoveScript(Node3D node)
     {
         if (moveScriptMap.TryGetValue(node, out MoveScript moveScript))
         {
@@ -459,26 +460,37 @@ public partial class InteractiveObjectDetector : Node
         }
     }
 
+    private Vector3 GetStaticObjectCachedPosition(Node3D node)
+    {
+        if (staticObjectPositionMap.TryGetValue(node, out Vector3 position))
+        {
+            return position;
+        }
+        else
+        {
+            position = node.GlobalPosition;
+            staticObjectPositionMap[node] = position;
+            return position;
+        }
+    }
+
     private bool TryGetPosition(Node node, out Vector3 vector)
     {
-        MoveScript ms = GetChachedMoveScript(node);
-        if (ms == null)
+        if (node is Node3D node3D)
         {
-            if (node is Node3D node3D)
+            MoveScript ms = GetChachedMoveScript(node3D);
+            if (ms == null)
             {
-                vector = node3D.GlobalPosition;
+                vector = GetStaticObjectCachedPosition(node3D);
                 return true;
             }
             else
             {
-                vector = Vector3.Zero;
-                return false;
+                vector = ms.GlobalPosition;
+                return true;
             }
         }
-        else
-        {
-            vector = ms.GlobalPosition;
-            return true;
-        }
+        vector = Vector3.Zero;
+        return false;
     }
 }
