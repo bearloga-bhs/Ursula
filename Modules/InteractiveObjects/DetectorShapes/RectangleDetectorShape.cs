@@ -25,12 +25,22 @@ public class RectangleDetectorShape : IDetectorShape
         //NOTE make detection like box collider? Need to discuss 
         
         Vector3 point_copy = new Vector3(point.X, 0, point.Z);
-            
-        Vector3 left_down_after_rotation = anchor.GlobalTransform * left_down;
-        Vector3 left_up_after_rotation = anchor.GlobalTransform * left_up;
-        Vector3 right_down_after_rotation = anchor.GlobalTransform * right_down;
-        Vector3 right_up_after_rotation = anchor.GlobalTransform * right_up;
-        
+
+        Transform3D anchorTransform;
+        if (anchor is MoveScript moveScript)
+        {
+            anchorTransform = moveScript.Transform;
+        }
+        else
+        {
+            anchorTransform = anchor.GlobalTransform;
+        }
+
+        Vector3 left_down_after_rotation = anchorTransform * left_down;
+        Vector3 left_up_after_rotation = anchorTransform * left_up;
+        Vector3 right_down_after_rotation = anchorTransform * right_down;
+        Vector3 right_up_after_rotation = anchorTransform * right_up;
+
         Vector3 left_side = left_up_after_rotation - left_down_after_rotation;
         Vector3 up_side = right_up_after_rotation - left_up_after_rotation;
         Vector3 right_side = right_down_after_rotation - right_up_after_rotation;

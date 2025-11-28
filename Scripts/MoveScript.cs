@@ -59,7 +59,8 @@ public partial class MoveScript : CharacterBody3D
         }
     }
 
-    public Quaternion Quaternion { get; private set; }
+    public new Quaternion Quaternion { get; private set; }
+    public new Transform3D Transform { get; private set; }
 
     public new Vector3 Rotation
     {
@@ -420,12 +421,14 @@ public partial class MoveScript : CharacterBody3D
             base.GlobalPosition = oldGlobalPosition.Lerp(GlobalPosition, interpolationFactor);
             base.Rotation = oldRotation.Lerp(Rotation, interpolationFactor);
             Quaternion = base.Quaternion;
+            Transform = base.Transform;
         }
         else
         {
             base.GlobalPosition = GlobalPosition;
             base.Rotation = Rotation;
             Quaternion = base.Quaternion;
+            Transform = base.Transform;
         }
     }
 
