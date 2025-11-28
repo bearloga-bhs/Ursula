@@ -2,6 +2,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.Json;
 
 namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Serialization
@@ -13,6 +14,11 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Serializatio
 
         public static string Serialize(NavGraph navGraph)
         {
+            if (navGraph == null)
+            {
+                return default(string);
+            }
+            
             Dictionary<NavGraphVertex, int> vertToIndex = new Dictionary<NavGraphVertex, int>();
             List<string> SerializedVertices = new List<string>();
             List<string> SerializedEdges = new List<string>();
@@ -40,6 +46,11 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.Serializatio
 
         public static NavGraph Deserialize(string jsonSerializedNavGraph)
         {
+            if (jsonSerializedNavGraph == default)
+            {
+                return null;
+            }
+            
             Dictionary<string, List<string>> serializedNavGraph = 
                 JsonSerializer.Deserialize<Dictionary<string, List<string>>>(jsonSerializedNavGraph);
 

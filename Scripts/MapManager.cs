@@ -1082,7 +1082,12 @@ public partial class MapManager : Node, IInjectable
             }
         }
         mapData.Add("mapHeight", sb.ToString());
-        mapData.Add("navGraph", NavGraphManager.Instance.SaveGraph());
+
+        string graphString = NavGraphManager.Instance.SaveGraph();
+        if (graphString != default)
+        {
+			mapData.Add("navGraph", graphString);
+        }
 
         if (!string.IsNullOrEmpty(gameImagePath))
             mapData.Add("gameImagePath", gameImagePath);
