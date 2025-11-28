@@ -17,11 +17,13 @@ public class HSMLogger
 
     public static void Print(InteractiveObject senderInteractiveObject, string message)
     {
+        return;
         ContextMenu.ShowMessageS($"{GetPrefixClear(senderInteractiveObject)} {message}");
     }
 
     public static void PrintMoveScriptError(InteractiveObject interactiveObject)
     {
+        return;
         HSMLogger.Print(interactiveObject, "Объект установлен статичным, обработка функций перемещения отключена");
     }
 
@@ -32,7 +34,8 @@ public class HSMLogger
 
     public static string GetPrefix(InteractiveObject interactiveObject, string stateLabel)
     {
-        return $"[HSM {interactiveObject.GetParent().Name} | {stateLabel}]";
+        //return $"[HSM {interactiveObject.GetParent().Name} | {stateLabel}]";
+        return "";
     }
 
     public string GetPrefix(string stateLabel)
@@ -42,6 +45,7 @@ public class HSMLogger
 
     public void OnStateEnter(object? sender, EventArgs args)
     {
+        return;
         if (sender is State state)
         {
             var prefix = GetPrefix(state.Label);
@@ -51,6 +55,7 @@ public class HSMLogger
 
     public void OnStateExit(object? sender, EventArgs args)
     {
+        return;
         if (sender is State state)
         {
             var prefix = GetPrefix(state.Label);
@@ -60,6 +65,7 @@ public class HSMLogger
 
     public void OnTransitionTriggered(object? sender, Transition transition)
     {
+        return;
         if (sender is State state)
         {
             var prefix = GetPrefix(state.Label);
@@ -69,6 +75,7 @@ public class HSMLogger
 
     public void OnCommandMaked(object? sender, Command command)
     {
+        return;
         var parameters = string.Join(", ", command.GetParameters().Select(t => t.Item2));
 
         if (sender is State state)
@@ -87,6 +94,7 @@ public class HSMLogger
 
     public void OnConditionCheck(object? sender, ConditionEventArgs args)
     {
+        return;
         if (sender is Transition transition)
         {
             var prefix = GetPrefix(transition.EventName);

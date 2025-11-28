@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 using System;
 using Ursula.GameObjects.Model;
 
@@ -77,5 +77,7 @@ namespace VoxLibExample
         public PackedScene InteractiveObjectInitializationPrefab;
         [Export]
         public PackedScene InteractiveObjectRandomnessPrefab;
+        [Export]
+        public PackedScene InteractiveObjectEpidemicPrefab;
     }
 }
