@@ -1990,7 +1990,6 @@ texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
 [node name="PanelTab" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" node_paths=PackedStringArray("panels")]
-visible = false
 layout_mode = 0
 offset_top = 40.0
 offset_right = 410.0
@@ -2222,7 +2221,7 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelTransport" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" node_paths=PackedStringArray("RoadCrossPrefab", "RoadTPrefab", "RoadStraightPrefab", "RoadTurnPrefab", "TrafficLightGreenPrefab", "TrafficLightRedPrefab", "CarPrefab", "SliderScale", "SliderCarsCount", "SliderMinTrafficLightsGreenTime", "SliderMaxTrafficLightsGreenTime", "ButtonGenerate", "ButtonClear")]
+[node name="PanelTransport" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" node_paths=PackedStringArray("RoadCrossPrefab", "RoadTPrefab", "RoadStraightPrefab", "RoadTurnPrefab", "TrafficLightGreenPrefab", "TrafficLightRedPrefab", "CarPrefab", "SliderScale", "SliderCarsCount", "SliderTrafficLightsGreenTime", "ButtonGenerate", "ButtonClear")]
 layout_mode = 0
 offset_left = -115.0
 offset_top = 50.0
@@ -2239,8 +2238,7 @@ TrafficLightRedPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerTra
 CarPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerCar/CarGameObjectAssetInfoViewPrefab")
 SliderScale = NodePath("VBoxContainer/VBoxContainerScale/Panel/HSliderScale")
 SliderCarsCount = NodePath("VBoxContainer/VBoxContainerCarCount/Panel/HSliderCarCount")
-SliderMinTrafficLightsGreenTime = NodePath("VBoxContainer/VBoxContainerMinTrafficLightsGreenTime/Panel/HSliderMinTrafficLightsGreenTime")
-SliderMaxTrafficLightsGreenTime = NodePath("VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime/Panel/HSliderMaxTrafficLightsGreenTime")
+SliderTrafficLightsGreenTime = NodePath("VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel/HSliderMinTrafficLightsGreenTime")
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
 ButtonClear = NodePath("HBoxContainer/ButtonClear")
 
@@ -2415,7 +2413,8 @@ theme_override_icons/grabber_highlight = ExtResource("22_m1i1r")
 theme_override_styles/slider = ExtResource("23_8khbg")
 theme_override_styles/grabber_area = ExtResource("24_ux6rg")
 theme_override_styles/grabber_area_highlight = ExtResource("24_ux6rg")
-value = 50.0
+max_value = 1000.0
+value = 100.0
 script = ExtResource("25_l6pvw")
 _hSlider = NodePath(".")
 
@@ -2436,19 +2435,19 @@ text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="VBoxContainerMinTrafficLightsGreenTime" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer"]
+[node name="VBoxContainerTrafficLightsGreenTime" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMinTrafficLightsGreenTime"]
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerTrafficLightsGreenTime"]
 layout_mode = 2
-text = "Min Traffic Lights Green Time"
+text = "Traffic Lights Green Time"
 
-[node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMinTrafficLightsGreenTime"]
+[node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerTrafficLightsGreenTime"]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("46_h4d78")
 
-[node name="HSliderMinTrafficLightsGreenTime" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMinTrafficLightsGreenTime/Panel" node_paths=PackedStringArray("_hSlider")]
+[node name="HSliderMinTrafficLightsGreenTime" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel" node_paths=PackedStringArray("_hSlider")]
 custom_minimum_size = Vector2(100, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -2469,57 +2468,7 @@ value = 1.0
 script = ExtResource("25_l6pvw")
 _hSlider = NodePath(".")
 
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMinTrafficLightsGreenTime/Panel/HSliderMinTrafficLightsGreenTime"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -72.0
-offset_top = -16.0
-offset_right = -43.0
-offset_bottom = 9.0
-grow_horizontal = 0
-grow_vertical = 2
-text = "0"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="VBoxContainerMaxTrafficLightsGreenTime" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime"]
-layout_mode = 2
-text = "Max Traffic Lights Green Time"
-
-[node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime"]
-custom_minimum_size = Vector2(0, 25)
-layout_mode = 2
-theme_override_styles/panel = ExtResource("46_h4d78")
-
-[node name="HSliderMaxTrafficLightsGreenTime" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime/Panel" node_paths=PackedStringArray("_hSlider")]
-custom_minimum_size = Vector2(100, 30)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = -1.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_icons/grabber = ExtResource("22_m1i1r")
-theme_override_icons/grabber_highlight = ExtResource("22_m1i1r")
-theme_override_styles/slider = ExtResource("23_8khbg")
-theme_override_styles/grabber_area = ExtResource("24_ux6rg")
-theme_override_styles/grabber_area_highlight = ExtResource("24_ux6rg")
-max_value = 10.0
-value = 5.0
-script = ExtResource("25_l6pvw")
-_hSlider = NodePath(".")
-
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerMaxTrafficLightsGreenTime/Panel/HSliderMaxTrafficLightsGreenTime"]
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel/HSliderMinTrafficLightsGreenTime"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -2662,7 +2611,7 @@ offset_right = 112.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("40_m5gvt")
-prefabs = [NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab2"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab3"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab4")]
+prefabs = []
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
 ButtonClear = NodePath("HBoxContainer/ButtonClear")
 

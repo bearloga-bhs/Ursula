@@ -22,8 +22,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
         // Гиперпараметры
         private float delta;
         private int carsCount;
-        private float minTrafficLightsGreenTime;
-        private float maxTrafficLightsGreenTime;
+        private float trafficLightsGreenTime;
 
         // Внутренние параметры симуляции
         private readonly float connectionProbability = 0.6f;
@@ -50,12 +49,11 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             }
         }
 
-        public void Init(float delta, int carsCount, float minTrafficLightsGreenTime, float maxTrafficLightsGreenTime)
+        public void Init(float delta, int carsCount, float trafficLightsGreenTime)
         {
             this.delta = delta;
             this.carsCount = carsCount;
-            this.minTrafficLightsGreenTime = minTrafficLightsGreenTime;
-            this.maxTrafficLightsGreenTime = maxTrafficLightsGreenTime;
+            this.trafficLightsGreenTime = trafficLightsGreenTime;
             initialized = true;
         }
 
@@ -78,7 +76,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             GDTask roadGeneration = NavGraphModelPlacer.Instance.GenerateRoads(navGraphUndirected, delta, modelHegihtOffset);
 
             // Create directed graph and assign shedules
-            navGraph = NavGraphGenerator.PostProcess(navGraphUndirected, subdivisionOffset, directionsOffset);
+            navGraph = NavGraphGenerator.PostProcess(navGraphUndirected, subdivisionOffset, directionsOffset, trafficLightsGreenTime);
             // Place traffic lights and car models
             GDTask trafficLightsGeneration = NavGraphModelPlacer.Instance.GenerateTrafficLights(navGraph, delta / 4, offset);
             GDTask carsGeneration = NavGraphModelPlacer.Instance.GenerateCars(navGraph, carsCount, modelHegihtOffset);
