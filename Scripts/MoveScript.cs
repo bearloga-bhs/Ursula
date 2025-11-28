@@ -698,6 +698,11 @@ public partial class MoveScript : CharacterBody3D
 
     public async void MoveToRandomSetup()
     {
+        if (!IsInstanceValid(this))
+        {
+            return;
+        }
+        
         // Wait for the first physics frame so the NavigationServer can sync.
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
@@ -718,6 +723,11 @@ public partial class MoveScript : CharacterBody3D
 
     public async void MoveToPositionSetup(Vector3 newPosition)
     {
+        if (!IsInstanceValid(this))
+        {
+            return;
+        }
+        
         ResetCoordinates();
         // TODO: requst to change + optimistic movement.
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
@@ -769,6 +779,11 @@ public partial class MoveScript : CharacterBody3D
 
     public async void MoveToTargetSetup(Node3D node)
     {
+        if (!IsInstanceValid(this))
+        {
+            return;
+        }
+        
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
         stateMashine = StateMashine.moveToTarget;
@@ -781,6 +796,11 @@ public partial class MoveScript : CharacterBody3D
 
     public async void MoveFromTargetSetup(Node3D node)
     {
+        if (!IsInstanceValid(this))
+        {
+            return;
+        }
+        
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
         stateMashine = StateMashine.moveFromTarget;
@@ -793,6 +813,11 @@ public partial class MoveScript : CharacterBody3D
 
     private async void FindToTargetSetup(Node3D node, float radiusSearh)
     {
+        if (!IsInstanceValid(this))
+        {
+            return;
+        }
+        
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
         stateMashine = StateMashine.findTarget;

@@ -194,13 +194,13 @@ public partial class MapManager : Node, IInjectable
     }
 
     private MapManagerModel _mapManagerModel { get; set; }
-    private GameObjectLibraryManager _gameObjectLibraryManager { get; set; }
-    private GameObjectCreateItemsModel _gameObjectCreateItemsModel { get; set; }
-    private GameObjectCurrentInfoModel _gameObjectCurrentInfoModel { get; set; }
+    public GameObjectLibraryManager _gameObjectLibraryManager { get; set; }
+    public GameObjectCreateItemsModel _gameObjectCreateItemsModel { get; set; }
+    public GameObjectCurrentInfoModel _gameObjectCurrentInfoModel { get; set; }
     private TerrainModel _terrainModel { get; set; }
     private WaterModel _waterModel { get; set; }
     private TerrainManager _terrainManager { get; set; }
-    private GameObjectCollectionModel _gameObjectCollectionModel { get; set; }
+    public GameObjectCollectionModel _gameObjectCollectionModel { get; set; }
 
     bool needSaveMap = false;
 	bool usedCustomItemBuild = false;
