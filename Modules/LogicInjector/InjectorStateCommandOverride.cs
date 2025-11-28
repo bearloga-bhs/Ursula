@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace bearloga.addons.Ursula.Modules.LogicInjector
 {
     public class InjectorStateCommandOverride
     {
+        [JsonInclude]
         private string commandName;
+        [JsonInclude]
         private int parameterIdx;
+        [JsonInclude]
         private string parameterValue;
 
         public InjectorStateCommandOverride(string commandName, int parameterIdx, string parameterValue)

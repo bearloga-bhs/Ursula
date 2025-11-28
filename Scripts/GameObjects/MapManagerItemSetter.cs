@@ -168,6 +168,7 @@ namespace Ursula.MapManagers.Setters
                 ips.state = state;
                 ips.scale = scale;
                 ips.GetParent().Name = $"{assetInfo.Name}_{_x}{_y}{_z}";
+                ips.LogicInjector = injector;
             }
 
             if (isTryGetItem)

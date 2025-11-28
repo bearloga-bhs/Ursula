@@ -9,6 +9,8 @@ public class HSMWorldInteractingModule
 
     // Event keys
     const string ChangeSurfaceTypeKey = $"{ModuleName}.СменаТипаПоверхности";
+    const string DayEventKey = $"{ModuleName}.НаступилДень";
+    const string NightEventKey = $"{ModuleName}.НаступилаНочь";
 
     // Variable keys
     const string DayTimeVariableKey = $"{ModuleName}.ВремяСуток";
@@ -27,6 +29,18 @@ public class HSMWorldInteractingModule
         }
         else
             HSMLogger.PrintMoveScriptError(interactiveObject);
+
+        DayNightCycle.instance.DayNightCycleChanged += () =>
+        {
+            if (DayNightCycle.instance.IsDay)
+            {
+                logic.localBus.InvokeEvent(DayEventKey);
+            }
+            else
+            {
+                logic.localBus.InvokeEvent(NightEventKey);
+            }
+        };
 
         // Variables
         logic.localBus.AddVariableGetter(DayTimeVariableKey, () => _object.move.timesOfDay.Value);

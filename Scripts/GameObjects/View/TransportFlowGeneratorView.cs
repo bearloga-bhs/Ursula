@@ -47,14 +47,20 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         [Export]
         private Button ButtonClear;
 
-        private float scale;
-        private int carsCount;
-        private float minTrafficLightsGreenTime;
-        private float maxTrafficLightsGreenTime;
+        private float scale = 25;
+        private int carsCount = 50;
+        private float minTrafficLightsGreenTime = 1;
+        private float maxTrafficLightsGreenTime = 5;
 
         [Inject]
         private ISingletonProvider<GameObjectCollectionModel> _gameObjectCollectionModelProvider;
         private GameObjectCollectionModel _gameObjectCollectionModel;
+
+        [Inject]
+        private ISingletonProvider<GameObjectLibraryManager> _commonLibraryProvider;
+        private GameObjectLibraryManager gameObjectLibraryManager;
+
+        private bool firstTimeOpened = true;
 
         public override void _Ready()
         {
@@ -76,8 +82,22 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             SliderMinTrafficLightsGreenTime.ValueChanged += OnSliderMinTrafficLightsGreenTimeValueChanged;
             SliderMaxTrafficLightsGreenTime.ValueChanged += OnSliderMaxTrafficLightsGreenTimeValueChanged;
 
+            SliderScale.Value = scale;
+            SliderCarsCount.Value = carsCount;
+            SliderMinTrafficLightsGreenTime.Value = minTrafficLightsGreenTime;
+            SliderMaxTrafficLightsGreenTime.Value = maxTrafficLightsGreenTime;
+
             ButtonGenerate.ButtonDown += OnButtonGenerateClick;
             ButtonClear.ButtonDown += OnButtonClearClick;
+
+            this.VisibilityChanged += TransportFlowGeneratorView_VisibilityChanged;
+        }
+
+        private void TransportFlowGeneratorView_VisibilityChanged()
+        {
+            if (firstTimeOpened && Visible == true)
+                TryLoadDefaultAssets();
+            firstTimeOpened = false;
         }
 
         private void OnButtonGenerateClick()
@@ -102,6 +122,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             float height = terrainManager.GetTerrainHeight(terrainManager.size / 2, terrainManager.size / 2);
            _ = NavGraphManager.Instance.Generate(terrainManager.countBlock, height);
         }
+
         private void OnButtonClearClick()
         {
             GD.Print("Clear Transport Flow");
@@ -131,6 +152,26 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         private async GDTask SubscribeEvent()
         {
             _gameObjectCollectionModel = await _gameObjectCollectionModelProvider.GetAsync();
+            gameObjectLibraryManager = await _commonLibraryProvider.GetAsync();
+        }
+
+        private void TryLoadDefaultAssets()
+        {
+            TryLoad(RoadCrossPrefab, $"{GameObjectAssetsEmbeddedSource.LibId}.road_cross");
+            TryLoad(RoadTPrefab, $"{GameObjectAssetsEmbeddedSource.LibId}.road_t");
+            TryLoad(RoadStraightPrefab, $"{GameObjectAssetsEmbeddedSource.LibId}.road_straight");
+            TryLoad(RoadTurnPrefab, $"{GameObjectAssetsEmbeddedSource.LibId}.road_turn");
+            TryLoad(TrafficLightGreenPrefab, $"{GameObjectAssetsEmbeddedSource.LibId}.traffic_light_green");
+            TryLoad(TrafficLightRedPrefab, $"{GameObjectAssetsEmbeddedSource.LibId}.traffic_light_red");
+            TryLoad(CarPrefab, $"{GameObjectAssetsEmbeddedSource.LibId}.Cow");
+        }
+
+        private void TryLoad(GameObjectAssetInfoView assetInfoView, string id)
+        {
+            if (gameObjectLibraryManager.TryGetItem(id, out IGameObjectAsset asset))
+            {
+                assetInfoView.Invalidate(asset.Info);
+            }
         }
 
         private void OnCarPrefabClickItemEvent(GameObjectAssetInfo info)

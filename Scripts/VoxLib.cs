@@ -87,11 +87,11 @@ public partial class VoxLib : Node, IInjectable
 		VoxLib.instance?._Log(message);
 	}
 
-	public void _Log(string message)
-	{
-		if (TryGetLogModel(out var logModel))
-			logModel.SetLogMessage(message);
-	}
+    public void _Log(string message)
+    {
+        //if (TryGetLogModel(out var logModel))
+            //logModel.SetLogMessage(message);
+    }
 
 	public static void SetVisibleLog(bool value)
 	{

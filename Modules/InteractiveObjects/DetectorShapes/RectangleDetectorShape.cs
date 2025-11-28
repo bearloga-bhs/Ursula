@@ -3,12 +3,12 @@ using Godot;
 
 public class RectangleDetectorShape : IDetectorShape
 {
-    private Vector3 left_down;
-    private Vector3 left_up;
-    private Vector3 right_down;
-    private Vector3 right_up;
+    public Vector3 left_down;
+    public Vector3 left_up;
+    public Vector3 right_down;
+    public Vector3 right_up;
 
-    private Node3D anchor;
+    public Node3D anchor;
     
     public RectangleDetectorShape(Node3D relativeTo, float width, float height, Vector3 offset)
     {

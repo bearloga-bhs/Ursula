@@ -2,11 +2,11 @@
 
 public class SphereDetectorShape : IDetectorShape
 {
-    private Vector3 center;
-    private float radius;
-    private Node3D anchor = null;
-    
-    public SphereDetectorShape(Node3D relativeTo, float radius, Vector3 center) 
+    public Vector3 center;
+    public float radius;
+    public Node3D anchor = null;
+
+    public SphereDetectorShape(Node3D relativeTo, float radius, Vector3 center)
     {
         anchor = relativeTo;
         this.radius = radius;
@@ -15,8 +15,17 @@ public class SphereDetectorShape : IDetectorShape
 
     public bool IsDetected(Vector3 point, out float distance)
     {
-        Vector3 center_after_rotation = anchor.GlobalTransform * center;
-        
+        Vector3 center_after_rotation;
+        if (anchor is MoveScript moveScript)
+        {
+            Vector3 position = moveScript.GlobalPosition;
+            Quaternion quaternion = moveScript.Quaternion;
+            Vector3 offset = quaternion * center;
+            center_after_rotation = position + offset;
+        }
+        else
+            center_after_rotation = anchor.GlobalTransform * center;
+
         float dist2 = point.DistanceSquaredTo(center_after_rotation);
         if (dist2 <= radius * radius)
         {

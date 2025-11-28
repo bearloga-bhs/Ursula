@@ -1990,6 +1990,7 @@ texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
 [node name="PanelTab" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" node_paths=PackedStringArray("panels")]
+visible = false
 layout_mode = 0
 offset_top = 40.0
 offset_right = 410.0
