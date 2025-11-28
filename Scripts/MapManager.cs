@@ -234,6 +234,7 @@ public partial class MapManager : Node, IInjectable
 		InitPlayer();
 
         _ = SubscribeEvent();
+        CSharpBridgeRegistry.Process += CSProcess;
     }
 
     public void GenerateProjectFolder()
@@ -1798,5 +1799,9 @@ public partial class MapManager : Node, IInjectable
         OpenInExplorer(pathImport);
     }
 
-
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        CSharpBridgeRegistry.Process -= CSProcess;
+    }
 }
