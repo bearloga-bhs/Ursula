@@ -63,9 +63,16 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 			SliderPopulationCount.ValueChanged += OnSliderPopulationCountValueChanged;
 			SliderFamine.ValueChanged += OnSliderFamineValueChanged;
 			SliderShowChildCount.ValueChanged += OnSliderShowChildCountValueChanged;
-			
-			ControlChildCount.Visible = false;
+
+            ControlChildCount.Visible = false;
 		}
+
+		public void LoadDefaultValues()
+		{
+            SliderPopulationCount.Value = _gameObjectAssetInfo.PopulationCount;
+            SliderFamine.Value = _gameObjectAssetInfo.Famine;
+            SliderShowChildCount.Value = _gameObjectAssetInfo.ChildCount;
+        }
 
 		public override void _ExitTree()
 		{
@@ -171,6 +178,34 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 			{
 				ControlChildCount.Visible = false;
 			}
+		}
+
+		public void SetSex(bool isFemale)
+		{
+			if (isFemale)
+			{
+                OptionButtonSex.Select(1);
+                OnOptionButtonSexItemSelected(1);
+            }
+			else
+			{
+                OptionButtonSex.Select(0);
+                OnOptionButtonSexItemSelected(0);
+			}
+        }
+
+		public void SetType(bool isHunter)
+		{
+			if (isHunter)
+			{
+				OptionButtonType.Select(0);
+                OnOptionButtonTypeItemSelected(0);
+            }
+			else
+			{
+                OptionButtonType.Select(1);
+                OnOptionButtonTypeItemSelected(1);
+            }
 		}
 
 		public void OnDependenciesInjected()

@@ -8,7 +8,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.Model
     {
         public string Type = "Травоядное";
         public string Sex = "Мужской";
-        public int PopulationCount = 100;
+        public int PopulationCount = 35;
         public int Famine = 300;
         public int ChildCount = 1;
 

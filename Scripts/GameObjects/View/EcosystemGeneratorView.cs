@@ -8,6 +8,7 @@ using ursula.addons.Ursula.Scripts.GameObjects.Model;
 using ursula.addons.Ursula.Scripts.GameObjects.Controller;
 using Ursula.Core.DI;
 using Ursula.GameObjects.Model;
+using Ursula.GameObjects.View;
 
 namespace ursula.addons.Ursula.Scripts.GameObjects.View
 {
@@ -68,6 +69,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
         public Button ButtonClear;
 
         private readonly List<Action<EcosystemGeneratorAssetView>> actions = new();
+        private bool firstTimeOpened = false;
 
         public override void _Ready()
         {
@@ -88,6 +90,34 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
 
             if (ButtonClear != null)
                 ButtonClear.ButtonDown += OnButtonClearClick;
+
+            VisibilityChanged += EcosystemGeneratorView_VisibilityChanged;
+        }
+
+        private void EcosystemGeneratorView_VisibilityChanged()
+        {
+            if (!firstTimeOpened)
+                TryLoadDefaultAssets();
+            firstTimeOpened = true;
+        }
+
+        private void TryLoadDefaultAssets()
+        {
+            TryLoad(prefabs[0], $"{GameObjectAssetsEmbeddedSource.LibId}.Cow", true, false);
+            TryLoad(prefabs[1], $"{GameObjectAssetsEmbeddedSource.LibId}.Cow_black", false, false);
+            TryLoad(prefabs[2], $"{GameObjectAssetsEmbeddedSource.LibId}.Cow_red", true, true);
+            TryLoad(prefabs[3], $"{GameObjectAssetsEmbeddedSource.LibId}.Cow_dark_red", false, true);
+        }
+
+        private void TryLoad(EcosystemGeneratorAssetView assetInfoView, string id, bool isFemale, bool isHunter)
+        {
+            if (VoxLib.mapManager._gameObjectLibraryManager.TryGetItem(id, out IGameObjectAsset asset))
+            {
+                assetInfoView.Invalidate(asset.Info);
+                assetInfoView.SetSex(isFemale);
+                assetInfoView.SetType(isHunter);
+                assetInfoView.LoadDefaultValues();
+            }
         }
 
         public override void _ExitTree()
