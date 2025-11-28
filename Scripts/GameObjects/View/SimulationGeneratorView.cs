@@ -230,7 +230,7 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             percent = Mathf.Clamp(percent, 0f, 100f);
 
             // Считаем, сколько будет здоровых и больных
-            int healthyCount = Mathf.RoundToInt(entitiesCount * (percent * 0.01f));
+            int healthyCount = 100 - Mathf.RoundToInt(entitiesCount * (percent * 0.01f));
             healthyCount = Mathf.Clamp(healthyCount, 0, entitiesCount);
             int illCount = entitiesCount - healthyCount;
 

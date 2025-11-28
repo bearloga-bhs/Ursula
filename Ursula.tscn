@@ -2211,7 +2211,7 @@ layout_mode = 2
 
 [node name="LabelCoefficient" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView/ScrollContainer/VBoxContainer/VBoxContainerCoefficient"]
 layout_mode = 2
-text = "Коэффициент заражения"
+text = "Вероятность заражения"
 
 [node name="Panel" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView/ScrollContainer/VBoxContainer/VBoxContainerCoefficient"]
 custom_minimum_size = Vector2(0, 25)
