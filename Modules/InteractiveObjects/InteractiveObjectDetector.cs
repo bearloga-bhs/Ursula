@@ -263,13 +263,13 @@ public partial class InteractiveObjectDetector : Node
     private void StartScanning()
     {
         isScanning = true;
-        GD.Print($"Scanning started...");
+        //GD.Print($"Scanning started...");
     }
 
     public object StopScanning()
     {
         isScanning = false;
-        GD.Print("Scanning stopped.");
+        //GD.Print("Scanning stopped.");
         return null;
     }
 
@@ -332,6 +332,7 @@ public partial class InteractiveObjectDetector : Node
     public override void _ExitTree()
     {
         GameManager.onPlayerInteractionObjectAction -= PlayerInteractionObject;
+        CSharpBridgeRegistry.Process -= CSProcess;
     }
 
     private void FindPlayer()
