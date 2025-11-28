@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://dgc042g3ej4rj"]
+[gd_scene load_steps=88 format=3 uid="uid://dgc042g3ej4rj"]
 
 [ext_resource type="PackedScene" uid="uid://dn1jem1nnefln" path="res://addons/Ursula/Modules/InteractiveObjects/Prefabs/project_timer.tscn" id="1_wxxnd"]
 [ext_resource type="Script" path="res://addons/Ursula/Scripts/Core/Initialization/UrsulaEntryPoint.cs" id="1_xjqfu"]
@@ -62,6 +62,7 @@
 [ext_resource type="StyleBox" uid="uid://ccj7ltfpijtug" path="res://addons/Ursula/Assets/Themes/ButtonStartup.tres" id="43_0nvn3"]
 [ext_resource type="Theme" uid="uid://dyddtywft2yrs" path="res://addons/Ursula/Assets/Themes/Controls.tres" id="43_cp4ec"]
 [ext_resource type="PackedScene" uid="uid://dw6db5l0e6pjq" path="res://addons/Ursula/Prefabs/Log/LogItemViewPrefab.tscn" id="43_l6wei"]
+[ext_resource type="Script" path="res://addons/Ursula/Scripts/DebugSettings/View/DebugView.cs" id="43_rtpxc"]
 [ext_resource type="Texture2D" uid="uid://chy1hgoe250ua" path="res://addons/Ursula/Assets/Themes/mingcute_delete-fill.png" id="44_xf707"]
 [ext_resource type="Texture2D" uid="uid://dlwwjyw56rlay" path="res://addons/Ursula/Assets/Themes/solar_pause-bold.png" id="45_vohne"]
 [ext_resource type="Texture2D" uid="uid://cun8fj7if47xg" path="res://addons/Ursula/Assets/Themes/mdi_download.png" id="46_4i5h6"]
@@ -1990,6 +1991,7 @@ texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
 [node name="PanelTab" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation" node_paths=PackedStringArray("panels")]
+visible = false
 layout_mode = 0
 offset_top = 40.0
 offset_right = 410.0
@@ -2858,7 +2860,7 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelEcosystem" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" node_paths=PackedStringArray("prefabs", "ButtonGenerate")]
+[node name="PanelEcosystem" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" node_paths=PackedStringArray("prefabs", "ButtonGenerate", "ButtonClear")]
 visible = false
 layout_mode = 0
 offset_left = -298.0
@@ -2869,6 +2871,7 @@ theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("40_m5gvt")
 prefabs = [NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab2"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab3"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab4")]
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
+ButtonClear = NodePath("HBoxContainer/ButtonClear")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem"]
 layout_mode = 1
@@ -2930,6 +2933,156 @@ offset_bottom = 10.0
 grow_vertical = 2
 texture = ExtResource("19_c8ee4")
 expand_mode = 1
+
+[node name="ButtonClear" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = ExtResource("18_c37xe")
+theme_override_styles/pressed = ExtResource("18_c37xe")
+theme_override_styles/normal = ExtResource("18_c37xe")
+text = "Очистить карту"
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer/ButtonClear"]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.07996
+offset_top = -9.0
+offset_right = 21.08
+offset_bottom = 10.0
+grow_vertical = 2
+texture = ExtResource("19_c8ee4")
+expand_mode = 1
+
+[node name="ButtonSettings" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer" node_paths=PackedStringArray("PanelMenu", "arrow1", "arrow2")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+focus_mode = 1
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = ExtResource("51_ffq47")
+theme_override_styles/hover_pressed = ExtResource("51_ffq47")
+theme_override_styles/pressed = ExtResource("51_ffq47")
+theme_override_styles/normal = ExtResource("51_qas0a")
+text = "Настройки"
+script = ExtResource("6_1h5ru")
+PanelMenu = NodePath("PanelTab")
+arrow1 = NodePath("Arrow1")
+arrow2 = NodePath("Arrow2")
+
+[node name="Icon" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -8.0
+offset_right = 18.0
+offset_bottom = 7.0
+grow_vertical = 2
+texture = ExtResource("16_couy0")
+expand_mode = 1
+flip_h = true
+
+[node name="Arrow1" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -4.0
+offset_right = -8.0
+offset_bottom = 6.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("10_ymu3k")
+expand_mode = 1
+
+[node name="Arrow2" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -4.0
+offset_right = -8.0
+offset_bottom = 6.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("11_0tbdj")
+expand_mode = 1
+
+[node name="PanelTab" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings" node_paths=PackedStringArray("panels")]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 410.0
+offset_bottom = 136.0
+theme_override_styles/panel = ExtResource("51_qas0a")
+script = ExtResource("10_6oiyr")
+panels = [NodePath(""), NodePath("")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 9.0
+offset_right = -11.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelDebug" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("51_qas0a")
+script = ExtResource("43_rtpxc")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -1.0
+offset_right = 385.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainerPhysicsOn" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckButtonPhysicsOn" type="CheckButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer/VBoxContainerPhysicsOn"]
+layout_mode = 2
+text = "Включить физическое движение"
+
+[node name="VBoxContainerShapeVisibility" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckButtonPhysicsOn" type="CheckButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer/VBoxContainerShapeVisibility"]
+layout_mode = 2
+text = "Видимость форм поиска"
+
+[node name="VBoxContainerNavGraphVisibility" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckButtonPhysicsOn" type="CheckButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer/VBoxContainerNavGraphVisibility"]
+layout_mode = 2
+text = "Видимость графа навигации"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu"]
 layout_mode = 1
@@ -4350,6 +4503,7 @@ clip_text = true
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab" method="OpenPanel" binds= [0]]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab" method="OpenPanel" binds= [1]]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab" method="OpenPanel" binds= [2]]
+[connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings" to="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings" method="OnClick"]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer2/ButtonOpenControlProject" to="Controls" method="OnOpenControlProject"]
 [connection signal="toggled" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer2/CheckButton" to="Controls" method="OnAlgoritmStartStopChange"]
 [connection signal="button_down" from="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer2/ButtonReload" to="MapManagers/MapManager" method="OnReloadMap"]

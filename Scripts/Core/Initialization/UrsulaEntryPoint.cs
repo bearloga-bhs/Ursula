@@ -23,6 +23,7 @@ using ursula.addons.Ursula.Scripts.GameObjects.View;
 using ursula.addons.Ursula.Modules.CyberiadaHSMExtensions;
 using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller;
 using bearloga.addons.Ursula.Scripts.NavigationGraph.Controller.ModelPlacement;
+using ursula.addons.Ursula.Scripts.DebugSettings.Model;
 
 
 namespace Ursula.Core.Initialization
@@ -121,6 +122,8 @@ namespace Ursula.Core.Initialization
             InstallSingleton<SimulationGeneratorController>(services);
 
             InstallSingleton<HSMEpidemicModule>(services);
+
+            InstallSingleton<DebugViewModel>(services);
         }
 
         private void InstallSingleton<T>(ServiceCollection services) where T : class 
