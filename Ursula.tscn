@@ -2070,7 +2070,7 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("ButtonGenerate", "mapManagerItemSetter")]
+[node name="PanelEpidemicView" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic" node_paths=PackedStringArray("SliderEntitiesCount", "SliderPercent", "SliderCoefficient", "SliderDistanceHealthy", "SliderDistanceIll", "SliderPillCount", "Asset", "ButtonGenerate", "ButtonClear", "mapManagerItemSetter")]
 layout_mode = 0
 offset_left = -11.0
 offset_top = 50.0
@@ -2078,7 +2078,15 @@ offset_right = 399.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("38_wuvcs")
+SliderEntitiesCount = NodePath("ScrollContainer/VBoxContainer/VBoxContainerEntitiesCount/Panel/HSliderEntitiesCount")
+SliderPercent = NodePath("ScrollContainer/VBoxContainer/VBoxContainerPercent/Panel/HSliderPercent")
+SliderCoefficient = NodePath("ScrollContainer/VBoxContainer/VBoxContainerCoefficient/Panel/HSliderCoefficient")
+SliderDistanceHealthy = NodePath("ScrollContainer/VBoxContainer/VBoxContainerDistanceHealthy/Panel/HSliderDistanceHealthy")
+SliderDistanceIll = NodePath("ScrollContainer/VBoxContainer/VBoxContainerDistanceIll/Panel/HSliderDistanceIll")
+SliderPillCount = NodePath("ScrollContainer/VBoxContainer/VBoxContainerPillCount/Panel/HSliderPillCount")
+Asset = NodePath("ScrollContainer/VBoxContainer/VBoxContainerAsset/GameObjectAssetInfoViewPrefab1")
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
+ButtonClear = NodePath("HBoxContainer/ButtonClear")
 mapManagerItemSetter = NodePath("../../../../../../../../../../MapManagers/MapManagerItemSetter")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView"]
@@ -2911,7 +2919,7 @@ offset_right = 112.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("40_m5gvt")
-prefabs = []
+prefabs = [NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab2"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab3"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab4")]
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem"]
