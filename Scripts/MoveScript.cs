@@ -167,7 +167,7 @@ public partial class MoveScript : CharacterBody3D
     Vector3 oldPosition = Vector3.Zero;
     VoxDrawTypes TypeSurface = VoxDrawTypes.solid;
 
-    bool isBlocked = false;
+    bool isBlocked => GlobalPosition.X < 0 || GlobalPosition.Z < 0 || GlobalPosition.X > VoxLib.mapManager.sizeX || GlobalPosition.Z > VoxLib.mapManager.sizeZ;
 
     private Vector3 _targetVelocity = Vector3.Zero;
 
@@ -352,7 +352,6 @@ public partial class MoveScript : CharacterBody3D
 
         if (MovementPosition.X < 0 || MovementPosition.Z < 0 || MovementPosition.X > VoxLib.mapManager.sizeX || MovementPosition.Z > VoxLib.mapManager.sizeZ)
         {
-            isBlocked = true;
             ContextMenu.ShowMessageS($"{/*onMovementFinished.guid*/""} Достигнут предел карты: перемещение остановлено.");
         }
 
@@ -930,7 +929,7 @@ public partial class MoveScript : CharacterBody3D
 
     public void ReloadAlgorithm()
     {
-        isBlocked = false;
+
     }
 
     #endregion
