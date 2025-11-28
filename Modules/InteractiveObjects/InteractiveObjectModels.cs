@@ -32,7 +32,7 @@ public partial class InteractiveObjectModels : Node, IInjectable
 		if (asset?.Model3d is not Node3D model)
 			return;
 
-		var newRoot = model.Duplicate() as Node3D;
+		var newRoot = model;
 		if (newRoot == null) return;
 
 		var oldRoot = GetParent<Node3D>();
