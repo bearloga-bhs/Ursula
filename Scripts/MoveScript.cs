@@ -1,17 +1,12 @@
-using Godot;
-using System.Reflection;
-using static Godot.TextServer;
-using static MoveScript;
-using Modules.HSM;
-using System;
 using Fractural.Tasks;
-using System.Diagnostics;
-using static Godot.TileSet;
+using Godot;
+using System;
 using System.Linq;
-using System.Collections.Generic;
 
 public partial class MoveScript : CharacterBody3D
 {
+    public static bool IsPhysicsOn = false;
+
     #region cache
     private Vector3 globalPositionCache;
     private Vector3 velocityCache;
@@ -476,7 +471,7 @@ public partial class MoveScript : CharacterBody3D
             UpdateSurfaceType();
 
             var isNavigationFinished = _navigationAgent.IsNavigationFinished();
-            
+
             if (isNavigationFinished)
             {
                 if (stateMashine == StateMashine.moveToTarget || stateMashine == StateMashine.moveFromTarget)
@@ -527,26 +522,26 @@ public partial class MoveScript : CharacterBody3D
 
         velocity = SetVelocity(velocity, delta);
 
-        //if (physicsLod == PhysicsLod.Lod0)
-        //{
-        Velocity = velocity;
+        if (IsPhysicsOn)
+        {
+            Velocity = velocity;
 
-        MoveAndSlide();
-        globalPositionCacheUpdated = false;
-        rotationCacheUpdated = false;
+            MoveAndSlide();
+            globalPositionCacheUpdated = false;
+            rotationCacheUpdated = false;
 
-        Rotation = SetRotation(Rotation, velocity, delta);
-        GlobalPosition = CorrectPositionByTerrainHeight(GlobalPosition, 0.5f);
-        //}
-        //else
-        //{
-        //    position += velocity * (float)delta;
-        //    position = CorrectPositionByTerrainHeight(position);
+            Rotation = SetRotation(Rotation, velocity, delta);
+            GlobalPosition = CorrectPositionByTerrainHeight(GlobalPosition, 0.5f);
+        }
+        else
+        {
+            position += velocity * (float)delta;
+            position = CorrectPositionByTerrainHeight(position);
 
-        //    GlobalPosition = position;
-        //    Velocity = velocity;
-        //    Rotation = rotation;
-        //}
+            GlobalPosition = position;
+            Velocity = velocity;
+            Rotation = SetRotation(Rotation, velocity, delta);
+        }
     }
 
     #endregion
@@ -678,7 +673,7 @@ public partial class MoveScript : CharacterBody3D
         velocity.Y = 0;
         //if (!isOnFloor)
         //{
-            _targetVelocity.Y -= (float)9.8 * (float)delta * 20;
+        _targetVelocity.Y -= (float)9.8 * (float)delta * 20;
         //}
 
         return velocity;
@@ -739,7 +734,7 @@ public partial class MoveScript : CharacterBody3D
         {
             return;
         }
-        
+
         // Wait for the first physics frame so the NavigationServer can sync.
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
@@ -764,7 +759,7 @@ public partial class MoveScript : CharacterBody3D
         {
             return;
         }
-        
+
         ResetCoordinates();
         // TODO: requst to change + optimistic movement.
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
@@ -820,7 +815,7 @@ public partial class MoveScript : CharacterBody3D
         {
             return;
         }
-        
+
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
         stateMashine = StateMashine.moveToTarget;
@@ -837,7 +832,7 @@ public partial class MoveScript : CharacterBody3D
         {
             return;
         }
-        
+
         await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 
         stateMashine = StateMashine.moveFromTarget;

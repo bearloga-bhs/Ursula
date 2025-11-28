@@ -2445,6 +2445,31 @@ grow_vertical = 2
 texture = ExtResource("19_c8ee4")
 expand_mode = 1
 
+[node name="ButtonClear" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = ExtResource("18_c37xe")
+theme_override_styles/pressed = ExtResource("18_c37xe")
+theme_override_styles/normal = ExtResource("18_c37xe")
+text = "Очистить карту"
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEpidemic/PanelEpidemicView/HBoxContainer/ButtonClear"]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.07996
+offset_top = -9.0
+offset_right = 21.08
+offset_bottom = 10.0
+grow_vertical = 2
+texture = ExtResource("19_c8ee4")
+expand_mode = 1
+
 [node name="ButtonTransport" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer" node_paths=PackedStringArray("PanelMenu")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -2506,6 +2531,7 @@ texture = ExtResource("8_4saec")
 expand_mode = 1
 
 [node name="PanelTransport" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport" node_paths=PackedStringArray("RoadCrossPrefab", "RoadTPrefab", "RoadStraightPrefab", "RoadTurnPrefab", "TrafficLightGreenPrefab", "TrafficLightRedPrefab", "CarPrefab", "SliderScale", "SliderCarsCount", "SliderTrafficLightsGreenTime", "ButtonGenerate")]
+visible = false
 layout_mode = 0
 offset_left = -115.0
 offset_top = 50.0
@@ -2522,7 +2548,7 @@ TrafficLightRedPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerTra
 CarPrefab = NodePath("ScrollContainer/GridContainer/VBoxContainerCar/CarGameObjectAssetInfoViewPrefab")
 SliderScale = NodePath("VBoxContainer/VBoxContainerScale/Panel/HSliderScale")
 SliderCarsCount = NodePath("VBoxContainer/VBoxContainerCarCount/Panel/HSliderCarCount")
-SliderTrafficLightsGreenTime = NodePath("VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel/HSliderTrafficLightsGreenTime")
+SliderTrafficLightsGreenTime = NodePath("VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel/HSliderMinTrafficLightsGreenTime")
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport"]
@@ -2730,7 +2756,7 @@ custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("46_h4d78")
 
-[node name="HSliderTrafficLightsGreenTime" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel" node_paths=PackedStringArray("_hSlider")]
+[node name="HSliderMinTrafficLightsGreenTime" type="HSlider" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel" node_paths=PackedStringArray("_hSlider")]
 custom_minimum_size = Vector2(100, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -2751,7 +2777,7 @@ value = 1.0
 script = ExtResource("25_l6pvw")
 _hSlider = NodePath(".")
 
-[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel/HSliderTrafficLightsGreenTime"]
+[node name="Label" type="Label" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/VBoxContainer/VBoxContainerTrafficLightsGreenTime/Panel/HSliderMinTrafficLightsGreenTime"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -2787,6 +2813,31 @@ text = "Сгенерировать"
 icon_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/HBoxContainer/ButtonGenerate"]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.07996
+offset_top = -9.0
+offset_right = 21.08
+offset_bottom = 10.0
+grow_vertical = 2
+texture = ExtResource("19_c8ee4")
+expand_mode = 1
+
+[node name="ButtonClear" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = ExtResource("18_c37xe")
+theme_override_styles/pressed = ExtResource("18_c37xe")
+theme_override_styles/normal = ExtResource("18_c37xe")
+text = "Очистить"
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonTransport/PanelTransport/HBoxContainer/ButtonClear"]
 visible = false
 layout_mode = 1
 anchors_preset = 4
@@ -2869,7 +2920,7 @@ offset_right = 112.0
 offset_bottom = 557.0
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("40_m5gvt")
-prefabs = [NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab2"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab3"), NodePath("ScrollContainer/VBoxContainer/TransportFlowAssetInfoViewPrefab4")]
+prefabs = []
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
 ButtonClear = NodePath("HBoxContainer/ButtonClear")
 
@@ -3022,13 +3073,14 @@ texture = ExtResource("11_0tbdj")
 expand_mode = 1
 
 [node name="PanelTab" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings" node_paths=PackedStringArray("panels")]
+visible = false
 layout_mode = 0
 offset_top = 40.0
 offset_right = 410.0
-offset_bottom = 136.0
+offset_bottom = 205.0
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("10_6oiyr")
-panels = [NodePath(""), NodePath("")]
+panels = [null, null]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab"]
 layout_mode = 1
@@ -3042,10 +3094,14 @@ offset_bottom = -11.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelDebug" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer"]
+[node name="PanelDebug" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer" node_paths=PackedStringArray("CheckButtonPhysicsOn", "CheckButtonShapeVisibility", "CheckButtonNavGraphVisibility", "CheckButtonLogCompressOn")]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("43_rtpxc")
+CheckButtonPhysicsOn = NodePath("ScrollContainer/VBoxContainer/VBoxContainerPhysicsOn/CheckButtonPhysicsOn")
+CheckButtonShapeVisibility = NodePath("ScrollContainer/VBoxContainer/VBoxContainerShapeVisibility/CheckButtonShapeVisibility")
+CheckButtonNavGraphVisibility = NodePath("ScrollContainer/VBoxContainer/VBoxContainerNavGraphVisibility/CheckButtonNavGraphVisibility")
+CheckButtonLogCompressOn = NodePath("ScrollContainer/VBoxContainer/VBoxContainerLogCompress/CheckButtonLogCompress")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug"]
 layout_mode = 1
@@ -3073,16 +3129,24 @@ text = "Включить физическое движение"
 [node name="VBoxContainerShapeVisibility" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="CheckButtonPhysicsOn" type="CheckButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer/VBoxContainerShapeVisibility"]
+[node name="CheckButtonShapeVisibility" type="CheckButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer/VBoxContainerShapeVisibility"]
 layout_mode = 2
 text = "Видимость форм поиска"
 
 [node name="VBoxContainerNavGraphVisibility" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="CheckButtonPhysicsOn" type="CheckButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer/VBoxContainerNavGraphVisibility"]
+[node name="CheckButtonNavGraphVisibility" type="CheckButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer/VBoxContainerNavGraphVisibility"]
 layout_mode = 2
 text = "Видимость графа навигации"
+
+[node name="VBoxContainerLogCompress" type="VBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CheckButtonLogCompress" type="CheckButton" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSettings/PanelTab/HBoxContainer/PanelDebug/ScrollContainer/VBoxContainer/VBoxContainerLogCompress"]
+layout_mode = 2
+button_pressed = true
+text = "Сжатие логов"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu"]
 layout_mode = 1

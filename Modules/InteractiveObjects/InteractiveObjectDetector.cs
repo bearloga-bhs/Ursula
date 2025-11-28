@@ -6,6 +6,10 @@ using System.Linq;
 
 public partial class InteractiveObjectDetector : Node
 {
+    public static bool IsDrawDebug = false;
+
+    private bool prevDrawDebug;
+
     public Node detectedObject; // заданныйОбъект
     public Node previousDetectedObject;
 
@@ -191,8 +195,7 @@ public partial class InteractiveObjectDetector : Node
         StartScanning();
         scanAction += FindPlayer;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
-        visualization.Hide();
-        //visualization.Draw(detectorShape, this);
+        DrawDebug();
         return null;
     }
 
@@ -202,8 +205,7 @@ public partial class InteractiveObjectDetector : Node
         StartScanning();
         scanAction += FindObject;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
-        visualization.Hide();
-        //visualization.Draw(detectorShape, this);
+        DrawDebug();
         return null;
     }
 
@@ -213,8 +215,7 @@ public partial class InteractiveObjectDetector : Node
         StartScanning();
         scanAction += FindObject;
         detectorShape = new RectangleDetectorShape(moveScript, width, width, new Vector3(offsetX, 0, offsetZ));
-        visualization.Hide();
-        //visualization.Draw(detectorShape, this);
+        DrawDebug();
         return null;
     }
 
@@ -224,8 +225,7 @@ public partial class InteractiveObjectDetector : Node
         StartScanning();
         scanAction += FindObject;
         detectorShape = new RectangleDetectorShape(moveScript, width, heihgt, new Vector3(offsetX, 0, offsetZ));
-        visualization.Hide();
-        //visualization.Draw(detectorShape, this);
+        DrawDebug();
         return null;
     }
 
@@ -234,8 +234,7 @@ public partial class InteractiveObjectDetector : Node
         targetObjectName = objectName;
         GameManager.onPlayerInteractionObjectAction += PlayerInteractionObject;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
-        visualization.Hide();
-        //visualization.Draw(detectorShape, this);
+        DrawDebug();
         return null;
     }
 
@@ -245,8 +244,7 @@ public partial class InteractiveObjectDetector : Node
         StartScanning();
         scanAction += FindSound;
         detectorShape = new SphereDetectorShape(moveScript, radius, Vector3.Zero);
-        visualization.Hide();
-        //visualization.Draw(detectorShape, this);
+        DrawDebug();
         return null;
     }
 
@@ -256,8 +254,7 @@ public partial class InteractiveObjectDetector : Node
         StartScanning();
         scanAction += FindSound;
         detectorShape = new SphereDetectorShape(moveScript, radius, new Vector3(offsetX, 0, offsetZ));
-        visualization.Hide();
-        //visualization.Draw(detectorShape, this);
+        DrawDebug();
         return null;
     }
 
@@ -270,12 +267,18 @@ public partial class InteractiveObjectDetector : Node
     public object StopScanning()
     {
         isScanning = false;
+        visualization.Hide();
         //GD.Print("Scanning stopped.");
         return null;
     }
 
     public void CSProcess(double delta)
     {
+        if (prevDrawDebug != IsDrawDebug)
+        {
+            prevDrawDebug = IsDrawDebug;
+            DrawDebug();
+        }
         if (isScanning)
         {
             timeAccumulator += (float)delta;
@@ -494,5 +497,14 @@ public partial class InteractiveObjectDetector : Node
         }
         vector = Vector3.Zero;
         return false;
+    }
+
+    private void DrawDebug()
+    {
+        visualization.Hide();
+        if (IsDrawDebug)
+        {
+            visualization.Draw(detectorShape, this);
+        }
     }
 }
