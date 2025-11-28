@@ -3,6 +3,7 @@ using System.Linq;
 using Fractural.Tasks;
 using Ursula.Core.DI;
 using Ursula.GameObjects.Model;
+using System.Collections.Generic;
 
 public partial class InteractiveObjectModels : Node, IInjectable
 {
@@ -32,49 +33,42 @@ public partial class InteractiveObjectModels : Node, IInjectable
 		if (asset?.Model3d is not Node3D model)
 			return;
 
-		var newRoot = model;
+        var newRoot = model;
 		if (newRoot == null) return;
 
 		var oldRoot = GetParent<Node3D>();
 		var grandParent = oldRoot?.GetParent();
 		if (grandParent == null) return;
 
-		var toRemove = newRoot.GetChildren()
-			.Where(n =>
-			{
-				string name = n.Name;
-				return name != null && (name.StartsWith("InteractiveObject") || name.StartsWith("ItemPropsScript"));
-			})
-			.ToList();
+        var toRemove = oldRoot.GetChildren()
+            .Where(n =>
+            {
+                string name = n.Name;
+                return name != null && (!name.StartsWith("InteractiveObject") && !name.StartsWith("ItemPropsScript"));
+            })
+            .ToList();
 
-		foreach (var n in toRemove)
-		{
-			newRoot.RemoveChild(n);
-			n.QueueFree();
-		}
+        foreach (var n in toRemove)
+        {
+            oldRoot.RemoveChild(n);
+            n.QueueFree();
+        }
 
-		var toMove = oldRoot.GetChildren()
-			.Where(n =>
-			{
-				string name = n.Name;
-				return name != null && (name.StartsWith("InteractiveObject") || name.StartsWith("ItemPropsScript"));
-			})
-			.ToList();
+        var toMove = newRoot.GetChildren()
+            .Where(n =>
+            {
+                string name = n.Name;
+                return name != null && (!name.StartsWith("InteractiveObject") && !name.StartsWith("ItemPropsScript"));
+            })
+            .ToList();
 
-		foreach (var n in toMove)
-		{
-			oldRoot.RemoveChild(n);
-			newRoot.AddChild(n, true);
-		}
+        foreach (var n in toMove)
+        {
+            newRoot.RemoveChild(n);
+            n.Owner = null;
+            oldRoot.AddChild(n, true);
+        }
+    }
 
-		newRoot.Name = oldRoot.Name;
-		newRoot.Transform = oldRoot.Transform;
-
-		grandParent.RemoveChild(oldRoot);
-		oldRoot.QueueFree();
-
-		grandParent.AddChild(newRoot, true);
-	}
-	
-	public void OnDependenciesInjected() { }
+    public void OnDependenciesInjected() { }
 }

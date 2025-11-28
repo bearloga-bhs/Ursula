@@ -225,7 +225,7 @@ public partial class InteractiveObjectDetector : Node
         scanAction += FindObject;
         detectorShape = new RectangleDetectorShape(moveScript, width, heihgt, new Vector3(offsetX, 0, offsetZ));
         visualization.Hide();
-        visualization.Draw(detectorShape, this);
+        //visualization.Draw(detectorShape, this);
         return null;
     }
 

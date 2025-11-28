@@ -45,7 +45,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
             base._Process(delta);
             if (visualization != null)
             {
-                visualization.Update(Time.GetTicksMsec() / 1000f);
+                //visualization.Update(Time.GetTicksMsec() / 1000f);
             }
         }
 
@@ -83,7 +83,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
 
             await GDTask.WhenAll(roadGeneration, trafficLightsGeneration, carsGeneration);
 
-            ShowDebugGraph();
+            //ShowDebugGraph();
 
             GD.Print($"Генерация транспортных потоков завершена.");
         }
@@ -97,7 +97,7 @@ namespace bearloga.addons.Ursula.Scripts.NavigationGraph.Controller
         {
             navGraph = NavGraphSerializer.Deserialize(serializedGraph);
 
-            ShowDebugGraph();
+            //ShowDebugGraph();
         }
 
         public Queue<Vector3> BuildPath(Vector3 from, Vector3 to)
