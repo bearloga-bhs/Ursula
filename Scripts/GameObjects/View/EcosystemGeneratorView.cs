@@ -29,21 +29,21 @@ namespace ursula.addons.Ursula.Scripts.GameObjects.View
             
             InjectorStateCommandOverride commandOverride = new InjectorStateCommandOverride("Таймер2.ТаймерЗапуск", 0, initFoodTimer);
             InjectorStateEventOverride eventOverride = new InjectorStateEventOverride("Enter", new List<InjectorStateCommandOverride>() { commandOverride });
-            return new InjectorStateOverride("Инициализация", new List<InjectorStateEventOverride>() { eventOverride });
+            return new InjectorStateOverride("[Inject] Инициализация", new List<InjectorStateEventOverride>() { eventOverride });
         }
         
         private static InjectorStateOverride CreateFoodTimerOverride(float foodTimer)
         {
             InjectorStateCommandOverride commandOverride = new InjectorStateCommandOverride("Таймер2.ТаймерЗапуск", 0, foodTimer.ToString());
             InjectorStateEventOverride eventOverride = new InjectorStateEventOverride("Enter", new List<InjectorStateCommandOverride>() { commandOverride });
-            return new InjectorStateOverride("Употребление", new List<InjectorStateEventOverride>() { eventOverride });
+            return new InjectorStateOverride("[Inject] Употребление", new List<InjectorStateEventOverride>() { eventOverride });
         }
 
         private static InjectorStateOverride CreateChildCountOverride(float childCount)
         {
             InjectorStateCommandOverride commandOverride = new InjectorStateCommandOverride("МодульИнтерактивныхОбъектов.Рождение", 0, childCount.ToString());
             InjectorStateEventOverride eventOverride = new InjectorStateEventOverride("Enter", new List<InjectorStateCommandOverride>() { commandOverride });
-            return new InjectorStateOverride("Рождение ребенка Ж", new List<InjectorStateEventOverride>() { eventOverride });
+            return new InjectorStateOverride("[Inject] Рождение ребенка Ж", new List<InjectorStateEventOverride>() { eventOverride });
         }
     }
     

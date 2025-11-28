@@ -2911,7 +2911,7 @@ grow_vertical = 2
 texture = ExtResource("8_4saec")
 expand_mode = 1
 
-[node name="PanelEcosystem" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" node_paths=PackedStringArray("prefabs", "ButtonGenerate", "ButtonClear")]
+[node name="PanelEcosystem" type="Panel" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem" node_paths=PackedStringArray("prefabs", "ButtonGenerate")]
 visible = false
 layout_mode = 0
 offset_left = -298.0
@@ -2922,7 +2922,6 @@ theme_override_styles/panel = ExtResource("51_qas0a")
 script = ExtResource("40_m5gvt")
 prefabs = []
 ButtonGenerate = NodePath("HBoxContainer/ButtonGenerate")
-ButtonClear = NodePath("HBoxContainer/ButtonClear")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem"]
 layout_mode = 1
@@ -2972,31 +2971,6 @@ text = "Сгенерировать"
 icon_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer/ButtonGenerate"]
-visible = false
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 3.07996
-offset_top = -9.0
-offset_right = 21.08
-offset_bottom = 10.0
-grow_vertical = 2
-texture = ExtResource("19_c8ee4")
-expand_mode = 1
-
-[node name="ButtonClear" type="Button" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 18
-theme_override_styles/hover = ExtResource("18_c37xe")
-theme_override_styles/pressed = ExtResource("18_c37xe")
-theme_override_styles/normal = ExtResource("18_c37xe")
-text = "Очистить карту"
-icon_alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="Controls/ControlBuild/Panel/ControlPopupMenu/HBoxContainer/ButtonSimulation/PanelTab/HBoxContainer/ButtonEcosystem/PanelEcosystem/HBoxContainer/ButtonClear"]
 visible = false
 layout_mode = 1
 anchors_preset = 4
