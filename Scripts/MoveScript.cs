@@ -82,6 +82,20 @@ public partial class MoveScript : CharacterBody3D
     private Vector3 oldGlobalPosition = Vector3.Zero;
     private Vector3 oldRotation = Vector3.Zero;
 
+    private ItemPropsScript itemPropsScriptCache = null;
+    private ItemPropsScript ItemPropsScript
+    {
+        get
+        {
+            if (itemPropsScriptCache == null)
+            {
+                ItemPropsScript value = FindChild("ItemPropsScript") as ItemPropsScript;
+                itemPropsScriptCache = value;
+            }
+            return itemPropsScriptCache;
+        }
+    }
+
     #endregion
 
     #region PublicFields
@@ -418,10 +432,12 @@ public partial class MoveScript : CharacterBody3D
         if (oldGlobalPosition != Vector3.Zero)
         {
             float interpolationFactor = (float)Engine.GetPhysicsInterpolationFraction();
-            base.GlobalPosition = oldGlobalPosition.Lerp(GlobalPosition, interpolationFactor);
+            Vector3 globalPos = oldGlobalPosition.Lerp(GlobalPosition, interpolationFactor);
+            base.GlobalPosition = globalPos;
             base.Rotation = oldRotation.Lerp(Rotation, interpolationFactor);
             Quaternion = base.Quaternion;
             Transform = base.Transform;
+            VoxLib.mapManager.spatialGrid.Update(ItemPropsScript, globalPos);
         }
         else
         {
@@ -429,6 +445,7 @@ public partial class MoveScript : CharacterBody3D
             base.Rotation = Rotation;
             Quaternion = base.Quaternion;
             Transform = base.Transform;
+            VoxLib.mapManager.spatialGrid.Update(ItemPropsScript, GlobalPosition);
         }
     }
 

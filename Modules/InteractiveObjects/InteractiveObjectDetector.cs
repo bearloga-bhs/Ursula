@@ -365,8 +365,9 @@ public partial class InteractiveObjectDetector : Node
     {
         Node currentDetectedObject = null;
         float min_distance = float.MaxValue;
+        SphereDetectorShape staticSphere = detectorShape.ToStaticSphere();
 
-        var nodes = GetItemsNodes().ToList();
+        var nodes = VoxLib.mapManager.spatialGrid.GetItemsNodes(staticSphere.center, staticSphere.radius);
         foreach (Node node in nodes)
         {
             if (!IsInstanceValid(node))
@@ -409,8 +410,9 @@ public partial class InteractiveObjectDetector : Node
         Node currentDetectedObject = null;
 
         float min_distance = float.MaxValue;
+        SphereDetectorShape staticSphere = detectorShape.ToStaticSphere();
 
-        var nodes = GetItemsNodes().ToList();
+        var nodes = VoxLib.mapManager.spatialGrid.GetItemsNodes(staticSphere.center, staticSphere.radius);
         foreach (Node node in nodes)
         {
             if (!IsInstanceValid(node))

@@ -13,18 +13,23 @@ public class SphereDetectorShape : IDetectorShape
         this.center = center;
     }
 
-    public bool IsDetected(Vector3 point, out float distance)
+    private Vector3 GetCenter()
     {
-        Vector3 center_after_rotation;
         if (anchor is MoveScript moveScript)
         {
             Vector3 position = moveScript.GlobalPosition;
-            Quaternion quaternion = moveScript.Quaternion;
-            Vector3 offset = quaternion * center;
-            center_after_rotation = position + offset;
+            Transform3D transform = moveScript.Transform;
+            return transform * center;
         }
         else
-            center_after_rotation = anchor.GlobalTransform * center;
+        {
+            return anchor.GlobalTransform * center;
+        }
+    }
+
+    public bool IsDetected(Vector3 point, out float distance)
+    {
+        Vector3 center_after_rotation = GetCenter();
 
         float dist2 = point.DistanceSquaredTo(center_after_rotation);
         if (dist2 <= radius * radius)
@@ -35,5 +40,11 @@ public class SphereDetectorShape : IDetectorShape
 
         distance = -1.0f;
         return false;
+    }
+
+    public SphereDetectorShape ToStaticSphere()
+    {
+        Vector3 center_after_rotation = GetCenter();
+        return new SphereDetectorShape(null, radius, center_after_rotation);
     }
 }

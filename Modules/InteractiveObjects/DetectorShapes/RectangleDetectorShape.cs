@@ -8,6 +8,10 @@ public class RectangleDetectorShape : IDetectorShape
     public Vector3 right_down;
     public Vector3 right_up;
 
+    public Vector3 offset;
+    public float width;
+    public float height;
+
     public Node3D anchor;
     
     public RectangleDetectorShape(Node3D relativeTo, float width, float height, Vector3 offset)
@@ -16,7 +20,24 @@ public class RectangleDetectorShape : IDetectorShape
         left_up = new Vector3(-width / 2, 0, height / 2) + offset;
         right_down = new Vector3(width / 2, 0, -height / 2) + offset;
         right_up = new Vector3(width / 2, 0, height / 2) + offset;
+        this.offset = offset;
+        this.width = width;
+        this.height = height;
         anchor = relativeTo;
+    }
+
+    private Vector3 GetCenter()
+    {
+        if (anchor is MoveScript moveScript)
+        {
+            Vector3 position = moveScript.GlobalPosition;
+            Transform3D transform = moveScript.Transform;
+            return transform * offset;
+        }
+        else
+        {
+            return anchor.GlobalTransform * offset;
+        }
     }
 
     public bool IsDetected(Vector3 point, out float distance)
@@ -64,5 +85,12 @@ public class RectangleDetectorShape : IDetectorShape
 
         distance = 1.0f;
         return true;
+    }
+
+    public SphereDetectorShape ToStaticSphere()
+    {
+        Vector3 center_after_rotation = GetCenter();
+        float radius = Mathf.Sqrt((width / 2) * (width / 2) + (height / 2) * (height / 2));
+        return new SphereDetectorShape(null, radius, center_after_rotation);
     }
 }
